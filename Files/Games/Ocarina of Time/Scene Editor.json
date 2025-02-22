@@ -93,7 +93,7 @@
 		"name"		: "Hyrule Field",
 		"dma"		: "B440",
 		"length"	: 1,
-		"stages"	: [ "Child", "Child - Kakariko Gate Opened", "Adult", "Link's Nightmare", "Zelda & Impla Flee Hyrule Castle", "Zelda Reminisces About Her Escape", "Title Screen Demo", "Song of Time", "Credits", "Escaping Lon Lon Ranch", "Farewell to Zelda", "Escorted by Impa" ]
+		"stages"	: [ "Child", "Child - All Spiritual Stones", "Adult", "Link's Nightmare", "Zelda & Impla Flee Hyrule Castle", "Zelda Reminisces About Her Escape", "Title Screen Demo", "Song of Time", "Credits", "Escaping Lon Lon Ranch", "Farewell to Zelda", "Escorted by Impa" ]
 	}, {
 		"id"		: "0052",
 		"name"		: "Kakariko Village",

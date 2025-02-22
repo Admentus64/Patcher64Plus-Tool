@@ -871,7 +871,7 @@ function ShiftMap([uint32]$Offset, [int16]$Shift=0) {
 
         foreach ($value in $values) {
             if ($SceneEditor.MapArray[$Offset+2] + $value -gt 255) {
-                if ($SceneEditor.MapArray[$Offset+1] + 1 -gt 255) {
+                if ($SceneEditor.MapArray[$Offset+1] -ge 255) {
                     $SceneEditor.MapArray[$Offset]   += 1
                     $SceneEditor.MapArray[$Offset+1]  = 0
                     $SceneEditor.MapArray[$Offset+2] += $value - 256
@@ -886,14 +886,14 @@ function ShiftMap([uint32]$Offset, [int16]$Shift=0) {
     }
     elseif ($Shift -lt 0) {
         while ($Shift -ne 0) {
-            if ($Shift -lt (-255)) { $values += 255; $Shift += 255 } else { $values += (-$Shift); $Shift = 0 }
+            if ($Shift -lt -255) { $values += 255; $Shift += 255 } else { $values += -$Shift; $Shift = 0 }
         }
 
         foreach ($value in $values) {
             if ($SceneEditor.MapArray[$Offset+2] - $value -lt 0) {
-                if ($SceneEditor.MapArray[$Offset+1] - 1 -lt 0) {
+                if ($SceneEditor.MapArray[$Offset+1] -le 0) {
                     $SceneEditor.MapArray[$Offset]   -= 1
-                    $SceneEditor.MapArray[$Offset+1]  = 0
+                    $SceneEditor.MapArray[$Offset+1]  = 255
                     $SceneEditor.MapArray[$Offset+2] += 256 - $value
                 }
                 else {
@@ -920,7 +920,7 @@ function ShiftScene([uint32]$Offset, [int16]$Shift=0) {
 
         foreach ($value in $values) {
             if ($SceneEditor.SceneArray[$Offset+2] + $value -gt 255) {
-                if ($SceneEditor.SceneArray[$Offset+1] + 1 -gt 255) {
+                if ($SceneEditor.SceneArray[$Offset+1] -ge 255) {
                     $SceneEditor.SceneArray[$Offset]   += 1
                     $SceneEditor.SceneArray[$Offset+1]  = 0
                     $SceneEditor.SceneArray[$Offset+2] += $value - 256
@@ -935,14 +935,14 @@ function ShiftScene([uint32]$Offset, [int16]$Shift=0) {
     }
     elseif ($Shift -gt 0) {
         while ($Shift -ne 0) {
-            if ($Shift -lt (-255)) { $values += 255; $Shift += 255 } else { $values += (-$Shift); $Shift = 0 }
+            if ($Shift -lt -255) { $values += 255; $Shift += 255 } else { $values += -$Shift; $Shift = 0 }
         }
 
         foreach ($value in $values) {
             if ($SceneEditor.SceneArray[$Offset+2] - $value -lt 0) {
-                if ($SceneEditor.SceneArray[$Offset+1] - 1 -lt 0) {
+                if ($SceneEditor.SceneArray[$Offset+1] -le 0) {
                     $SceneEditor.SceneArray[$Offset]   -= 1
-                    $SceneEditor.SceneArray[$Offset+1]  = 0
+                    $SceneEditor.SceneArray[$Offset+1]  = 255
                     $SceneEditor.SceneArray[$Offset+2] += 256 - $value
                 }
                 else {
@@ -3048,7 +3048,7 @@ function ShiftSceneHeaderData([int16]$Shift=0x10) {
     }
 
     if ($SceneEditor.GUI) { ShiftSceneMapData -Shift $Shift } else { $SceneEditor.SceneMapShift += $Shift }
-    ShiftActors         -Shift $Shift
+    ShiftActors -Shift $Shift
 
 }
 

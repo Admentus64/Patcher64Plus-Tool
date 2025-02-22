@@ -1,3 +1,7 @@
+v25.2.1
+- Fixed issue with using the B button in grottos with OoT Redux
+- Fixed issue with Scene Editor API not properly shifting map changes
+
 v25.2.0
 - Updated OoT Redux with minor changes
 - Added "Invert Aiming Controls" option for OoT
