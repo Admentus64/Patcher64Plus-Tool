@@ -28,6 +28,7 @@ function PatchDungeonsOoTMQ() {
 
     if (IsIndex -Elem $Redux.MQ.Dungeons -Text "Custom") { return }
     PatchDungeonsMQ
+    if ($DungeonList.Count -eq 0) { $StatusLabel.Text = $lastMessage; return }
 
     $title = "Inside the Deku Tree" # Inside the Deku Tree
     if ($DungeonList[$title] -ne "Vanilla") { 
@@ -121,6 +122,8 @@ function PatchDungeonsOoTMQ() {
         if (!(PatchDungeon -TableOffset "CCC0" -Path ($DungeonList[$title] + "\" + $title + "\") -Length 20 -Scene "B71544")) { return }
     }
 
+    $StatusLabel.Text = $lastMessage
+
 }
 
 
@@ -129,6 +132,7 @@ function PatchDungeonsOoTMQ() {
 function PatchDungeonsMQ() {
     
     # BYTE PATCHING MASTER QUEST DUNGEONS
+    $global:DungeonList = @{}
     if (IsChecked $Redux.MQ.Disable) { return $False }
 
     if ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Master Quest") -or (IsIndex -Elem $Redux.MQ.Dungeons -Text "Randomize") ) {
@@ -144,13 +148,13 @@ function PatchDungeonsMQ() {
         }
     }
 
+    $lastMessage = $StatusLabel.Text
     UpdateStatusLabel ("Patching " + $GameType.mode + " Master Quest Dungeons...")
-    $global:DungeonList = @{}
     $versions = @{}
 
     foreach ($item in $Redux.Box.SelectMQ) {
         foreach ($label in $item.controls) {
-            if     ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select")       -and $label.GetType() -eq [System.Windows.Forms.Label])   { write-host 123456 $label.ComboBox.text; $DungeonList[$label.text.replace(":", "")] = $label.ComboBox.text     }
+            if     ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Select")       -and $label.GetType() -eq [System.Windows.Forms.Label])   { $label.ComboBox.text; $DungeonList[$label.text.replace(":", "")] = $label.ComboBox.text     }
             elseif ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Vanilla")      -and $label.GetType() -eq [System.Windows.Forms.Label])   { $DungeonList[$label.text.replace(":", "")] = $label.ComboBox.items[0] }
             elseif ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Master Quest") -and $label.GetType() -eq [System.Windows.Forms.Label])   { $DungeonList[$label.text.replace(":", "")] = $label.ComboBox.items[1] }
             elseif ( (IsIndex -Elem $Redux.MQ.Dungeons -Text "Ura Quest")    -and $label.GetType() -eq [System.Windows.Forms.Label])   { $DungeonList[$label.text.replace(":", "")] = $label.ComboBox.items[2] }

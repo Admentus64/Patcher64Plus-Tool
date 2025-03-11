@@ -5,6 +5,77 @@
 	"hash"			: "5BD1FE107BF8106B2AB6650ABECD54D6",
 	"quest"			: [ "Master Quest", "Ura Quest" ],
 	
+	"world_map" : [ {
+		"title"		: "Hyrule Field / None",
+		"id"		: "00"
+	}, {
+		"title"		: "Kakariko Village",
+		"id"		: "01"
+	}, {
+		"title"		: "Graveyard",
+		"id"		: "02"
+	}, {
+		"title"		: "Zora's River",
+		"id"		: "03"
+	}, {
+		"title"		: "Kokiri Forest",
+		"id"		: "04"
+	}, {
+		"title"		: "Sacred Forest Meadow",
+		"id"		: "05"
+	}, {
+		"title"		: "Lake Hylia",
+		"id"		: "06"
+	}, {
+		"title"		: "Zora's Domain",
+		"id"		: "07"
+	}, {
+		"title"		: "Zora's Fountain",
+		"id"		: "08"
+	}, {
+		"title"		: "Gerudo Valley",
+		"id"		: "09"
+	}, {
+		"title"		: "Lost Woods",
+		"id"		: "0A"
+	}, {
+		"title"		: "Desert Colossus",
+		"id"		: "0B"
+	}, {
+		"title"		: "Gerudo's Fortress",
+		"id"		: "0C"
+	}, {
+		"title"		: "Haunted Wasteland",
+		"id"		: "0D"
+	}, {
+		"title"		: "Market",
+		"id"		: "0E"
+	}, {
+		"title"		: "Hyrule Castle",
+		"id"		: "0F"
+	}, {
+		"title"		: "Death Mountain Trail",
+		"id"		: "10"
+	}, {
+		"title"		: "Death Mountain Crater",
+		"id"		: "11"
+	}, {
+		"title"		: "Goron City",
+		"id"		: "12"
+	}, {
+		"title"		: "Lon Lon Ranch",
+		"id"		: "13"
+	}, {
+		"title"		: "Dampé's Grave & Windmill",
+		"id"		: "14"
+	}, {
+		"title"		: "Ganon's Castle",
+		"id"		: "15"
+	}, {
+		"title"		: "Grottos & Fairy Fountains",
+		"id"		: "16"
+	} ],
+
 	"skyboxes" : [ {
 		"title"		: "No Skybox",
 		"id"		: "00"

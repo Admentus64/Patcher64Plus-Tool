@@ -1821,7 +1821,7 @@
 			"value"	: "FF"
 		} ] ]
 	}, {
-		"name"		: "Trees and Bushes",
+		"name"		: "Greenery",
 		"id"		: "0041",
 		"type"		: "Object",
 		"band"		: [ "00FF", "FF00", "00FF rz" ],

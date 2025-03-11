@@ -1,3 +1,9 @@
+v25.2.2
+- Changed "Visible Gerudo Tent" and "Gerudo's Fortress" options for OoT
+- Minor improvements and fixes for OoT Redux
+- Fixed issue with Text Editor
+- Minor fixes to the scripting
+
 v25.2.1
 - Fixed issue with using the B button in grottos with OoT Redux
 - Fixed issue with Scene Editor API not properly shifting map changes

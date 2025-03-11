@@ -140,27 +140,28 @@ function ByteOptions() {
         ChangeBytes -Offset "B65A40" -Values "04"; ChangeBytes -Offset "B65A44" -Values "04"; ChangeBytes -Offset "B65A4C" -Values "04"; ChangeBytes -Offset "B65A50" -Values "04"
     }
     if ( (IsIndex -Elem $Redux.Restore.Blood -Index 3) -or (IsIndex -Elem $Redux.Restore.Blood -Index 4) ) {
-        ChangeBytes -Offset "D8D590" -Values "00 78 00 FF 00 78 00 FF"; ChangeBytes -Offset "E8C424" -Values "00 78 00 FF 00 78 00 FF"
+        ChangeBytes -Offset "D8D590" -Values "007800FF007800FF"; ChangeBytes -Offset "E8C424" -Values "007800FF007800FF"
     }
 
     if (IsChecked $Redux.Restore.RupeeColors) {
-        ChangeBytes -Offset "F47EB0" -Values "70 6B BB 3F FF FF EF 3F 68 AD C3 FD E6 BF CD 7F 48 9B 91 AF C3 7D BB 3D 40 0F 58 19 88 ED 80 AB" # Purple
-        ChangeBytes -Offset "F47ED0" -Values "D4 C3 F7 49 FF FF F7 E1 DD 03 EF 89 E7 E3 E7 DD A3 43 D5 C3 DF 85 E7 45 7A 43 82 83 B4 43 CC 83" # Gold
+        ChangeBytes -Offset "F47EB0" -Values "706BBB3FFFFFEF3F68ADC3FDE6BFCD7F489B91AFC37DBB3D400F581988ED80AB" # Purple
+        ChangeBytes -Offset "F47ED0" -Values "D4C3F749FFFFF7E1DD03EF89E7E3E7DDA343D5C3DF85E7457A438283B443CC83" # Gold
     }
 
     if (IsChecked $Redux.Restore.FireTemple) {
-        ChangeBytes -Offset "7465"   -Values "03 91 30"                         # DMA Table, Pointer to Audiobank
-        ChangeBytes -Offset "7471"   -Values "03 91 30 00 08 8B B0 00 03 91 30" # DMA Table, Pointer to Audioseq
-        ChangeBytes -Offset "7481"   -Values "08 8B B0 00 4D 9F 40 00 08 8B B0" # DMA Table, Pointer to Audiotable
-        ChangeBytes -Offset "B2E82F" -Values "04 24 A5 91 30"                   # MIPS assembly that loads Audioseq
-        ChangeBytes -Offset "B2E857" -Values "09 24 A5 8B B0"                   # MIPS assembly that loads Audiotable
+        ChangeBytes -Offset "7465"   -Values "039130"                 # DMA Table, Pointer to Audiobank
+        ChangeBytes -Offset "7471"   -Values "03913000088BB000039130" # DMA Table, Pointer to Audioseq
+        ChangeBytes -Offset "7481"   -Values "088BB0004D9F4000088BB0" # DMA Table, Pointer to Audiotable
+        ChangeBytes -Offset "B2E82F" -Values "0424A59130"             # MIPS assembly that loads Audioseq
+        ChangeBytes -Offset "B2E857" -Values "0924A58BB0"             # MIPS assembly that loads Audiotable
         PatchBytes  -Offset "B896A0" -Patch "Fire Temple Theme\audiobank_pointers.bin"
         PatchBytes  -Offset "B89AD0" -Patch "Fire Temple Theme\audioseq_pointers.bin"
         PatchBytes  -Offset "B8A1C0" -Patch "Fire Temple Theme\audiotable_pointers.bin"
         ExportAndPatch -Path "audiobank_fire_temple" -Offset "D390" -Length "4CCBB0"
+        if ($global:QueuedSoundData -ne $null) { & $global:QueuedSoundData; $global:QueuedSoundData = $null }
     }
 
-    if (IsChecked $Redux.Restore.CowNoseRing)           { ChangeBytes -Offset "EF3E68" -Values "00 00"        }
+    if (IsChecked $Redux.Restore.CowNoseRing)           { ChangeBytes -Offset "EF3E68" -Values "0000"         }
     if (IsChecked $Redux.Restore.CenterTextboxCursor)   { ChangeBytes -Offset "B5883B" -Values "04" -Subtract }
     
     
@@ -173,7 +174,7 @@ function ByteOptions() {
         ChangeBytes -Offset   "1A3F880"           -Values (0..0x3F | ForEach-Object { 0 })
     }
 
-    if (IsChecked $Redux.Fixes.VisibleGerudoTent) {
+    if (IsChecked $Redux.Fixes.GerudoTentFortress) {
         ChangeBytes -Offset "D215D3" -Values "128483"
         ChangeBytes -Offset "D215E1" -Values "41000724010003"
         ChangeBytes -Offset "D215EF" -Values "0410410005000000001000000F0000102503E000082C62000103E000080060102503E00008240200018483001C386200022C420001144000040000000038620003"
@@ -182,11 +183,9 @@ function ByteOptions() {
     if (IsChecked $Redux.Fixes.BuyableBombs)          { ChangeBytes -Offset "C00840" -Values "1000"                                                      }
     if (IsChecked $Redux.Fixes.PauseScreenDelay)      { ChangeBytes -Offset "B15DD0" -Values "00000000"                                                  } # Pause Screen Anti-Aliasing
     if (IsChecked $Redux.Fixes.PauseScreenCrash)      { ChangeBytes -Offset "B12947" -Values "03";       ChangeBytes -Offset "BBED6C" -Values "1000"     } # Pause Screen Delay Speed, Game Over Continue as Adult Link fix
-  # if (IsChecked $Redux.Fixes.ShieldBurningCrash)    { ChangeBytes -Offset "DB2732" -Values "0000"                                                      }
     if (IsChecked $Redux.Fixes.WhiteBubbleCrash)      { ChangeBytes -Offset "CB4397" -Values "00"                                                        }
     if (IsChecked $Redux.Fixes.RemoveFishingPiracy)   { ChangeBytes -Offset "DBEC80" -Values "34020000"                                                  }
     if (IsChecked $Redux.Fixes.PoacherSaw)            { ChangeBytes -Offset "AE72CC" -Values "00000000"                                                  }
-    if (IsChecked $Redux.Fixes.GerudosFortress)       { CopyBytes   -Offset "96E068" -Length "D48" -Start "974600"                                       } # Minimap fix
     if (IsChecked $Redux.Fixes.AlwaysMoveKingZora)    { ChangeBytes -Offset "E55BB0" -Values "85CE8C3C844F0EDA"                                          }
     if (IsChecked $Redux.Fixes.DeathMountainOwl)      { ChangeBytes -Offset "E304F0" -Values "240E0001"                                                  }
     if (IsChecked $Redux.Fixes.Boomerang)             { ChangeBytes -Offset "F0F718" -Values "FC41C7FFFFFFFE38"                                          }
@@ -367,13 +366,16 @@ function ByteOptions() {
     # SOUNDS / VOICES #
 
     if ($GamePatch.age -eq "Child") {
+        if (IsChecked $Redux.Restore.FireTemple) { $offset = "1EF340" } else { $offset = "1DFC00" }
         try     { $file = "Voices Child\" + $Redux.Sounds.ChildVoices.Text.replace(" (default)", "") + ".bin" }
         catch   { $file = "Voices Child\Majora's Mask.bin" }
-        if (TestFile ($GameFiles.binaries + "\" + $file)) { PatchBytes -Offset "1DFC00" -Patch $file }
+        if (TestFile ($GameFiles.binaries + "\" + $file)) { PatchBytes -Offset $offset -Patch $file }
+
     }
     elseif ($GamePatch.age -eq "Adult") {
+        if (IsChecked $Redux.Restore.FireTemple) { $offset = "19D920" } else { $offset = "18E1E0" }
         $file = "Voices Adult\" + $Redux.Sounds.AdultVoices.Text.replace(" (default)", "") + ".bin"
-        if (TestFile ($GameFiles.binaries + "\" + $file)) { PatchBytes -Offset "18E1E0" -Patch $file }
+        if (TestFile ($GameFiles.binaries + "\" + $file)) { PatchBytes -Offset $offset -Patch $file }
     }
     else {
         if (IsChecked $Redux.Restore.FireTemple) { $offset = "1EF340" } else { $offset = "1DFC00" }
@@ -591,13 +593,13 @@ function ByteOptions() {
 
     # EASY MODE #
 
+    if (IsDefault $Redux.EasyMode.GhostShopPoints -Not)   { ChangeBytes -Offset   "EE69CE"            -Values (Get16Bit ([int]$Redux.EasyMode.GhostShopPoints.Text * 100) ) }
     if (IsChecked $Redux.EasyMode.NoShieldSteal)          { ChangeBytes -Offset   "D74910"            -Values "1000000B"                                                    }
     if (IsChecked $Redux.EasyMode.NoTunicSteal)           { ChangeBytes -Offset   "D74964"            -Values "1000000A"                                                    }
     if (IsChecked $Redux.EasyMode.SkipStealthSequence)    { ChangeBytes -Offset   "21F60DE"           -Values "05F0"                                                        }
     if (IsChecked $Redux.EasyMode.SkipTowerEscape)        { ChangeBytes -Offset @("D82A12". "B139A2") -Values "0517"                                                        }
     if (IsChecked $Redux.EasyMode.HotRodderGoron)         { ChangeBytes -Offset @("ED289C", "ED28A4") -Values "1100"                                                        }
     if (IsChecked $Redux.EasyMode.GerudoFighterJail)      { ChangeBytes -Offset   "EBEF3B"            -Values "00"                                                          }
-    if (IsDefault $Redux.EasyMode.GhostShopPoints -Not)   { ChangeBytes -Offset   "EE69CE"            -Values (Get16Bit ([int]$Redux.EasyMode.GhostShopPoints.Text * 100) ) }
 
 
 
@@ -1052,10 +1054,10 @@ function ByteOptions() {
     if (IsItem -Elem $Redux.Save.Progression -Item "Compasses")            { ChangeBytes -Offset "B71F04" -Values 2 -Repeat 20 -Add }
     if (IsItem -Elem $Redux.Save.Progression -Item "Dungeon Maps")         { ChangeBytes -Offset "B71F04" -Values 4 -Repeat 20 -Add }
 
-    if   (IsDefault $Redux.Save.TradeSequenceItem -Not)   { ChangeBytes -Offset   "B71EE6"            -Values (Get8Bit ($Redux.Save.TradeSequenceItem.SelectedIndex + 44) ) }
-    if   (IsDefault $Redux.Save.Mask              -Not)   { ChangeBytes -Offset   "B71EE7"            -Values (Get8Bit ($Redux.Save.Mask.SelectedIndex              + 32) ) }
-    if   (IsDefault $Redux.Save.SkullKidMinigame  -Not)   { ChangeBytes -Offset @("B71E9B", "B71F57") -Values (Get8Bit ($Redux.Save.OcarinaMinigame.SelectedIndex)        ) }
-    if   (IsDefault $Redux.Save.GoldSkulltulas    -Not)   { ChangeBytes -Offset   "B71F2C"            -Values (Get8Bit ($Redux.Save.GoldSkulltulas.Text)                  ) }
+    if (IsDefault $Redux.Save.TradeSequenceItem -Not)   { ChangeBytes -Offset   "B71EE6"            -Values (Get8Bit ($Redux.Save.TradeSequenceItem.SelectedIndex + 44) ) }
+    if (IsDefault $Redux.Save.Mask              -Not)   { ChangeBytes -Offset   "B71EE7"            -Values (Get8Bit ($Redux.Save.Mask.SelectedIndex              + 32) ) }
+    if (IsDefault $Redux.Save.SkullKidMinigame  -Not)   { ChangeBytes -Offset @("B71E9B", "B71F57") -Values (Get8Bit ($Redux.Save.OcarinaMinigame.SelectedIndex)        ) }
+    if (IsDefault $Redux.Save.GoldSkulltulas    -Not)   { ChangeBytes -Offset   "B71F2C"            -Values (Get8Bit ($Redux.Save.GoldSkulltulas.Text)                  ) }
     
 
 
@@ -1075,17 +1077,17 @@ function ByteOptions() {
     # AMMO CAPACITY #
 
     if (IsChecked $Redux.Capacity.EnableAmmo) {
-        ChangeBytes -Offset "B6EC2F" -Values @( (Get8Bit $Redux.Capacity.Quiver1.Text),     (Get8Bit $Redux.Capacity.Quiver2.Text),     (Get8Bit $Redux.Capacity.Quiver3.Text)     ) -Interval 2
-        ChangeBytes -Offset "B6EC37" -Values @( (Get8Bit $Redux.Capacity.BombBag1.Text),    (Get8Bit $Redux.Capacity.BombBag2.Text),    (Get8Bit $Redux.Capacity.BombBag3.Text)    ) -Interval 2
-        ChangeBytes -Offset "B6EC57" -Values @( (Get8Bit $Redux.Capacity.BulletBag1.Text),  (Get8Bit $Redux.Capacity.BulletBag2.Text),  (Get8Bit $Redux.Capacity.BulletBag3.Text)  ) -Interval 2
-        ChangeBytes -Offset "B6EC5F" -Values @( (Get8Bit $Redux.Capacity.DekuSticks1.Text), (Get8Bit $Redux.Capacity.DekuSticks2.Text), (Get8Bit $Redux.Capacity.DekuSticks3.Text) ) -Interval 2
-        ChangeBytes -Offset "B6EC67" -Values @( (Get8Bit $Redux.Capacity.DekuNuts1.Text),   (Get8Bit $Redux.Capacity.DekuNuts2.Text),   (Get8Bit $Redux.Capacity.DekuNuts3.Text)   ) -Interval 2
+        if ($Redux.Capacity.Quiver1     -ne $null)   { ChangeBytes -Offset "B6EC2F" -Values @( (Get8Bit $Redux.Capacity.Quiver1.Text),     (Get8Bit $Redux.Capacity.Quiver2.Text),     (Get8Bit $Redux.Capacity.Quiver3.Text)     ) -Interval 2 }
+        if ($Redux.Capacity.BombBag1    -ne $null)   { ChangeBytes -Offset "B6EC37" -Values @( (Get8Bit $Redux.Capacity.BombBag1.Text),    (Get8Bit $Redux.Capacity.BombBag2.Text),    (Get8Bit $Redux.Capacity.BombBag3.Text)    ) -Interval 2 }
+        if ($Redux.Capacity.BulletBag1  -ne $null)   { ChangeBytes -Offset "B6EC57" -Values @( (Get8Bit $Redux.Capacity.BulletBag1.Text),  (Get8Bit $Redux.Capacity.BulletBag2.Text),  (Get8Bit $Redux.Capacity.BulletBag3.Text)  ) -Interval 2 }
+        if ($Redux.Capacity.DekuSticks1 -ne $null)   { ChangeBytes -Offset "B6EC5F" -Values @( (Get8Bit $Redux.Capacity.DekuSticks1.Text), (Get8Bit $Redux.Capacity.DekuSticks2.Text), (Get8Bit $Redux.Capacity.DekuSticks3.Text) ) -Interval 2 }
+        if ($Redux.Capacity.DekuNuts1   -ne $null)   { ChangeBytes -Offset "B6EC67" -Values @( (Get8Bit $Redux.Capacity.DekuNuts1.Text),   (Get8Bit $Redux.Capacity.DekuNuts2.Text),   (Get8Bit $Redux.Capacity.DekuNuts3.Text)   ) -Interval 2 }
         
         # Upgrade Checks
-        ChangeBytes -Offset "ED288B" -Values (Get8Bit $Redux.Capacity.BombBag1.Text); ChangeBytes -Offset "ED295B" -Values (Get8Bit $Redux.Capacity.BombBag2.Text); ChangeBytes -Offset "E2EEFB" -Values (Get8Bit $Redux.Capacity.BombBag2.Text)
+        if ($Redux.Capacity.BombBag1  -ne $null)     { ChangeBytes -Offset "ED288B" -Values (Get8Bit $Redux.Capacity.BombBag1.Text); ChangeBytes -Offset "ED295B" -Values (Get8Bit $Redux.Capacity.BombBag2.Text); ChangeBytes -Offset "E2EEFB" -Values (Get8Bit $Redux.Capacity.BombBag2.Text) }
 
         # Initial Ammo
-        ChangeBytes -Offset "AE6D03" -Values (Get8Bit $Redux.Capacity.BulletBag1.Text)
+        if ($Redux.Capacity.BulletBag1  -ne $null)   { ChangeBytes -Offset "AE6D03" -Values (Get8Bit $Redux.Capacity.BulletBag1.Text) }
     }
 
 
@@ -1851,7 +1853,7 @@ function ByteSceneOptions() {
         SaveAndPatchLoadedScene
     }
 
-    if (IsChecked $Redux.Fixes.GerudosFortress) { PrepareMap -Scene "Gerudo's Fortress" -Map 0 -Header 0; ReplaceActor -Name "Treasure Chest" -Compare "03E0" -Param "07C0"; SaveAndPatchLoadedScene }
+    if (IsChecked $Redux.Fixes.GerudoTentFortress) { PrepareMap -Scene "Gerudo's Fortress" -Map 0 -Header 0; ReplaceActor -Name "Treasure Chest" -Compare "03E0" -Param "07C0"; SaveAndPatchLoadedScene }
 
     if (IsChecked $Redux.Fixes.Dungeons) {
         PrepareMap   -Scene "Dodongo's Cavern" -Map 0 -Header 0
@@ -2597,10 +2599,10 @@ function CreatePresets() {
         BoxCheck $Redux.Fixes.PauseScreenCrash
         BoxCheck $Redux.Fixes.WhiteBubbleCrash
         BoxCheck $Redux.Fixes.PoacherSaw
-        BoxCheck $Redux.Fixes.GerudosFortress
+        BoxCheck $Redux.Fixes.RemoveFishingPiracy
+        BoxCheck $Redux.Fixes.GerudoTentFortress
         BoxCheck $Redux.Fixes.AlwaysMoveKingZora
         BoxCheck $Redux.Fixes.DeathMountainOwl
-        BoxCheck $Redux.Fixes.RemoveFishingPiracy
         BoxCheck $Redux.Fixes.Boomerang
 
         BoxCheck $Redux.Graphics.ExtendedDraw
@@ -2747,24 +2749,23 @@ function CreateTabMain() {
     # FIXES #
 
     CreateReduxGroup    -Tag  "Fixes"                                    -Text "Fixes"
-    CreateReduxCheckBox -Name "MagicMeter"                -Base 5        -Text "Magic Meter Fix"           -Info "Prevent fill texture from fetching garbage to avoid HD texture duplicates"                                                          -Checked -Credits "Admentus & GhostlyDark"
+    CreateReduxCheckBox -Name "MagicMeter"                -Base 5        -Text "Magic Meter"               -Info "Prevent fill texture from fetching garbage to avoid HD texture duplicates"                                                          -Checked -Credits "Admentus & GhostlyDark"
     CreateReduxCheckBox -Name "BuyableBombs"              -Base 5        -Text "Buyable Bombs"             -Info "You no longer need the Goron's Ruby before you can buy bombs`nOnly the Bomb Bag is required"                                                 -Credits "Admentus"
     CreateReduxCheckBox -Name "PauseScreenDelay"          -Base 5        -Text "Pause Screen Delay"        -Info "Removes the delay when opening the Pause Screen by removing the anti-aliasing"                                                       -Native -Checked -Credits "zel"
-    CreateReduxCheckBox -Name "PauseScreenCrash"          -Base 5        -Text "Pause Screen Crash Fix"    -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"                                                          -Checked -Credits "zel"
-    CreateReduxCheckBox -Name "DodongoBombchuCrash"                      -Text "Dodongo Bombchu Crash Fix" -Info "Prevents the game from crashing when a Dodongo eats a Bombchu"                                                                               -Checked -Credits "Admentus"
-    CreateReduxCheckBox -Name "WhiteBubbleCrash"                         -Text "White Bubble Crash Fix"    -Info "Prevents the game from crashing when using Din's Fire on White Bubbles"                                                                      -Checked -Credits "Randomizer"
+    CreateReduxCheckBox -Name "PauseScreenCrash"          -Base 5        -Text "Pause Screen Crash"        -Info "Prevents the game from randomly crashing emulating a decompressed ROM upon pausing"                                                          -Checked -Credits "zel"
+    CreateReduxCheckBox -Name "DodongoBombchuCrash"                      -Text "Dodongo Bombchu Crash"     -Info "Prevents the game from crashing when a Dodongo eats a Bombchu"                                                                               -Checked -Credits "Admentus"
+    CreateReduxCheckBox -Name "WhiteBubbleCrash"                         -Text "White Bubble Crash"        -Info "Prevents the game from crashing when using Din's Fire on White Bubbles"                                                                      -Checked -Credits "Randomizer"
     CreateReduxCheckBox -Name "PoacherSaw"                -Base 4 -Adult -Text "Poacher's Saw"             -Info "Obtaining the Poacher's Saw no longer prevents Link from obtaining the second Deku Nut upgrade"                                              -Checked -Credits "Randomizer"
-    CreateReduxCheckBox -Name "GerudosFortress"           -Base 4 -Child -Text "Gerudo's Fortress Fixes"   -Info "Display the complete minimap and fix the Piece of Heart Chest for Gerudo's Fortress during the Child era"                                             -Credits "Admentus & GhostlyDark"
     CreateReduxCheckBox -Name "AlwaysMoveKingZora"        -Base 4 -Child -Text "Always Move King Zora"     -Info "King Zora will move aside even if the Zora Sapphire is in possession"                                                                                 -Credits "Randomizer"
     CreateReduxCheckBox -Name "DeathMountainOwl"          -Base 4 -Child -Text "Death Mountain Owl"        -Info "The Owl on top of the Death Mountain will always carry down Link regardless of having magic"                                                          -Credits "Randomizer"
-    CreateReduxCheckBox -Name "RemoveFishingPiracy"       -Base 4        -Text "Remove Fishing DRM"        -Info "Removes the anti-piracy check for fishing that can cause the fish to always let go after 51 frames"                                                   -Checked -Credits "Randomizer"
-    CreateReduxCheckBox -Name "Boomerang"                 -Child         -Text "Boomerang"                 -Info "Fix the gem color on the thrown boomerang"                                                                                            -Exclude "Dawn" -Credits "Aria Hiroshi 64"
-    CreateReduxCheckBox -Name "VisibleGerudoTent"         -Base 4 -Child -Text "Visible Gerudo Tent"       -Info "Make the tent in Gerudo Valley during the Child era visible`nThe tent was always accessible, just invisible"                                          -Credits "Admentus"
+    CreateReduxCheckBox -Name "RemoveFishingPiracy"       -Base 4 -Lite  -Text "Remove Fishing DRM"        -Info "Removes the anti-piracy check for fishing that can cause the fish to always let go after 51 frames"                                                   -Checked -Credits "Randomizer"
+    CreateReduxCheckBox -Name "Boomerang"                         -Child -Text "Boomerang"                 -Info "Fix the gem color on the thrown boomerang"                                                                                            -Exclude "Dawn" -Credits "Aria Hiroshi 64"
+    CreateReduxCheckBox -Name "GerudoTentFortress"        -Base 4 -Child -Text "Gerudo Tent & Fortress"    -Info "Make the invisible tent in Gerudo Valley as Child visible`n`Fix the Piece of Heart Chest for Gerudo's Fortress as Child"                              -Credits "Admentus & GhostlyDark"
     CreateReduxCheckBox -Name "Graves"                            -Scene -Text "Graveyard Graves"          -Info "The grave holes in Kakariko Graveyard behave as in the Rev 1 revision`nThe edges no longer force Link to grab or jump over them when trying to enter" -Credits "Admentus"
-    CreateReduxCheckBox -Name "TimeDoor"                          -Scene -Text "Fix Door of Time"          -Info "Fix the positioning of the Temple of Time door, so you can not skip past it`nAlso fixes a bug where the door doesn't open on your first visit"        -Credits "Admentus & Randomizer"
+    CreateReduxCheckBox -Name "TimeDoor"                          -Scene -Text "Door of Time"              -Info "Fix the positioning of the Temple of Time door, so you can not skip past it`nAlso fixes a bug where the door doesn't open on your first visit"        -Credits "Admentus & Randomizer"
     $text = "Fix issues in Dodogono's Cavern, Water Temple and Spirit Temple`n`n- Gossip Stones that won't spawn fairies (Dodongo's Cavern)`n- Unreachable hookshot spot (Raging Water Cavern)`n- Three out of bounds pots (Raging Water Cavern)`n- Restore two Keese (Central Hall)`n- Removes the non-functional Magic Jar atop the Statues in Gerudo Training Ground (Statues Challenge)"
-    CreateReduxCheckBox -Name "Dungeons"                          -Scene -Text "Fix Dungeons"              -Info ($text + "`n- Navi targeting Spots in Fire Temple, Ice Cavern, Shadow Temple and Spirit Temple" )                                                      -Credits "Admentus, ZethN64, Sakura, Frostclaw, Steve(ToCoool), GoldenMariaNova & GhostlyDark (ported)"
-    CreateReduxCheckBox -Name "GreatFairyTextBoxes"               -Scene -Text "Fix Great Fairy Textboxes" -Info "Fix the broken textboxes outside the Great Fairy entrances in Death Mountain Crater and Desert Colossus"                                              -Credits "Admentus"
+    CreateReduxCheckBox -Name "Dungeons"                          -Scene -Text "Dungeons"                  -Info ($text + "`n- Navi targeting Spots in Fire Temple, Ice Cavern, Shadow Temple and Spirit Temple" )                                                      -Credits "Admentus, ZethN64, Sakura, Frostclaw, Steve(ToCoool), GoldenMariaNova & GhostlyDark (ported)"
+    CreateReduxCheckBox -Name "GreatFairyTextBoxes"               -Scene -Text "Great Fairy Textboxes"     -Info "Fix the broken textboxes outside the Great Fairy entrances in Death Mountain Crater and Desert Colossus"                                              -Credits "Admentus"
 
 
     # OTHER #
@@ -2944,12 +2945,12 @@ function CreateTabLanguage() {
     # DIALOGUE #
 
     $Redux.Box.Dialogue = CreateReduxGroup -Tag "Text" -Text "Dialogue" -Safe -Base 5
-    CreateReduxComboBox -Base 1 -Name "Language" -Text "Language" -Items ($Files.json.languages.title) -Info "Patch the game with a different language"
-    CreateReduxCheckBox -Base 1 -Name "Restore"        -Text "Restore Text"    -Info "Restores the text used from the GC and later revisions and applies their text and icons fixes in the game dialogue"                                        -Credits "Admentus & ShadowOne333"
-    CreateReduxCheckBox -Base 1 -Name "FemalePronouns" -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus"
-    CreateReduxCheckBox         -Name "GoldSkulltula"  -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far" -Credits "ShadowOne333"
-    CreateReduxCheckBox -Base 4 -Name "EasterEggs"     -Text "Easter Eggs"     -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Checked                                                                        -Credits "Admentus & Patreons"
-    CreateReduxCheckBox -Base 1 -Name "Custom"         -Text "Custom"          -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
+    CreateReduxComboBox -Base   1  -Name "Language"       -Text "Language"        -Info "Patch the game with a different language" -Items ($Files.json.languages.title) 
+    CreateReduxCheckBox -Base   1  -Name "Restore"        -Text "Restore Text"    -Info "Restores the text used from the GC and later revisions and applies their text and icons fixes in the game dialogue"                                        -Credits "Admentus & ShadowOne333"
+    CreateReduxCheckBox -Base   1  -Name "FemalePronouns" -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus"
+    CreateReduxCheckBox            -Name "GoldSkulltula"  -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far" -Credits "ShadowOne333"
+    CreateReduxCheckBox -Base   4  -Name "EasterEggs"     -Text "Easter Eggs"     -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Checked                                                                        -Credits "Admentus & Patreons"
+    CreateReduxCheckBox -Base   1  -Name "Custom"         -Text "Custom"          -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
 
 
 

@@ -18,15 +18,14 @@
 
 
     # Exclude Options
-    ExcludeOption -Group "Misc"         -Option "SkipCutscenes"
     ExcludeOption -Group "Gameplay"     -Option "Medallions"
-    ExcludeOption -Group "Fixes"        -Option "GerudosFortress"
-    ExcludeOption -Group "Fixes"        -Option "VisibleGerudoTent"
+    ExcludeOption -Group "Fixes"        -Option "GerudoTentFortress"
     ExcludeOption -Group "Fixes"        -Option "Dungeons"
     ExcludeOption -Group "Styles"       -Option "HairColor"
     ExcludeOption -Group "Equipment"    -Option "HideSword"
     ExcludeOption -Group "Equipment"    -Option "HideShield"
     ExcludeOption -Group "Equipment"    -Option "FunctionalWeapons"
+    ExcludeOption -Group "Misc"         -Option "SkipCutscenes"
 
 }
 

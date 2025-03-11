@@ -33,10 +33,8 @@
 
 
     # Exclude Options
-    ExcludeOption -Group "Misc"         -Option "SkipCutscenes"
     ExcludeOption -Group "Gameplay"     -Option "Medallions"
-    ExcludeOption -Group "Fixes"        -Option "GerudosFortress"
-    ExcludeOption -Group "Fixes"        -Option "VisibleGerudoTent"
+    ExcludeOption -Group "Fixes"        -Option "GerudoTentFortress"
     ExcludeOption -Group "Fixes"        -Option "Dungeons"
     ExcludeOption -Group "Graphics"     -Option "ForceHiresModel"
     ExcludeOption -Group "Styles"       -Option "HairColor"
@@ -52,12 +50,12 @@
     ExcludeOption -Group "Capacity"     -Option "DekuSeedBullets5"
     ExcludeOption -Group "Capacity"     -Option "DekuSeedBullets30"
     ExcludeOption -Group "ShopPrice"    -Option "DekuSeedBullets30"
+    ExcludeOption -Group "Misc"         -Option "SkipCutscenes"
 
 
 
     # Force Options
-    ForceOption   -Group "Sounds"       -Option "ChildVoices"   -Values "Majora's Mask"
-    ForceOption   -Group "Equipment"    -Option "PowerBracelet"
+    ForceOption   -Group "Sounds"       -Option "ChildVoices" -Values "Majora's Mask"
     ForceOption   -Group "Equipment"    -Option "HerosBow"
 
 

@@ -1125,27 +1125,28 @@ function ParseMessageLanguage([char[]]$Text, [switch]$Encode) {
     
     # Language Parsing
 
-    $types = [bool[]](0..($LanguagePatch.encode.Length - 1) | ForEach-Object { $False })
+    [System.Collections.ArrayList]$types = @()
+    for ($i=0; $i -lt $LanguagePatch.encode.length; $i++) { $types += $False }
     if (!$Encode) {
-        $encodedSet = [System.Collections.Generic.HashSet[char]]::new()
-        $LanguagePatch.encode | ForEach-Object { $encodedSet.Add($_) }
         foreach ($c in $Text) {
             if ($c -eq [byte]$Files.json.textEditor.end) { break }
 
-            if ($encodedSet.Contains($c)) {
-                $index = [Array]::IndexOf($LanguagePatch.encode, $c)
-                if ($index -ge 0) { $types[$index] = $True }
+            for ($i=0; $i -lt $LanguagePatch.encode.length; $i++) {
+                if ([char]$c -eq [char]$LanguagePatch.encode[$i]) {
+                    $types[$i] = $True
+                }
             }
         }
     }
-    else { $types = $types | ForEach-Object { $True } }
+    else {
+        for ($i=0; $i -lt $LanguagePatch.encode.length; $i++) { $types[$i] = $True }
+    }
 
     $skip = $False
     for ($global:ScriptCounter = 0; $global:ScriptCounter -lt $Text.Length; $global:ScriptCounter++) {
         if ($Text[$global:ScriptCounter] -eq [byte]$Files.json.textEditor.end) { break }
 
         if ($Text[$global:ScriptCounter] -eq 60) {
-            # Detect and handle skip regions
             for ($i = $global:ScriptCounter + 1; $i -lt $Text.Length; $i++) {
                 if ($Text[$i] -eq 60) { $skip = $False; break }
                 if ($Text[$i] -eq 62) { $skip = $True; $global:ScriptCounter = $i; break }
