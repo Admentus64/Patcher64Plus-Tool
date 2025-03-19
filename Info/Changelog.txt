@@ -1,3 +1,7 @@
+v25.2.4
+- Fixed issue with Iron/Hover Boots on D-Pad for OoT Redux
+- Fixed issue with Text Editor decoding for alternate colors
+
 v25.2.3
 - Minor improvements and fixes for OoT Redux
 

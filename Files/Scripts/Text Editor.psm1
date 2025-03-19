@@ -1215,8 +1215,8 @@ function ParseMessageOoT([char[]]$Text, [switch]$Encode) {
             $Text = ParseMessagePart -Text $Text -Encoded @(5, 69) -Decoded @(60, 77, 62) -Encode $Encode # 05 45 / <M> (pink / magenta)
             $Text = ParseMessagePart -Text $Text -Encoded @(5, 70) -Decoded @(60, 89, 62) -Encode $Encode # 05 46 / <Y> (yellow)
             $Text = ParseMessagePart -Text $Text -Encoded @(5, 71) -Decoded @(60, 75, 62) -Encode $Encode # 05 47 / <K> (black / key)
-            $Text = ParseMessagePart -Text $Text -Encoded @(5, 1)  -Decoded @(60, 75, 1)  -Encode $Encode # 05 01 / <O> (orange)
-            $Text = ParseMessagePart -Text $Text -Encoded @(5, 5)  -Decoded @(60, 75, 5)  -Encode $Encode # 05 05 / <P> (purple)
+            $Text = ParseMessagePart -Text $Text -Encoded @(5, 1)  -Decoded @(60, 79, 62) -Encode $Encode # 05 01 / <O> (orange)
+            $Text = ParseMessagePart -Text $Text -Encoded @(5, 5)  -Decoded @(60, 80, 62) -Encode $Encode # 05 05 / <P> (purple)
         }
 
         # Highscore values
