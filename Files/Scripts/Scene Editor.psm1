@@ -1189,7 +1189,7 @@ function CalculateFlags() {
 
 
 #==============================================================================================================================================================================================
-function ShiftActors([sbyte]$Shift) {
+function ShiftActors([int16]$Shift) {
     
     switch ($SceneEditor.LoadedScene.Name) {
         "Kokiri Forest" {
@@ -1230,7 +1230,7 @@ function ShiftActors([sbyte]$Shift) {
 
 
 #==============================================================================================================================================================================================
-function ShiftTexturesTable([sbyte]$Shift) {
+function ShiftTexturesTable([int16]$Shift) {
     
     # Debug: BA1498 -> BA1538
     # Rev0:  B71D4C -> B71DEC
@@ -1258,7 +1258,7 @@ function ShiftTexturesTable([sbyte]$Shift) {
 
 
 #==============================================================================================================================================================================================
-function ShiftCutscenesTable([sbyte]$Shift) {
+function ShiftCutscenesTable([int16]$Shift) {
     
     # Debug: B95394 -> B95534
     # Rev0:  B65C64 -> B65E04

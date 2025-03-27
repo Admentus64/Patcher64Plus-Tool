@@ -565,7 +565,7 @@ function PatchingAdditionalOptions() {
                 Copy-Item -LiteralPath ($GameFiles.extracted + "\message_data."        + $LanguagePatch.code + ".tbl") -Destination ($GameFiles.editor + "\message_data."        + $LanguagePatch.code + ".tbl") -Force
             }
 
-            $global:LastScript = $global:DialogueList = $global:ByteScriptArray = $global:ByteTableArray = $Files.json.textEditor = $null
+            $global:LastScript = $global:DialogueList = $global:ByteScriptArray = $global:ByteTableArray = $Files.json.textEditor = $global:StoredMessages = $global:StoredReplaceIDs = $null
         }
     }
 

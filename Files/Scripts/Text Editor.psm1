@@ -372,7 +372,7 @@ function CloseTextEditor() {
         }
     }
     
-    $global:LastScript = $global:DialogueList = $global:ByteScriptArray = $global:ByteTableArray = $Files.json.textEditor = $global:TextEditor = $global:LanguagePatch = $global:StoredMessages = $null
+    $global:LastScript = $global:DialogueList = $global:ByteScriptArray = $global:ByteTableArray = $Files.json.textEditor = $global:TextEditor = $global:LanguagePatch = $global:StoredMessages = $global:StoredReplaceIDs = $null
     [System.GC]::WaitForPendingFinalizers(); [System.GC]::Collect()
 
 }
@@ -504,6 +504,7 @@ function LoadScript([string]$Script, [string]$Table) {
         }
 
         $DialogueList[$item]                                   = @{}
+        [uint32]$DialogueList[$item].index                     = $i
         [uint32]$DialogueList[$item].start                     = $start
         [uint32]$DialogueList[$item].end                       = $end
         [System.Collections.ArrayList]$DialogueList[$item].msg = $ByteScriptArray[$DialogueList[$item].start..($DialogueList[$item].end-1)]
@@ -599,7 +600,7 @@ function SaveScript([string]$Script, [string]$Table) {
 
     [System.IO.File]::WriteAllBytes($Script, $tempList)
     [System.IO.File]::WriteAllBytes($Table,  $ByteTableArray)
-    $increase = $tempList = $null
+    $increase = $tempList = $global:StoredReplaceIDs = $null
 
 }
 

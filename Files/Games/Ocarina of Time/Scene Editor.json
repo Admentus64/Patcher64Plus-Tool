@@ -7008,6 +7008,10 @@
 			"value"	: "FF"
 		} ] ]
 	}, {
+		"name"		: "Cucco-Chasing Girl",
+		"id"		: "019A",
+		"type"		: "NPC"
+	}, {
 		"name"		: "Dog",
 		"id"		: "019B",
 		"type"		: "NPC",

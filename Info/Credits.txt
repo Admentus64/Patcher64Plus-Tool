@@ -66,6 +66,7 @@
 - GoldenMariaNova
 - Anthrogi
 - ZNemesis
+- LoadingError
 
 --- Custom Textures ---
 - Community Texture pack

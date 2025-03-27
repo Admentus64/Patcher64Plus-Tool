@@ -25,7 +25,7 @@ function PrePatchReduxOptions() {
 
 #==============================================================================================================================================================================================
 function PatchOptions() {
-	
+    
     # MODELS #
 
     if (IsDefault -Elem $Redux.Graphics.ChildModels -Not)   { PatchModel -Category "Child" -Name $GamePatch.LoadedModelsList["Child"][$Redux.Graphics.ChildModels.SelectedIndex] }
@@ -36,6 +36,13 @@ function PatchOptions() {
     if (IsChecked $Redux.Fixes.DodongoBombchuCrash)         { ApplyPatch -Patch "Decompressed\Optional\dodongo_bombchu_crash_fix.ppf" } # FIXES #
     if (IsChecked $Redux.Hero.PotsChallenge)                { ApplyPatch -Patch "Decompressed\Optional\pots_challenge.ppf"            } # DIFFICULTY #
     if (IsChecked $Redux.Text.PauseScreen)                  { ApplyPatch -Patch "Decompressed\Optional\mm_pause_screen.ppf"           } # TEXT
+
+
+
+    # GRAPHICS #
+
+    if ( ( (IsIndex $Redux.Graphics.Revisited -Index 2) -or (IsIndex $Redux.Graphics.Revisited -Index 4) ) -and !(TestFile ($GameFiles.textures + "\Revisited") -Container) ) { ApplyPatch -Patch "Decompressed\Optional\revisited_icons.ppf"        }
+    if ( ( (IsIndex $Redux.Graphics.Revisited -Index 3) -or (IsIndex $Redux.Graphics.Revisited -Index 4) ) -and !(TestFile ($GameFiles.textures + "\Revisited") -Container) ) { ApplyPatch -Patch "Decompressed\Optional\revisited_pause_screen.ppf" }
 
 
 
@@ -256,17 +263,43 @@ function ByteOptions() {
         PatchBytes -Offset "F21810"  -Length "1000" -Texture -Patch "Widescreen\lens_of_truth.bin"
     }
 
-    
-
     if (IsChecked $Redux.Graphics.GCScheme) { # Z to L + L to D-Pad textures and GC R button
         if (IsChecked $Redux.Text.PauseScreen -Lang 1) { PatchBytes -Offset "844540" -Texture -Patch "GameCube\l_pause_screen_button_mm.bin" } else { PatchBytes -Offset "844540" -Texture -Patch "GameCube\l_pause_screen_button.bin" }
         if (IsChecked $Redux.Text.PauseScreen -Lang 1) { PatchBytes -Offset "844840" -Texture -Patch "GameCube\r_pause_screen_button_mm.bin" } else { PatchBytes -Offset "844840" -Texture -Patch "GameCube\r_pause_screen_button.bin" }
-	PatchBytes -Offset "92C100" -Texture -Patch "GameCube\dpad_text_icon.bin"
+	    PatchBytes -Offset "92C100" -Texture -Patch "GameCube\dpad_text_icon.bin"
         PatchBytes -Offset "92C200" -Texture -Patch "GameCube\l_text_icon.bin"
         if (TestFile ($GameFiles.textures + "\GameCube\l_targeting_" + $LanguagePatch.code + ".bin")) {
             if ($LanguagePatch.l_target_jpn -eq 1) { $offset = "1A0B300" } else { $offset = "1A35680" }
             PatchBytes -Offset $offset -Texture -Patch ("GameCube\l_targeting_" + $LanguagePatch.code + ".bin")
         }
+    }
+
+    if ( !(IsDefault $Redux.Graphics.Revisited) -and (TestFile ($GameFiles.textures + "\Revisited") -Container) ) {
+        if     (IsIndex $Redux.Graphics.Revisited -Index 2)    { $searchRootExtension = "\Items"        }
+        elseif (IsIndex $Redux.Graphics.Revisited -Index 3)    { $searchRootExtension = "\Pause Screen" }
+        else                                                   { $searchRootExtension = ""              }
+        
+        $searchRoot = $GameFiles.textures + "\Revisited" + $searchRootExtension
+        $binFiles   = Get-ChildItem -Path $searchRoot -Recurse -Filter "*.bin"
+        $fileInfo   = @()
+
+        foreach ($file in $binFiles) {
+            if ($file.Name -match '([A-Fa-f0-9]+)\.bin$') {
+                $hexPart      = $matches[1]
+                $fileSize     = $file.Length
+                $filePath     = $file.FullName
+                $relativePath = $filePath.Replace($searchRoot, '').TrimStart('\')
+        
+                $fileInfo += [PSCustomObject]@{
+                    FileName = $file.Name
+                    HexPart  = $hexPart
+                    FileSize = $fileSize
+                    FilePath = $relativePath
+                }
+            }
+        }
+
+        foreach ($entry in $fileInfo) { PatchBytes -Offset $entry.HexPart -Texture -Patch ("Revisited" + $searchRootExtension + "\" + $entry.FilePath) }
     }
 
     if (IsChecked $Redux.Graphics.ExtendedDraw)      { ChangeBytes -Offset   "A9A970" -Values "00 01"                                                                                                                                                  }
@@ -2948,12 +2981,12 @@ function CreateTabLanguage() {
     # DIALOGUE #
 
     $Redux.Box.Dialogue = CreateReduxGroup -Tag "Text" -Text "Dialogue" -Safe -Base 5
-    CreateReduxComboBox -Base   1  -Name "Language"       -Text "Language"        -Info "Patch the game with a different language" -Items ($Files.json.languages.title) 
-    CreateReduxCheckBox -Base   1  -Name "Restore"        -Text "Restore Text"    -Info "Restores the text used from the GC and later revisions and applies their text and icons fixes in the game dialogue"                                        -Credits "Admentus & ShadowOne333"
-    CreateReduxCheckBox -Base   1  -Name "FemalePronouns" -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus"
-    CreateReduxCheckBox            -Name "GoldSkulltula"  -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far" -Credits "ShadowOne333"
-    CreateReduxCheckBox -Base   4  -Name "EasterEggs"     -Text "Easter Eggs"     -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Checked                                                                        -Credits "Admentus & Patreons"
-    CreateReduxCheckBox -Base   1  -Name "Custom"         -Text "Custom"          -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
+    CreateReduxComboBox -Base 1 -Name "Language"       -Text "Language"        -Info "Patch the game with a different language" -Items ($Files.json.languages.title) 
+    CreateReduxCheckBox -Base 1 -Name "Restore"        -Text "Restore Text"    -Info "Restores the text used from the GC and later revisions and applies their text and icons fixes in the game dialogue"                                        -Credits "Admentus & ShadowOne333"
+    CreateReduxCheckBox -Base 1 -Name "FemalePronouns" -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus"
+    CreateReduxCheckBox         -Name "GoldSkulltula"  -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far" -Credits "ShadowOne333"
+    CreateReduxCheckBox -Base 4 -Name "EasterEggs"     -Text "Easter Eggs"     -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Checked                                                                        -Credits "Admentus & Patreons"
+    CreateReduxCheckBox -Base 1 -Name "Custom"         -Text "Custom"          -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
 
 
 
@@ -3061,6 +3094,10 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "GCScheme"          -Text "GC Scheme"                    -Info "Replace and change the textures, dialogue and text colors to match the GameCube's scheme"            -Credits "Admentus, GhostlyDark, ShadowOne333 & GoldenMariaNova"
     CreateReduxCheckBox -Name "OverworldSkyboxes" -Text "Overworld Skyboxes"           -Info "Use day and night skyboxes for all overworld areas lacking one"                               -Scene -Credits "Admentus"
     CreateReduxCheckBox -Name "ImprovedMoon"      -Text "Improved Moon"                -Info "Replaces the moon with a nicer looking texture"                                                      -Credits "Admentus & GoldenMariaNova"
+
+    if ($GamePatch.settings -eq "Master of Time") {
+        CreateReduxComboBox -Name "Revisited"     -Text "Revisited Textures"           -Info "Update textures with those from the Revisted visual overhaul"                                        -Credits "Ported by LoadingError, textures by Don Camilo" -Items @("None", "Items Only", "Pause Screen", "Both")
+    }
 
     if (!$IsWiiVC -and $Redux.Graphics.Widescreen -ne $null) {
         EnableElem -Elem @($Redux.Fixes.PauseScreenDelay, $Redux.Fixes.PauseScreenCrash) -Active (!$Redux.Graphics.Widescreen.Checked)

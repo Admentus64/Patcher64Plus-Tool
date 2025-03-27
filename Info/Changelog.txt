@@ -1,3 +1,7 @@
+v25.2.5
+- Added "Revisited Textures" option for Master of Time (thanks LoadingError)
+- Fixed minor issues
+
 v25.2.4
 - Fixed issue with Iron/Hover Boots on D-Pad for OoT Redux
 - Fixed issue with Text Editor decoding for alternate colors
