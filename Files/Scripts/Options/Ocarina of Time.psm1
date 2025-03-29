@@ -1830,7 +1830,10 @@ function ByteSceneOptions() {
         SaveAndPatchLoadedScene
     }
 
-
+    if (IsChecked $Redux.Gameplay.AlternateIceArrow) {
+        PrepareMap      -Scene "Ice Cavern"    -Map 11 -Header 0; ReplaceActor -Name "Piece of Heart" -New "Treasure Chest" -X 1261 -Y (-71) -Z 68 -XRot 650 -Param "0B23" SaveAndPatchLoadedScene
+	PrepareMap      -Scene "Gerudo Training Ground"    -Map 8 -Header 0; ReplaceActor -Name "Treasure Chest" -Compare "0B2C" -Param "07CC" SaveAndPatchLoadedScene
+    }
 
     # RESTORE #
 
@@ -2279,6 +2282,10 @@ function ByteTextOptions() {
     
     if (IsChecked $Redux.Equipment.NoSlipperyBoots -Lang 1) {
         SetMessage -ID "0054" -Text "The downside? No traction!<N><New Box>"                   -Replace "<New Box>"
+    }
+
+    if (IsChecked $Redux.Gameplay.AlternateIceArrow -Lang 1) {
+        SetMessage -ID "0071"                                                                  -Replace "<NS><Icon:0C><DI>You got the <B>Ice Arrow<W>!<DC><N>Set it to <Y><C Button> <W>and your arrows will<N>be powered up! If you hit your <N>target, it will freeze."
     }
     
     if (IsChecked $Redux.Graphics.GCScheme) {
@@ -2752,11 +2759,11 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "PushbackAttackingWalls"                     -Text "Pushback Attacking Walls"   -Info "Link is getting pushed back a bit when hitting the wall with the sword"                                                                                         -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckBox -Name "RemoveCrouchStab"                           -Text "Remove Crouch Stab"         -Info "The Crouch Stab move is removed"                                                                                                                                -Credits "Garo-Mastah"
     CreateReduxCheckBox -Name "RemoveQuickSpin"                            -Text "Remove Magic Quick Spin"    -Info "The magic Quick Spin Attack move is removed`nIt's a regular Quick Spin Attack now instead"                                                                      -Credits "Admentus & Three Pendants"
-    CreateReduxCheckBox -Name "RunFaster"                                  -Text "Run Faster"                 -Info "Faster run speed & longer jumps"                                                                                                    -Credits "Admentus & Ikey Ilex"
+    CreateReduxCheckBox -Name "RunFaster"                                  -Text "Run Faster"                 -Info "Faster run speed & longer jumps"                                                                                                                                -Credits "Admentus & Ikey Ilex"
     CreateReduxCheckbox -Name "RemoveSpeedClamp"                           -Text "Remove Jump Speed Limit"    -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckbox -Name "ChildShops"                          -Child -Text "Child Shops"                -Info "Open the Potion Shop and Bazaar in Kakariko Village for Child Link"                                                                                             -Credits "Admentus"
     CreateReduxCheckBox -Name "FastArrows"                                 -Text "Less Magic Arrows Cooldown" -Info "The burst animation for Fire, Ice and Light Arrows are shorter`nAllows Link to shoot the next magic arrow a bit quicker"                                        -Credits "Anthrogi"
-
+    CreateReduxCheckBox -Name "AlternateIceArrow"                          -Text "Alt Ice Arrow Location"     -Info "Change how and where the Ice Arrow is gotten, making it obtainable much earlier"  -Warning "Doesn't work correctly in later saves. Vanilla Quest only for now." -Credits "GoldenMariaNova"              
 
     # GAMEPLAY (UNSTABLE) #
 
@@ -2776,7 +2783,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "RupeeColors"              -Text "Correct Rupee Colors"  -Info "Corrects the color palette for the in-game Purple (50) and Golden (200) Rupees`nIn the base game they are closer to pink and orange, this changes them to more closely match their 3D get item models"                                                    -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "CowNoseRing"              -Text "Restore Cow Nose Ring" -Info "Restore the rings in the noses for Cows as seen in the Japanese release"                                                                                                                                                                                  -Credits "ShadowOne333"
     CreateReduxCheckBox -Name "CenterTextboxCursor"      -Text "Center Textbox Cursor" -Info "Aligns the textbox cursor to the center of the screen"                                                                                                                                                                                                    -Credits "BilonFullHDemon"
-    CreateReduxCheckBox -Name "N64Logo"         	     -Text "Restore N64 Logo"  	   -Info "Fixes the appearance of the N64 intro logo as seen in the Rev 1 ROM and newer"                                                                                                                                                                            -Credits "GhostlyDark"
+    CreateReduxCheckBox -Name "N64Logo"         	     -Text "Restore N64 Logo"  -Info "Fixes the appearance of the N64 intro logo as seen in the Rev 1 ROM and newer"                                                                                                                                                                            -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "FireTemple" -Safe -Base 3 -Text "Censor Fire Temple"    -Info "Censor Fire Temple theme as used in the Rev 2 ROM"                                                                                                                                                                                                        -Credits "ShadowOne333" 
 
 
