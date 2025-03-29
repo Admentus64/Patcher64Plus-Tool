@@ -1831,8 +1831,8 @@ function ByteSceneOptions() {
     }
 
     if (IsChecked $Redux.Gameplay.AlternateIceArrow) {
-        PrepareMap      -Scene "Ice Cavern"    -Map 11 -Header 0; ReplaceActor -Name "Collectable" -Compare "0106" -New "Treasure Chest" -X 1261 -Y (-71) -Z 68 -XRot 650 -Param "0B23" SaveAndPatchLoadedScene
-	PrepareMap      -Scene "Gerudo Training Ground"    -Map 8 -Header 0; ReplaceActor -Name "Treasure Chest" -Compare "0B2C" -Param "07CC" SaveAndPatchLoadedScene
+        PrepareMap      -Scene "Ice Cavern"    -Map 11 -Header 0; ReplaceActor -Name "Collectable" -Compare "0106" -New "Treasure Chest" -X 1261 -Y (-71) -Z 68 -XRot 650 -Param "0B23"; SaveAndPatchLoadedScene
+	PrepareMap      -Scene "Gerudo Training Ground"    -Map 8 -Header 0; ReplaceActor -Name "Treasure Chest" -Compare "0B2C" -Param "07CC"; SaveAndPatchLoadedScene
     }
 
     # RESTORE #
