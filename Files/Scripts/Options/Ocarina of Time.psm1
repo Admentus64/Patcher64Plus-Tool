@@ -1830,8 +1830,11 @@ function ByteSceneOptions() {
         SaveAndPatchLoadedScene
     }
 
-
-
+    if (IsChecked $Redux.Gameplay.AlternateIceArrow) {
+        PrepareMap -Scene "Zora's Fountain" -Map 0 -Header 2; ReplaceActor -Name "Collectable" -Compare "1406" -Param "0B20"; SaveAndPatchLoadedScene
+	PrepareMap -Scene "Gerudo Training Ground" -Map 8 -Header 0; ReplaceActor -Name "Treasure Chest" -Compare "0B2C" -Param "07CC"; SaveAndPatchLoadedScene
+    }
+    
     # RESTORE #
 
     if (IsDefault $Redux.Restore.GerudoTextures -Not) {
@@ -2275,6 +2278,10 @@ function ByteTextOptions() {
     if (IsChecked $Redux.Gameplay.InstantClaimCheck -Lang 1) {
         SetMessage -ID "305A" -Text "My worrrrrk is not <N>verrrry consistent, so "            -Replace "Now, I know you're <N>verrrry busy, so "
         SetMessage -ID "305C"                                                                  -Replace "Please returrrrrrn soon...<N>When you're readyyyy<N>for it, show the claim<N>agaaaain..."
+    }
+    
+    if (IsChecked $Redux.Gameplay.AlternateIceArrow -Lang 1) {
+        SetMessage -ID "0071"                                                                  -Replace "<NS><Icon:0C><DI>You got the <B>Ice Arrow<W><DC><N>Set it to <Y><C Button> <W>and your arrows will<N>be powered up! If you hit your <N>target, it will freeze."
     }
     
     if (IsChecked $Redux.Equipment.NoSlipperyBoots -Lang 1) {
@@ -2755,6 +2762,7 @@ function CreateTabMain() {
     CreateReduxCheckBox -Name "RunFaster"                                  -Text "Run Faster"                 -Info "Faster run speed & longer jumps"                                                                                                    -Credits "Admentus & Ikey Ilex"
     CreateReduxCheckbox -Name "RemoveSpeedClamp"                           -Text "Remove Jump Speed Limit"    -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckbox -Name "ChildShops"                          -Child -Text "Child Shops"                -Info "Open the Potion Shop and Bazaar in Kakariko Village for Child Link"                                                                                             -Credits "Admentus"
+    CreateReduxCheckBox -Name "AlternateIceArrow"                          -Text "Alt Ice Arrow Location"     -Info "Changes the location of the Ice Arrow, allowing it to be obtained much earlier"                                                                                 -Credits "GoldenMariaNova"
     CreateReduxCheckBox -Name "FastArrows"                                 -Text "Less Magic Arrows Cooldown" -Info "The burst animation for Fire, Ice and Light Arrows are shorter`nAllows Link to shoot the next magic arrow a bit quicker"                                        -Credits "Anthrogi"
 
 
