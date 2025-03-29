@@ -1831,7 +1831,7 @@ function ByteSceneOptions() {
     }
 
     if (IsChecked $Redux.Gameplay.AlternateIceArrow) {
-        PrepareMap      -Scene "Ice Cavern"    -Map 11 -Header 0; ReplaceActor -Name "Piece of Heart" -Compare "0106" -New "Treasure Chest" -X 1261 -Y (-71) -Z 68 -XRot 650 -Param "0B23" SaveAndPatchLoadedScene
+        PrepareMap      -Scene "Ice Cavern"    -Map 11 -Header 0; ReplaceActor -Name "Collectable" -Compare "0106" -New "Treasure Chest" -X 1261 -Y (-71) -Z 68 -XRot 650 -Param "0B23" SaveAndPatchLoadedScene
 	PrepareMap      -Scene "Gerudo Training Ground"    -Map 8 -Header 0; ReplaceActor -Name "Treasure Chest" -Compare "0B2C" -Param "07CC" SaveAndPatchLoadedScene
     }
 
@@ -1916,7 +1916,7 @@ function ByteSceneOptions() {
         PrepareMap -Scene "Ice Cavern"             -Map 3  -Header 0; ReplaceActor -Name "Navi Message"          -Compare "0580" -XRot 24 -YRot 0 -ZRot 0;        SaveAndPatchLoadedScene
         PrepareMap -Scene "Shadow Temple"          -Map 21 -Header 0; ReplaceActor -Name "Information Spot"      -Compare "2084" -X (-2724) -Y (-1293) -Z (-596); SaveAndPatchLoadedScene
         PrepareMap -Scene "Gerudo Training Ground" -Map 4  -Header 0; ReplaceActor -Name "Invisible Collectable" -Compare "1093" -Y (-1000) -Z (-4000);           SaveAndPatchLoadedScene
-	    PrepareMap -Scene "Spirit Temple"          -Map 5  -Header 0; ReplaceActor -Name "Information Spot"      -Compare "3C24" -Z (-1410);                      SaveAndPatchLoadedScene
+	PrepareMap -Scene "Spirit Temple"          -Map 5  -Header 0; ReplaceActor -Name "Information Spot"      -Compare "3C24" -Z (-1410);                      SaveAndPatchLoadedScene
     }
 
     if (IsChecked $Redux.Fixes.GreatFairyTextBoxes) {
