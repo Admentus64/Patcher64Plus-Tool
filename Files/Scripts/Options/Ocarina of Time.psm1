@@ -1831,8 +1831,7 @@ function ByteSceneOptions() {
     }
 
     if (IsChecked $Redux.Gameplay.AlternateIceArrow) {
-        PrepareMap -Scene "Zora's Fountain" -Map 0 -Header 2; ReplaceActor -Name "Collectable" -Compare "1406" -Param "1414"; SaveAndPatchLoadedScene
-	PrepareMap -Scene "Ice Cavern" -Map 11 -Header 0; ReplaceActor -Name "Blue Fire Flames" -New "Treasure Chest" -X 1493 -Y (-22) -Z 413 -Param "0B20"; SaveAndPatchLoadedScene
+	PrepareMap -Scene "Ice Cavern" -Map 11 -Header 0; ReplaceActor -Name "Collectable" -Compare "0106" -New "Treasure Chest" -X 1262 -Y (-71) -Z 68 -Param "0B20"; SaveAndPatchLoadedScene
         PrepareMap -Scene "Gerudo Training Ground" -Map 8 -Header 0; ReplaceActor -Name "Treasure Chest" -Compare "0B2C" -Param "07CC"; SaveAndPatchLoadedScene
     }
     
