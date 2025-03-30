@@ -1831,7 +1831,8 @@ function ByteSceneOptions() {
     }
 
     if (IsChecked $Redux.Gameplay.AlternateIceArrow) {
-        PrepareMap      -Scene "Ice Cavern"    -Map 11 -Header 0; ReplaceActor -Name "Collectable" -Compare "0106" -New "Treasure Chest" -X 1261 -Y (-71) -Z 68 -XRot 1850 -Param "0B23"; SaveAndPatchLoadedScene
+        PrepareMap      -Scene "Fire Temple"    -Map 8 -Header 0; ReplaceActor -Name "Treasure Chest" -Compare "5ACD" -Param "0B2D"; SaveAndPatchLoadedScene
+	PrepareMap      -Scene "Zora's Fountain"    -Map 0 -Header 2; ReplaceActor -Name "Collectable" -Compare "1406" -Param "1402"; SaveAndPatchLoadedScene
 	PrepareMap      -Scene "Gerudo Training Ground"    -Map 8 -Header 0; ReplaceActor -Name "Treasure Chest" -Compare "0B2C" -Param "07CC"; SaveAndPatchLoadedScene
     }
 
@@ -2763,7 +2764,7 @@ function CreateTabMain() {
     CreateReduxCheckbox -Name "RemoveSpeedClamp"                           -Text "Remove Jump Speed Limit"    -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckbox -Name "ChildShops"                          -Child -Text "Child Shops"                -Info "Open the Potion Shop and Bazaar in Kakariko Village for Child Link"                                                                                             -Credits "Admentus"
     CreateReduxCheckBox -Name "FastArrows"                                 -Text "Less Magic Arrows Cooldown" -Info "The burst animation for Fire, Ice and Light Arrows are shorter`nAllows Link to shoot the next magic arrow a bit quicker"                                        -Credits "Anthrogi"
-    CreateReduxCheckBox -Name "AlternateIceArrow"                          -Text "Alt Ice Arrow Location"     -Info "Change how and where the Ice Arrow is gotten, making it obtainable much earlier"  -Warning "Doesn't work correctly in later saves. Vanilla Quest only for now." -Credits "GoldenMariaNova"              
+    CreateReduxCheckBox -Name "AlternateIceArrow"                          -Text "Alt Ice Arrow Location"     -Info "Change how and where the Ice Arrow is obtained, making it usable much earlier"                                                                                  -Credits "GoldenMariaNova"              
 
     # GAMEPLAY (UNSTABLE) #
 
