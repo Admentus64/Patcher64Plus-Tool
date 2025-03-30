@@ -23,6 +23,7 @@ Release Prepare.bat
 *.7z
 *.7z.tmp
 *.zip
+!Files/Addons/Music/**/*.zip
 *.htm
 *.html
 *.nes
