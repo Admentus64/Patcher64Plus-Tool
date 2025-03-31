@@ -1846,8 +1846,10 @@ function ByteSceneOptions() {
 	PrepareMap      -Scene "Gerudo Training Ground"    -Map 8 -Header 0 
         ReplaceActor -Name "Treasure Chest" -Compare "0B2C" -Param "07CC"
 	ReplaceActor -Name "Treasure Chest" -Compare "BB24" -Param "B7C4" 
+        SaveLoadedMap
+        PrepareMap      -Scene "Gerudo Training Ground"    -Map 10 -Header 0
+	ReplaceActor    -Name "Treasure Chest" -Compare "0B22" -Param "07C2"
         SaveAndPatchLoadedScene
-        PrepareMap      -Scene "Gerudo Training Ground"    -Map 10 -Header 0; ReplaceActor -Name "Treasure Chest" -Compare "0B22" -Param "07C2"; SaveAndPatchLoadedScene
     }
 
     # RESTORE #
@@ -2779,7 +2781,7 @@ function CreateTabMain() {
     CreateReduxCheckbox -Name "RemoveSpeedClamp"                           -Text "Remove Jump Speed Limit"    -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckbox -Name "ChildShops"                          -Child -Text "Child Shops"                -Info "Open the Potion Shop and Bazaar in Kakariko Village for Child Link"                                                                                             -Credits "Admentus"
     CreateReduxCheckBox -Name "FastArrows"                                 -Text "Less Magic Arrows Cooldown" -Info "The burst animation for Fire, Ice and Light Arrows are shorter`nAllows Link to shoot the next magic arrow a bit quicker"                                        -Credits "Anthrogi"
-    CreateReduxCheckBox -Name "AlternateIceArrow"                          -Text "Alt Ice Arrow Location"     -Info "Change how and where the Ice Arrow is obtained, making it usable much earlier"   -Warning "It is only for Vanilla Dungeons"                                     -Credits "GoldenMariaNova"              
+    CreateReduxCheckBox -Name "AlternateIceArrow"                          -Text "Alt Ice Arrow Location"     -Info "Change how and where the Ice Arrow is obtained, making it usable much earlier"                                                                                  -Credits "GoldenMariaNova"              
 
     # GAMEPLAY (UNSTABLE) #
 
