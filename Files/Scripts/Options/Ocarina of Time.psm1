@@ -1831,8 +1831,8 @@ function ByteSceneOptions() {
     }
 
     if (IsChecked $Redux.Gameplay.AlternateIceArrow) {
-        PrepareMap      -Scene "Fire Temple"    -Map 8 -Header 0
-	RemoveObject    -Name  "Treasure Chest" 
+	PrepareMap      -Scene "Fire Temple"    -Map 8 -Header 0
+        RemoveObject    -Name  "Treasure Chest" # This is a way to make this object working correctly between each versions of this map
         RemoveActor     -Name  "Treasure Chest"
 	InsertObject    -Name  "Treasure Chest"
         InsertActor     -Name  "Treasure Chest" -Param "0B2D" -X   1944  -Y 4681 -Z (-393) -YRot 24394
@@ -1840,16 +1840,24 @@ function ByteSceneOptions() {
         ReplaceActor    -Name  "Switch"         -Param "3800" -X   1148  -Y 4400 -Z (-294)
 	ReplaceActor    -Name  "Flame Circle"   -Param "1378" -X   1938  -Y 4680 -Z (-393)
         ReplaceActor    -Name  "Pushable Block" -Compare "FF00" -Param "1080" -Y (-10000) # Making the hard-coded block begone
-	SaveAndPatchLoadedScene
-	PrepareMap      -Scene "Zora's Fountain" -Map 0 -Header 2; ReplaceActor  -Name "Collectable" -Compare "1406" -Param "1402" 
-	SaveAndPatchLoadedScene
-	PrepareMap      -Scene "Gerudo Training Ground"    -Map 8 -Header 0 
+	
+        SaveAndPatchLoadedScene
+	
+        PrepareMap      -Scene "Zora's Fountain" -Map 0 -Header 2 
+	ReplaceActor  -Name "Collectable" -Compare "1406" -Param "1402" 
+	
+        SaveAndPatchLoadedScene
+	
+        PrepareMap      -Scene "Gerudo Training Ground"    -Map 8 -Header 0 
         ReplaceActor -Name "Treasure Chest" -Compare "0B2C" -Param "07CC"
 	ReplaceActor -Name "Treasure Chest" -Compare "BB24" -Param "B7C4" 
-        SaveLoadedMap
-        PrepareMap      -Scene "Gerudo Training Ground"    -Map 10 -Header 0
+        
+	SaveLoadedMap
+        
+	PrepareMap      -Scene "Gerudo Training Ground"    -Map 10 -Header 0
 	ReplaceActor    -Name "Treasure Chest" -Compare "0B22" -Param "07C2"
-        SaveAndPatchLoadedScene
+        
+	SaveAndPatchLoadedScene
     }
 
     # RESTORE #
