@@ -1,3 +1,6 @@
+v25.2.6
+- Added scripts support for patches addons
+
 v25.2.5
 - Added "Revisited Textures" option for Master of Time (thanks LoadingError)
 - Fixed minor issues

@@ -328,13 +328,16 @@ function ChangeGameMode() {
     $GameFiles.textEditor   = $GameFiles.Base   + "\Text Editor.json"
     $GameFiles.sceneEditor  = $GameFiles.Base   + "\Scene Editor.json"
     $GameFiles.scenesPatch  = $GameFiles.editor + "\scenes.bps"
+    $GameFiles.addonScripts = $null
 
     # JSON Files
     if ($GameType.patches -gt 0) {
         $Files.json.patches = SetJSONFile $GameFiles.patches
         $Files.json.repo.addons | Where-Object { $_.type -eq "Patches" } | ForEach-Object {
-            if (TestFile ($Paths.Patches + "\" + $_.title + "\" + $GameType.mode + "\Patches.json")) { $Files.json.patches += SetJSONFile ($Paths.Patches + "\" + $_.title + "\" + $GameType.mode + "\Patches.json") }
-            write-host ($Paths.Patches + "\" + $_.title + "\" + $GameType.mode + "\Patches.json")
+            if (TestFile ($Paths.Patches + "\" + $_.title + "\" + $GameType.mode + "\Patches.json")) {
+                $GameFiles.addonScripts  = $Paths.Patches + "\" + $_.title + "\" + $GameType.mode + "\Scripts"
+                $Files.json.patches     += SetJSONFile ($Paths.Patches + "\" + $_.title + "\" + $GameType.mode + "\Patches.json")
+            }
         }
     }
     else { $Files.json.patches = $null }
@@ -558,19 +561,28 @@ function ChangePatch() {
 
 #==============================================================================================================================================================================================
 function SetGameScript() {
-
+    
     if (IsSet $GamePatch.script) {
         if ($GamePatch.script -is [system.Array]) {
             foreach ($script in $GamePatch.script) {
                 if (Get-Module -Name $script) { Remove-Module -Name $script }
                 $file = $Paths.Scripts + "\Options\" + $script + ".psm1"
                 if (TestFile $file) { Import-Module -Name $file -Global }
+                else {
+                    $file = $GameFiles.addonScripts + "\" + $script + ".psm1"
+                    if (TestFile $file) { Import-Module -Name $file -Global }
+                }
             }
         }
         else {
             if (Get-Module -Name $GamePatch.script) { Remove-Module -Name $GamePatch.script }
             $file = $Paths.Scripts + "\Options\" + $GamePatch.script + ".psm1"
             if (TestFile $file) { Import-Module -Name $file -Global }
+            else {
+                $file = $GameFiles.addonScripts + "\" + $GamePatch.script + ".psm1"
+                if (TestFile $file) { Import-Module -Name $file -Global }
+                write-host $file
+            }
         }
         if (HasCommand "CreateOptions") {
             CreateOptions
