@@ -1837,11 +1837,11 @@ function ByteSceneOptions() {
 	InsertObject    -Name  "Treasure Chest"
         InsertActor     -Name  "Treasure Chest" -Param "0B2D" -X   1944  -Y 4681 -Z (-393) -YRot 24394
         ReplaceActor    -Name  "Skullwalltula"  -X   1728  -Y 4473 -Z (-231) -YRot 57344
-        RemoveActor     -Name  "Switch"
-	RemoveActor     -Name  "Flame Circle"
-        ReplaceActor    -Name  "Pushable Block" -Param "FF01" -X   1938  -Y 4680 -Z (-395) -YRot 8192
+        ReplaceActor    -Name  "Switch"         -Param "3800" -X   1148  -Y 4400 -Z (-294)
+	ReplaceActor    -Name  "Flame Circle"   -Param "1378" -X   1938  -Y 4680 -Z (-393)
+        ReplaceActor    -Name  "Pushable Block" -Compare "FF00" -Param "1080" -Y (-10000) # Making the hard-coded block begone
 	SaveAndPatchLoadedScene
-	PrepareMap      -Scene "Zora's Fountain"           -Map 0 -Header 2; ReplaceActor  -Name "Collectable" -Compare "1406" -Param "1402" 
+	PrepareMap      -Scene "Zora's Fountain" -Map 0 -Header 2; ReplaceActor  -Name "Collectable" -Compare "1406" -Param "1402" 
 	SaveAndPatchLoadedScene
 	PrepareMap      -Scene "Gerudo Training Ground"    -Map 8 -Header 0 
         ReplaceActor -Name "Treasure Chest" -Compare "0B2C" -Param "07CC"
