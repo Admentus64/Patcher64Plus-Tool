@@ -1,4 +1,5 @@
 v25.2.7
+- Fixed some issues with Redux for OoT
 - Fixed issues with Master of Time
 	* Set Giant's Knife durability reset values to 20
 	* Remove Hover Boots icon shown prior to the Quiver upgrades
