@@ -29,9 +29,13 @@ function PerformUpdate() {
 function CleaningRepos([string]$Type) {
     
     $addonTitles = @("Core", "Custom") + ($Files.json.repo.addons | Where-Object { $_.type -eq $Type } | ForEach-Object { $_.title })
-    ((Get-ChildItem -Path ($Paths.Addons + "\" + $Type) -Directory -Force) | Where {$addonTitles -NotContains $_.Name}) | ForEach-Object {
+    (Get-ChildItem -Path ($Paths.Addons + "\" + $Type) -Directory -Force) | Where-Object { 
+        $addonPath = $_.FullName
+        $permanentFile = Get-ChildItem -Path $addonPath -File -Force | Where-Object { $_.Name.ToLower() -eq "permanent.txt" }
+        -not $permanentFile -and ($addonTitles -NotContains $_.Name)
+    } | ForEach-Object {
         RemovePath $_.FullName
-        WriteToConsole ("Removed unused " + $Type.toLower() + " repo: " + $_.BaseName) 
+        WriteToConsole ("Removed unused " + $Type.ToLower() + " repo: " + $_.BaseName) 
     }
 
 }
