@@ -3096,7 +3096,7 @@ function CreateTabGraphics() {
     CreateReduxCheckBox -Name "ImprovedMoon"      -Text "Improved Moon"                -Info "Replaces the moon with a nicer looking texture"                                                      -Credits "Admentus & GoldenMariaNova"
 
     if ($GamePatch.settings -eq "Master of Time") {
-        CreateReduxComboBox -Name "Revisited"     -Text "Revisited Textures"           -Info "Update textures with those from the Revisted visual overhaul"                                        -Credits "Ported by LoadingError, textures by Don Camilo" -Items @("None", "Items Only", "Pause Screen", "Both")
+        CreateReduxComboBox -Name "Revisited"     -Text "Revisited Textures"           -Info "Update textures with those from the Revisted visual overhaul"                                        -Credits "Ported by LoadingError, textures by Syeo" -Items @("None", "Items Only", "Pause Screen", "Both")
     }
 
     if (!$IsWiiVC -and $Redux.Graphics.Widescreen -ne $null) {
