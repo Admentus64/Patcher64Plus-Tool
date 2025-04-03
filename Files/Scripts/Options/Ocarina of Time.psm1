@@ -3562,6 +3562,8 @@ function CreateTabEquipment() {
 
     # EQUIPMENT #
 
+    if (StrLike -Str $GamePatch.settings -Val "Master of Time") { $hp = 20 } else { $hp = 8 } 
+
     CreateReduxGroup    -Tag  "Equipment"                  -Text "Equipment Adjustments"
     CreateReduxCheckBox -Name "HideSword"                  -Text "Hide Sword"                  -Info "The sword is hidden when sheathed"                                                             -Credits "Admentus"
     CreateReduxCheckBox -Name "HideShield"                 -Text "Hide Shield"                 -Info "The shield is hidden when sheathed"                                                            -Credits "Admentus"
@@ -3573,7 +3575,7 @@ function CreateTabEquipment() {
     CreateReduxCheckBox -Name "PowerBracelet"       -Child -Text "Power Bracelet"              -Info "Replace the Goron's Bracelet textures and text with the Power Bracelet"                        -Credits "Admentus"
     CreateReduxCheckBox -Name "Hookshot"            -Adult -Text "Termina Hookshot"            -Info "Replace the Hyrule Hookshot icon with the Termina Hookshot"                                    -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "GoronBraceletFix"    -Adult -Text "Keep Goron's Bracelet Color" -Info "Prevent grayscale on Goron's Bracelet, as Adult Link isn't able to push big blocks without it" -Credits "Randomizer"
-    CreateReduxTextBox  -Name "SwordHealth"         -Adult -Text "Sword Health"      -Length 3 -Info "Set the amount of hits the Giant's Knife can take before it breaks"   -Value 8 -Min 1 -Max 255 -Credits "Admentus" 
+    CreateReduxTextBox  -Name "SwordHealth"         -Adult -Text "Sword Health"      -Length 3 -Info "Set the amount of hits the Giant's Knife can take before it breaks" -Value $hp -Min 1 -Max 255 -Credits "Admentus" 
 
     CreateReduxGroup    -Tag  "Equipment"            -Text "Swords & Shields"
     CreateReduxComboBox -Name "KokiriSword"   -Child -Text "Kokiri Sword"     -Items @("Kokiri Sword")                      -Shift (-15) -FilePath ($GameFiles.Textures + "\Equipment\Kokiri Sword") -Ext @("icon", "bin") -Info "Select an alternative for the icon and text of the Kokiri Sword"     -Credits "Admentus (injects) & GhostlyDark (injects) & CYB3RTR0N (beta icon)"
