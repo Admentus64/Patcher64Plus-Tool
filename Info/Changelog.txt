@@ -1,8 +1,11 @@
 v25.2.7
+- Addons with a "permanent.txt" file will not delete themselves if not defined in repo.json
 - Fixed some issues with Redux for OoT
 - Fixed issues with Master of Time
 	* Set Giant's Knife durability reset values to 20
 	* Remove Hover Boots icon shown prior to the Quiver upgrades
+	* Small dialogue fix
+- Corrected some tooltips
 
 v25.2.6
 - Added scripts support for patches addons

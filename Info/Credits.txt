@@ -208,6 +208,7 @@
 - Rogue_Millipede
 - DezZival
 - OniHelix
+- Syeo
 
 --- Gold Quest ---
 - AndiiSyn
