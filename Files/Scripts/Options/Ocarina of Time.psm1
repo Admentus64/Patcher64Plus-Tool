@@ -1836,6 +1836,7 @@ function ByteSceneOptions() {
         RemoveActor     -Name  "Treasure Chest"
 	InsertObject    -Name  "Treasure Chest"
         InsertActor     -Name  "Treasure Chest" -Param "0B2D" -X   1944  -Y 4681 -Z (-393) -YRot 24394
+	RemoveActor     -Name  "Stone Hookshot Target"     -Compare "3DC1" # This is also to remove the bloat of these now unusable actors (Master Quest and URA Quest) 
         ReplaceActor    -Name  "Skullwalltula"  -X   1728  -Y 4473 -Z (-231) -YRot 57344
         ReplaceActor    -Name  "Switch"         -Param "3800" -X   1148  -Y 4400 -Z (-294)
 	ReplaceActor    -Name  "Flame Circle"   -Param "1378" -X   1938  -Y 4680 -Z (-393)
