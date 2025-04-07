@@ -1062,7 +1062,7 @@ function CreateButtonColorOptions($Default=1) {
     
     if ($Settings.Core.Lite) { return }
 
-    $items     = @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Xbox OoT", "Xbox MM", "JP PlayStation OoT", "JP PlayStation MM", "WE PlayStation OoT", "WE PlayStation MM", "N64 TML", "GC TML", "Randomized", "Custom")
+    $items     = @("N64 OoT", "N64 MM", "GC OoT", "GC MM", "Xbox OoT", "Xbox MM", "JP PlayStation OoT", "JP PlayStation MM", "WE PlayStation OoT", "WE PlayStation MM", "N64 TML", "GC TML", "Gold Quest", "GC Gold Quest", "Randomized", "Custom")
     $randomize = "`n" + '"Randomized" fully randomizes the colors each time the patcher is opened'
     $buttons   = $Redux.Colors.SetButtons = $Redux.Colors.ButtonLabels = @()
 
@@ -1517,6 +1517,8 @@ function SetButtonColorsPreset([object]$ComboBox) {
     elseif ($Text -eq "WE PlayStation MM")    { SetColors -Colors @("64C8FF", "FF6464", "787878", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($Text -eq "N64 TML")              { SetColors -Colors @("3EB3EF", "09D131", "F7EE37", "D44646") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($Text -eq "GC TML")               { SetColors -Colors @("09D131", "D44646", "F7EE37", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($Text -eq "Gold Quest")           { SetColors -Colors @("5A5AFF", "009600", "F8CF00", "C80000") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($Text -eq "GC Gold Quest")        { SetColors -Colors @("00C832", "FF1E1E", "F8CF00", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($Text -eq "Randomized")           {
         $Colors = @()
         for ($i=0; $i -lt $Redux.Colors.SetButtons.length; $i++) { $Colors += SetRandomColor -Dialog $Redux.Colors.SetButtons[$i] -Label $Redux.Colors.ButtonLabels[$i] }
