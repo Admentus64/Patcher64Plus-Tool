@@ -16,7 +16,12 @@ function PatchDungeonsOoTMQ() {
         ChangeBytes -Offset "E6C9F0" -Values "3C01BFB0C44462D444818000C44A62E046062200844E62CA26017FFF46105480E44862D425CFFFFFE45262E0"
         ChangeBytes -Offset "E6CA48" -Values "3C0143484481400026017FFFE44662D4E44862E0"
     }
-    elseif   (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest")         { PatchBytes -Offset "1795300" -Texture -Patch "Logo\nmq_logo.bin" }          # New Master Quest Title
+    elseif   (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest") { 
+    PatchBytes -Offset "1795300" -Texture -Patch "Logo\nmq_logo.bin" 
+    PatchBytes -Offset "17AE300" -Texture -Patch "Logo\mq_copyright.bin"} # New Master Quest Title
+    elseif   (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest Without Subtitle") { 
+    PatchBytes -Offset "1795300" -Texture -Patch "Logo\nmq_nosub_logo.bin" 
+    PatchBytes -Offset "17AE300" -Texture -Patch "Logo\mq_copyright.bin"} # New Master Quest Title Without Subtitle
     elseif ( (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest") -or (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest + Subtitle") ) { # Ura Title
         if     (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest")              { PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_logo.bin"          } # Ura Title
         elseif (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest + Subtitle")   { PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_subtitle_logo.bin" } # Ura Title + Subtitle
