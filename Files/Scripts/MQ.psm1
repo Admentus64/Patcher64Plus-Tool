@@ -5,8 +5,7 @@ function PatchDungeonsOoTMQ() {
     if (IsIndex -Elem $Redux.MQ.Logo -Text "Vanilla + GC Copyright") { # The GC copyright is the same as OOT Master Quest, as they are on the same disk
         PatchBytes -Offset "17AE300" -Texture -Patch "Logo\mq_copyright.bin" 
     }
-
-    if (IsIndex -Elem $Redux.MQ.Logo -Text "Master Quest") { # MQ Title with Subtitle
+    elseif (IsIndex -Elem $Redux.MQ.Logo -Text "Master Quest") { # MQ Title with Subtitle
         PatchBytes -Offset "1795300" -Texture -Patch "Logo\mq_logo.bin"
         PatchBytes -Offset "17AE300" -Texture -Patch "Logo\mq_copyright.bin"
         ChangeBytes -Offset "E6E266" -Values "64963421FF" # THE LEGEND OF + OCARINA OF TIME (1450358CA0)
@@ -16,7 +15,6 @@ function PatchDungeonsOoTMQ() {
         ChangeBytes -Offset "E6C9F0" -Values "3C01BFB0C44462D444818000C44A62E046062200844E62CA26017FFF46105480E44862D425CFFFFFE45262E0"
         ChangeBytes -Offset "E6CA48" -Values "3C0143484481400026017FFFE44662D4E44862E0"
     }
-    elseif   (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest")         { PatchBytes -Offset "1795300" -Texture -Patch "Logo\nmq_logo.bin" }          # New Master Quest Title
     elseif ( (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest") -or (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest + Subtitle") ) { # Ura Title
         if     (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest")              { PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_logo.bin"          } # Ura Title
         elseif (IsIndex -Elem $Redux.MQ.Logo -Text "Ura Quest + Subtitle")   { PatchBytes -Offset "1795300" -Texture -Patch "Logo\ura_subtitle_logo.bin" } # Ura Title + Subtitle
@@ -24,6 +22,11 @@ function PatchDungeonsOoTMQ() {
         ChangeBytes -Offset "E6E266" -Values "C8963421C8" # THE LEGEND OF + OCARINA OF TIME
         ChangeBytes -Offset "E6E2A6" -Values "6432358C64" # Overlay Title color
         ChangeBytes -Offset "E6DE2E" -Values "96" # Title Flames color
+    }
+    elseif ( (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest") -or (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest + Subtitle") ) { # New Master Quest
+        if     (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest")              { PatchBytes -Offset "1795300" -Texture -Patch "Logo\nmq_logo.bin"          } # Ura Title
+        elseif (IsIndex -Elem $Redux.MQ.Logo -Text "New Master Quest + Subtitle")   { PatchBytes -Offset "1795300" -Texture -Patch "Logo\nmq_subtitle_logo.bin" } # Ura Title + Subtitle
+        PatchBytes -Offset "17AE300" -Texture -Patch "Logo\mq_copyright.bin"
     }
 
     if (IsIndex -Elem $Redux.MQ.Dungeons -Text "Custom") { return }
