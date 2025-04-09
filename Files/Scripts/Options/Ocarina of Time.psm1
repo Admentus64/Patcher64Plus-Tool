@@ -768,6 +768,9 @@ function ByteOptions() {
     elseif (IsIndex $Redux.Colors.PauseScreenColors -Index 3) {
         ChangeBytes -Offset "BC7994" -Values "0A46460A0A5A5A0A508C8C5073E1E173508C8C50326E6E323264643232646432283C3C2864A7A764283C3C28326E6E3250828250283C3C281E3C3C1E2C1C1C2C1E3C3C1E326E6E32" # Background
         }
+    elseif (IsIndex $Redux.Colors.PauseScreenColors -Index 4) {
+        ChangeBytes -Offset "BC7994" -Values "78DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878FFDD7878FFDD7878FFDD7878FFDD7878FFDD7878FFDD78" # Background
+	}
     }
 
     
@@ -3498,7 +3501,7 @@ function CreateTabColors() {
     # MISC COLORS #
 
     CreateReduxGroup -Tag "Colors" -Text "Misc Colors"
-    CreateReduxComboBox -Name "PauseScreenColors" -Text "Pause Screen Colors"    -Info "Select Pause Screen color schemes from Majora's Mask and some others mods" -Items @("Default", "Majora's Mask", "Gold Quest")                  -Credits "Garo-Mastah & GoldenMariaNova"
+    CreateReduxComboBox -Name "PauseScreenColors" -Text "Pause Screen Colors"    -Info "Select Pause Screen color schemes from Majora's Mask and some others mods" -Items @("Default", "Majora's Mask", "Gold Quest", "MoT Remastered")      -Credits "Garo-Mastah & GoldenMariaNova"
 
 }
 
