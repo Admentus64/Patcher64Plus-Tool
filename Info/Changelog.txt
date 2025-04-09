@@ -1,3 +1,7 @@
+v25.2.8
+- Added new New Master Quest logo without subtitle for OoT
+- Added Gold Quest HUD colors for OoT
+
 v25.2.7
 - Addons with a "permanent.txt" file will not delete themselves if not defined in repo.json
 - Fixed some issues with Redux for OoT

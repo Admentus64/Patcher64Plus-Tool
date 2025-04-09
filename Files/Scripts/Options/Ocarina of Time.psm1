@@ -3241,8 +3241,10 @@ function CreateQuestGroups() {
     # DUNGEONS & LOGO #
 
     CreateReduxGroup -Tag "MQ" -Text "Dungeons & Logo"
-    CreateReduxComboBox -Name "Dungeons" -Text "Dungeons" -Items @("Vanilla", "Master Quest", "Ura Quest", "Select", "Randomize", "Custom")                         -Info 'Select the dungeons to patch`n"Custom" patches Scene Editor generated scenes' -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), ShadowOne333 & Admentus"
-    CreateReduxComboBox -Name "Logo"     -Text "Logo"     -Items @("Vanilla", "Vanilla + GC Copyright", "Master Quest", "Ura Quest", "New Master Quest", "Ura Quest", "Ura Quest + Subtitle") -Info "Select the logo title for the intro title screen" -Base 1                     -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), ShadowOne333, GhostlyDark & Admentus"
+    $items = @("Vanilla", "Vanilla + GC Copyright", "Master Quest", "Ura Quest", "Ura Quest + Subtitle", "New Master Quest", "New Master Quest + Subtitle")
+
+    CreateReduxComboBox -Name "Dungeons" -Text "Dungeons" -Items @("Vanilla", "Master Quest", "Ura Quest", "Select", "Randomize", "Custom") -Info 'Select the dungeons to patch`n"Custom" patches Scene Editor generated scenes' -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), ShadowOne333 & Admentus"
+    CreateReduxComboBox -Name "Logo"     -Text "Logo"     -Items $items                                                                     -Info "Select the logo title for the intro title screen"                     -Base 1 -Credits "ZethN64, Sakura, Frostclaw, Steve(ToCoool), ShadowOne333, MariaNova, GhostlyDark & Admentus"
 
 
 
