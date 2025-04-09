@@ -750,7 +750,8 @@ function ByteOptions() {
     # MISC COLORS #
 
     if (IsDefault $Redux.Colors.PauseScreenColors -Not) {
-        ChangeBytes -Offset "BBF88E" -Values "978B" # Menu Title Background
+    if (IsIndex $Redux.Colors.PauseScreenColors -Index 2) {    
+	ChangeBytes -Offset "BBF88E" -Values "978B" # Menu Title Background
         ChangeBytes -Offset "BBF892" -Values "61"   # Menu Title Background
         ChangeBytes -Offset "BBF97E" -Values "978B" # Z
         ChangeBytes -Offset "BBF982" -Values "61FF" # R
@@ -763,6 +764,7 @@ function ByteOptions() {
         ChangeBytes -Offset "BC7947" -Values "8B"   # Z/R Highlight
         ChangeBytes -Offset "BC7949" -Values "61"   # Z/R Highlight
         ChangeBytes -Offset "BC7994" -Values "B4B4B4B478B4B4B4B4B4B4B478B4B4B4B4B4B4B4B4B4B4B4B4B4B4B478B4B4B4B4B4B4B478B4B4B4B4B4B4B4B4B4B4B4787878784678787878787878467878787878787878787878" # Background
+	}
     if (IsIndex $Redux.Colors.PauseScreenColors -Index 3) {
         ChangeBytes -Offset "BC7994" -Values "0A46460A0A5A5A0A508C8C5073E1E173508C8C50326E6E323264643232646432283C3C2864A7A764283C3C28326E6E3250828250283C3C281E3C3C1E2C1C1C2C1E3C3C1E326E6E32" # Background
         }
