@@ -1,3 +1,6 @@
+v25.2.9
+- New Pause Screen Color options for OoT
+
 v25.2.8
 - Added new New Master Quest logo without subtitle for OoT
 - Added Gold Quest HUD colors for OoT
