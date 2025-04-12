@@ -2563,7 +2563,7 @@ function CreateOptionsPreviews() {
     CreateImageBox -X 20  -Y 20  -W 80 -H 80 -Name "ImprovedMoon";  $Redux.Graphics.ImprovedMoon.Add_CheckStateChanged( { ShowHUDPreview -IsOoT } )
 
     CreatePreviewGroup -Text "Hookshot Reticle Previews" -Height 3
-    CreateImageBox -X 20  -Y 20  -W 80 -H 80 -Name "HookReticle";   $Redux.Graphics.HookReticle.Add_SelectedIndexChanged( { ShowHUDPreview -IsOoT } )
+    CreateImageBox -X 20  -Y 20  -W 80 -H 80 -Name "HookReticle";   $Redux.UI.HookReticle.Add_SelectedIndexChanged( { ShowHUDPreview -IsOoT } )
 
     ShowHUDPreview -IsOoT
 
