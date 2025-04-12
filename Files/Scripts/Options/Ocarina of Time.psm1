@@ -322,6 +322,7 @@ function ByteOptions() {
     if ( (IsIndex -Elem $Redux.UI.BlackBars -Index 3) -or (IsIndex -Elem $Redux.UI.BlackBars -Index 4) ) { ChangeBytes -Offset @("B0F5A4", "B0F5D4", "B0F5E4", "B0F688") -Values "00000000" }
 
     if (IsChecked $Redux.UI.CenterNaviPrompt)    { ChangeBytes -Offset "B582DF"  -Values "01" -Subtract }
+    if (IsDefault $Redux.UI.HookReticle  -Not)   { PatchBytes  -Offset "FB1B18"  -Shared -Patch ("HUD\Hook Reticle\"  + $Redux.UI.HookReticle.Text.replace(  " (default)", "") + ".bin") }
     if (IsDefault $Redux.UI.ButtonStyle  -Not)   { PatchBytes  -Offset "1A3CA00" -Shared -Patch ("HUD\Buttons\"       + $Redux.UI.ButtonStyle.Text.replace(  " (default)", "") + ".bin") }
     if (IsDefault $Redux.UI.Rupees       -Not)   { PatchBytes  -Offset "1A3DF00" -Shared -Patch ("HUD\Rupees\"        + $Redux.UI.Rupees.Text.replace(       " (default)", "") + ".bin") }
     if (IsDefault $Redux.UI.Hearts       -Not)   { PatchBytes  -Offset "1A3C000" -Shared -Patch ("HUD\Hearts\"        + $Redux.UI.Hearts.Text.replace(       " (default)", "") + ".bin") }
@@ -2559,7 +2560,10 @@ function CreateOptionsPreviews() {
     CreateImageBox -X 210 -Y 120 -W 40  -H 40 -Name "BossFloor";    $Redux.UI.BossFloor.Add_SelectedIndexChanged(    { ShowHUDPreview -IsOoT } )
     
     CreatePreviewGroup -Text "Misc Previews" -Height 3
-    CreateImageBox -X 20  -Y 20  -W 80 -H 80 -Name "ImprovedMoon"; $Redux.Graphics.ImprovedMoon.Add_CheckStateChanged( { ShowHUDPreview -IsOoT } )
+    CreateImageBox -X 20  -Y 20  -W 80 -H 80 -Name "ImprovedMoon";  $Redux.Graphics.ImprovedMoon.Add_CheckStateChanged( { ShowHUDPreview -IsOoT } )
+
+    CreatePreviewGroup -Text "Hookshot Reticle Previews" -Height 3
+    CreateImageBox -X 20  -Y 20  -W 80 -H 80 -Name "HookReticle";   $Redux.UI.HookReticle.Add_SelectedIndexChanged( { ShowHUDPreview -IsOoT } )
 
     ShowHUDPreview -IsOoT
 
@@ -3113,6 +3117,7 @@ function CreateTabGraphics() {
     CreateReduxComboBox -Name "Magic"            -Text "Magic Bar"           -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Magic")         -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the magic meter"                                                                 -Credits "GhostlyDark (ported), Pizza, Nerrel (HD), Zeth Alkar"
     CreateReduxComboBox -Name "CurrentFloor"     -Text "Current Floor Icon"  -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Current Floor") -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the current floor icon"                                                          -Credits "Admentus (ported), GhostlyDark (ported) & GoldenMariaNova (Alternative & Triforce)"
     CreateReduxComboBox -Name "BossFloor"        -Text "Boss Floor Icon"     -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Boss Floor")    -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the boss floor icon"                                                             -Credits "Admentus (ported), GhostlyDark (ported) & GoldenMariaNova (Alternative)"
+    CreateReduxComboBox -Name "HookReticle"      -Text "Hookshot Reticle"    -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Hook Reticle")  -Ext "bin" -Default $val              -Info "Set the style for the Hookshot reticle"                                                            -Credits "GoldenMariaNova"
     CreateReduxCheckBox -Name "DungeonKeys"      -Text "MM Key Icon"         -Info "Replace the key icon with that from Majora's Mask"          -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "Chests"           -Text "MM Chests Map Icon"  -Info "Replace the chests map icons with those from Majora's Mask" -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "CenterNaviPrompt" -Text "Center Navi Prompt"  -Info 'Centers the "Navi" prompt shown in the C-Up button'         -Credits "GhostlyDark (ported)"
