@@ -854,6 +854,8 @@ function ShowHudPreview([switch]$IsOoT) {
     $image = GetImageFile ($Paths.Shared + "\HUD\Keys\" + $file)
     if ($image -ne $null) { SetBitMap -Path $image -Box $Redux.Previews.DungeonKeys } else { $Redux.Previews.DungeonKeys.Image = $null }
 
+    if ($Redux.UI.HookReticle  -ne $null)   { ShowPreviewImage -Option $Redux.UI.HookReticle.Text  -Path "HUD\Hook Reticle\" -Box $Redux.Previews.HookReticle  }
+    
     if ($IsOoT) {
         if (IsChecked $Redux.Graphics.ImprovedMoon) { $image = GetImageFile ($GameFiles.Textures + "\Moon\Improved Moon.png") } else { $image = GetImageFile ($GameFiles.Textures + "\Moon\Original Moon.png") } 
         if ($image -ne $null) { SetBitMap -Path $image -Box $Redux.Previews.ImprovedMoon } else { $Redux.Previews.ImprovedMoon.Image = $null }
@@ -1517,8 +1519,8 @@ function SetButtonColorsPreset([object]$ComboBox) {
     elseif ($Text -eq "WE PlayStation MM")    { SetColors -Colors @("64C8FF", "FF6464", "787878", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($Text -eq "N64 TML")              { SetColors -Colors @("3EB3EF", "09D131", "F7EE37", "D44646") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($Text -eq "GC TML")               { SetColors -Colors @("09D131", "D44646", "F7EE37", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
-    elseif ($Text -eq "Gold Quest")           { SetColors -Colors @("5A5AFF", "009600", "F8CF00", "C80000") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
-    elseif ($Text -eq "GC Gold Quest")        { SetColors -Colors @("00C832", "FF1E1E", "F8CF00", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($Text -eq "Gold Quest")           { SetColors -Colors @("5A5AFF", "009600", "EAC309", "C80000") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
+    elseif ($Text -eq "GC Gold Quest")        { SetColors -Colors @("00C832", "FF1E1E", "EAC309", "787878") -Dialogs $Redux.Colors.SetButtons -Labels $Redux.Colors.ButtonLabels }
     elseif ($Text -eq "Randomized")           {
         $Colors = @()
         for ($i=0; $i -lt $Redux.Colors.SetButtons.length; $i++) { $Colors += SetRandomColor -Dialog $Redux.Colors.SetButtons[$i] -Label $Redux.Colors.ButtonLabels[$i] }

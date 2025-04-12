@@ -322,6 +322,7 @@ function ByteOptions() {
     if ( (IsIndex -Elem $Redux.UI.BlackBars -Index 3) -or (IsIndex -Elem $Redux.UI.BlackBars -Index 4) ) { ChangeBytes -Offset @("B0F5A4", "B0F5D4", "B0F5E4", "B0F688") -Values "00000000" }
 
     if (IsChecked $Redux.UI.CenterNaviPrompt)    { ChangeBytes -Offset "B582DF"  -Values "01" -Subtract }
+    if (IsDefault $Redux.UI.HookReticle  -Not)   { PatchBytes  -Offset "FB1B18"  -Shared -Patch ("HUD\Hook Reticle\"  + $Redux.UI.HookReticle.Text.replace(  " (default)", "") + ".bin") }
     if (IsDefault $Redux.UI.ButtonStyle  -Not)   { PatchBytes  -Offset "1A3CA00" -Shared -Patch ("HUD\Buttons\"       + $Redux.UI.ButtonStyle.Text.replace(  " (default)", "") + ".bin") }
     if (IsDefault $Redux.UI.Rupees       -Not)   { PatchBytes  -Offset "1A3DF00" -Shared -Patch ("HUD\Rupees\"        + $Redux.UI.Rupees.Text.replace(       " (default)", "") + ".bin") }
     if (IsDefault $Redux.UI.Hearts       -Not)   { PatchBytes  -Offset "1A3C000" -Shared -Patch ("HUD\Hearts\"        + $Redux.UI.Hearts.Text.replace(       " (default)", "") + ".bin") }
@@ -749,21 +750,17 @@ function ByteOptions() {
 
     # MISC COLORS #
 
-    if (IsChecked $Redux.Colors.PauseScreenColors) {
-        ChangeBytes -Offset "BBF88E" -Values "978B" # Menu Title Background
-        ChangeBytes -Offset "BBF892" -Values "61"   # Menu Title Background
-        ChangeBytes -Offset "BBF97E" -Values "978B" # Z
-        ChangeBytes -Offset "BBF982" -Values "61FF" # R
-        ChangeBytes -Offset "BBFC7E" -Values "FFFF" # Unavailable Menu Title
-        ChangeBytes -Offset "BBFC82" -Values "FF"   # Unavailable Menu Title
-        ChangeBytes -Offset "BC793D" -Values "97"   # Z/R Highlight
-        ChangeBytes -Offset "BC793F" -Values "8B"   # Z/R Highlight
-        ChangeBytes -Offset "BC7941" -Values "61"   # Z/R Highlight
-        ChangeBytes -Offset "BC7945" -Values "97"   # Z/R Highlight
-        ChangeBytes -Offset "BC7947" -Values "8B"   # Z/R Highlight
-        ChangeBytes -Offset "BC7949" -Values "61"   # Z/R Highlight
-        ChangeBytes -Offset "BC7994" -Values "B4B4B4B478B4B4B4B4B4B4B478B4B4B4B4B4B4B4B4B4B4B4B4B4B4B478B4B4B4B4B4B4B478B4B4B4B4B4B4B4B4B4B4B4787878784678787878787878467878787878787878787878" # Background
-    }
+    if (IsIndex $Redux.Colors.PauseScreenColors -Index 2) {    
+        ChangeBytes -Offset @("BBF88E", "BBF97E")           -Values "978B" # Menu Title Background, Z
+        ChangeBytes -Offset   "BBF982"                      -Values "61FF" # R
+        ChangeBytes -Offset @("BBFC7E", "BBFC7F", "BBFC82") -Values "FF"   # Unavailable Menu Title
+        ChangeBytes -Offset @("BC793D", "BC7945")           -Values "97"   # Z/R Highlight
+        ChangeBytes -Offset @("BC793F", "BC7947")           -Values "8B"   # Z/R Highlight
+        ChangeBytes -Offset @("BC7941", "BC7949", "BBF892") -Values "61"   # Z/R Highlight, Menu Title Background
+        ChangeBytes -Offset   "BC7994"                      -Values "B4B4B4B478B4B4B4B4B4B4B478B4B4B4B4B4B4B4B4B4B4B4B4B4B4B478B4B4B4B4B4B4B478B4B4B4B4B4B4B4B4B4B4B4787878784678787878787878467878787878787878787878" # Background
+	}
+    elseif (IsIndex $Redux.Colors.PauseScreenColors -Index 3) { ChangeBytes -Offset "BC7994" -Values "0A46460A0A5A5A0A508C8C5073E1E173508C8C50326E6E323264643232646432283C3C2864A7A764283C3C28326E6E3250828250283C3C281E3C3C1E2C1C1C2C1E3C3C1E326E6E32" }
+    elseif (IsIndex $Redux.Colors.PauseScreenColors -Index 4) { ChangeBytes -Offset "BC7994" -Values "78DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878DDDD7878FFDD7878FFDD7878FFDD7878FFDD7878FFDD7878FFDD78" }
 
 
     
@@ -2597,7 +2594,10 @@ function CreateOptionsPreviews() {
     CreateImageBox -X 210 -Y 120 -W 40  -H 40 -Name "BossFloor";    $Redux.UI.BossFloor.Add_SelectedIndexChanged(    { ShowHUDPreview -IsOoT } )
     
     CreatePreviewGroup -Text "Misc Previews" -Height 3
-    CreateImageBox -X 20  -Y 20  -W 80 -H 80 -Name "ImprovedMoon"; $Redux.Graphics.ImprovedMoon.Add_CheckStateChanged( { ShowHUDPreview -IsOoT } )
+    CreateImageBox -X 20  -Y 20  -W 80 -H 80 -Name "ImprovedMoon";  $Redux.Graphics.ImprovedMoon.Add_CheckStateChanged( { ShowHUDPreview -IsOoT } )
+
+    CreatePreviewGroup -Text "Hookshot Reticle Previews" -Height 3
+    CreateImageBox -X 20  -Y 20  -W 80 -H 80 -Name "HookReticle";   $Redux.UI.HookReticle.Add_SelectedIndexChanged( { ShowHUDPreview -IsOoT } )
 
     ShowHUDPreview -IsOoT
 
@@ -3151,6 +3151,7 @@ function CreateTabGraphics() {
     CreateReduxComboBox -Name "Magic"            -Text "Magic Bar"           -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Magic")         -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the magic meter"                                                                 -Credits "GhostlyDark (ported), Pizza, Nerrel (HD), Zeth Alkar"
     CreateReduxComboBox -Name "CurrentFloor"     -Text "Current Floor Icon"  -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Current Floor") -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the current floor icon"                                                          -Credits "Admentus (ported), GhostlyDark (ported) & GoldenMariaNova (Alternative & Triforce)"
     CreateReduxComboBox -Name "BossFloor"        -Text "Boss Floor Icon"     -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Boss Floor")    -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the boss floor icon"                                                             -Credits "Admentus (ported), GhostlyDark (ported) & GoldenMariaNova (Alternative)"
+    CreateReduxComboBox -Name "HookReticle"      -Text "Hookshot Reticle"    -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Hook Reticle")  -Ext "bin" -Default $val              -Info "Set the style for the Hookshot reticle"                                                            -Credits "GoldenMariaNova"
     CreateReduxCheckBox -Name "DungeonKeys"      -Text "MM Key Icon"         -Info "Replace the key icon with that from Majora's Mask"          -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "Chests"           -Text "MM Chests Map Icon"  -Info "Replace the chests map icons with those from Majora's Mask" -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "CenterNaviPrompt" -Text "Center Navi Prompt"  -Info 'Centers the "Navi" prompt shown in the C-Up button'         -Credits "GhostlyDark (ported)"
@@ -3528,8 +3529,7 @@ function CreateTabColors() {
     # MISC COLORS #
 
     CreateReduxGroup -Tag "Colors" -Text "Misc Colors"
-
-    CreateReduxCheckBox -Name "PauseScreenColors" -Text "MM Pause Screen Colors" -Info "Use the Pause Screen color scheme from Majora's Mask" -Credits "Garo-Mastah"
+    CreateReduxComboBox -Name "PauseScreenColors" -Text "Pause Screen Colors"    -Info "Select Pause Screen color schemes from Majora's Mask and some others mods" -Items @("Default", "Majora's Mask", "Gold Quest", "MoT Remastered")      -Credits "Garo-Mastah & GoldenMariaNova"
 
 }
 
