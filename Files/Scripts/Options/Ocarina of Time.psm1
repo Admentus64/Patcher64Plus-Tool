@@ -1827,7 +1827,36 @@ function ByteSceneOptions() {
         SaveAndPatchLoadedScene
     }
 
+    if (IsChecked $Redux.Gameplay.AlternateIceArrow) {
+	PrepareMap      -Scene "Fire Temple"    -Map 8 -Header 0
+        RemoveObject    -Name  "Treasure Chest" # This is a way to make this object working correctly between each versions of this map
+        RemoveActor     -Name  "Treasure Chest"
+	InsertObject    -Name  "Treasure Chest"
+        InsertActor     -Name  "Treasure Chest" -Param "0B2D" -X   1944  -Y 4681 -Z (-393) -YRot 24394
+	ReplaceActor    -Name  "Stone Hookshot Target"     -Compare "3DC1"   -Param "1080" -Y (-10000) # This is to mask these now unusable actors (Master Quest and URA Quest)
+        ReplaceActor    -Name  "Skullwalltula"  -X   1728  -Y 4473 -Z (-231) -YRot 57344
+        ReplaceActor    -Name  "Switch"         -Param "3800" -X   1148  -Y 4400 -Z (-294)
+	ReplaceActor    -Name  "Flame Circle"   -Param "1378" -X   1938  -Y 4680 -Z (-393)
+        ReplaceActor    -Name  "Pushable Block" -Compare "FF00" -Param "1080" -Y (-10000) # Making the hard-coded block begone
 
+        SaveAndPatchLoadedScene
+
+        PrepareMap      -Scene "Zora's Fountain" -Map 0 -Header 2 
+	ReplaceActor  -Name "Collectable" -Compare "1406" -Param "1402" 
+
+        SaveAndPatchLoadedScene
+
+        PrepareMap      -Scene "Gerudo Training Ground"    -Map 8 -Header 0 
+        ReplaceActor -Name "Treasure Chest" -Compare "0B2C" -Param "07CC"
+	ReplaceActor -Name "Treasure Chest" -Compare "BB24" -Param "B7C4" 
+
+	SaveLoadedMap
+
+	PrepareMap      -Scene "Gerudo Training Ground"    -Map 10 -Header 0
+	ReplaceActor    -Name "Treasure Chest" -Compare "0B22" -Param "07C2"
+
+	SaveAndPatchLoadedScene
+    }
 
     # RESTORE #
 
@@ -2276,6 +2305,11 @@ function ByteTextOptions() {
     
     if (IsChecked $Redux.Equipment.NoSlipperyBoots -Lang 1) {
         SetMessage -ID "0054" -Text "The downside? No traction!<N><New Box>"                   -Replace "<New Box>"
+    }
+    
+    if (IsChecked $Redux.Gameplay.AlternateIceArrow -Lang 1) {
+            SetMessage -ID "0071"                                                              -Replace "<NS><Icon:0C><DI>You got the <B>Ice Arrow<W>!<DC><N>Set it to <Y><C Button> <W>and your arrows will<N>be powered up! If you hit your <N>target, it will freeze."
+            SetMessage -ID "0419"                                                              -Replace "They say that a treasure deep in <N>the hidden tower of the Fire Temple,<N>would be able to freeze enemies<N>and even traps!"
     }
     
     if (IsChecked $Redux.Graphics.GCScheme) {
@@ -2756,7 +2790,7 @@ function CreateTabMain() {
     CreateReduxCheckbox -Name "RemoveSpeedClamp"                           -Text "Remove Jump Speed Limit"    -Info "Removes the jumping speed limit just like in MM"                                                                                                                -Credits "Admentus (ROM) & Aegiker (RAM)"
     CreateReduxCheckbox -Name "ChildShops"                          -Child -Text "Child Shops"                -Info "Open the Potion Shop and Bazaar in Kakariko Village for Child Link"                                                                                             -Credits "Admentus"
     CreateReduxCheckBox -Name "FastArrows"                                 -Text "Less Magic Arrows Cooldown" -Info "The burst animation for Fire, Ice and Light Arrows are shorter`nAllows Link to shoot the next magic arrow a bit quicker"                                        -Credits "Anthrogi"
-
+    CreateReduxCheckBox -Name "AlternateIceArrow"                          -Text "Alt Ice Arrow Location"     -Info "Change how and where the Ice Arrow is obtained, making it usable much earlier"                                                                                  -Credits "GoldenMariaNova"
 
     # GAMEPLAY (UNSTABLE) #
 
