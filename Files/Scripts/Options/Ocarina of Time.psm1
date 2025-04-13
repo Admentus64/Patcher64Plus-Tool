@@ -2304,7 +2304,7 @@ function ByteTextOptions() {
     }
     
     if (IsChecked $Redux.Equipment.NoSlipperyBoots -Lang 1) {
-        SetMessage -ID "0054" -Text "The downside? No traction!<N><New Box>"                   -Replace "<New Box>"
+            SetMessage -ID "0054" -Text "With these mysterious boots<N>you can hover above the ground.<N>The downside? No traction!"                   -Replace "With these mysterious boots<N>you can hover above the ground."
     }
     
     if (IsChecked $Redux.Gameplay.AlternateIceArrow -Lang 1) {
