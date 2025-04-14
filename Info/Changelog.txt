@@ -1,3 +1,10 @@
+v25.2.12
+- Added "Change Ice Arrow Location" option for OoT
+- Added extra hair color options for OoT
+- Updated button HUD colors for Gold Quest preset for OoT
+- Updated alternate Current Floor icon for OoT
+- Updated alternate Hookshot Recticles for OoT
+
 v25.2.11
 - Added "Hookshot Reticle" option for OoT
 
