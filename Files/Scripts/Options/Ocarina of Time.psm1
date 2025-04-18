@@ -1846,7 +1846,7 @@ function ByteSceneOptions() {
 
        PrepareMap       -Scene "Fire Temple"    -Map 17 -Header 0
         if ($DungeonList["Fire Temple"] -eq "Master Quest" -or $DungeonList["Fire Temple"] -eq "Ura Quest") {
-           ReplaceActor -Name  "Treasure Chest" -Compare "7542" -Param "0802" -X -312 -Z -223 -YRot 32767       
+           ReplaceActor -Name  "Treasure Chest" -Compare "7542" -Param "0802" -X -242 -Z -232 -YRot 16380    
         }
         else 
 	{ SaveLoadedMap }
