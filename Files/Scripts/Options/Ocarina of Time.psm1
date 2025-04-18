@@ -1865,7 +1865,7 @@ function ByteSceneOptions() {
         SaveAndPatchLoadedScene
 
         PrepareMap       -Scene "Gerudo Training Ground" -Map 8 -Header 0 
-        if ($DungeonList["Gerudo Training Ground"]  -eq "Master Quest" {
+        if ($DungeonList["Gerudo Training Ground"]  -eq "Master Quest") {
 	   ReplaceActor     -Name  "Treasure Chest" -Compare "BB24" -Param "B7C4"
         }
 	else { 
@@ -1874,7 +1874,7 @@ function ByteSceneOptions() {
         SaveLoadedMap
 
         PrepareMap       -Scene "Gerudo Training Ground" -Map 10 -Header 0
-        if ($DungeonList["Gerudo Training Ground"]  -eq "Ura Quest" {
+        if ($DungeonList["Gerudo Training Ground"]  -eq "Ura Quest") {
 	ReplaceActor     -Name  "Treasure Chest" -Compare "0B22" -Param "07C2"
         }
 	else { SaveLoadedMap }
