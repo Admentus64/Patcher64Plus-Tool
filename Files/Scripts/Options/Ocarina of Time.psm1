@@ -1830,7 +1830,7 @@ function ByteSceneOptions() {
     if (IsChecked $Redux.Gameplay.AlternateIceArrow) {
         PrepareMap       -Scene "Fire Temple"    -Map 4 -Header 0
         if ($DungeonList["Fire Temple"] -eq "Master Quest" -or $DungeonList["Fire Temple"] -eq "Ura Quest") {
-           ReplaceActor -Name  "Treasure Chest" -Compare "080B" -Param "27EB" -X 2474 -Y 2080 -Z -50 -YRot 32768        
+           ReplaceActor -Name  "Treasure Chest" -Compare "080B" -Param "27EB" -X 2474 -Y 2080 -Z -43 -YRot 32768        
         }
         else 
 	{ SaveLoadedMap }
@@ -1846,7 +1846,7 @@ function ByteSceneOptions() {
 
        PrepareMap       -Scene "Fire Temple"    -Map 17 -Header 0
         if ($DungeonList["Fire Temple"] -eq "Master Quest" -or $DungeonList["Fire Temple"] -eq "Ura Quest") {
-           ReplaceActor -Name  "Treasure Chest" -Compare "7542" -Param "0802" -X -220 -Z -220 -YRot 16384       
+           ReplaceActor -Name  "Treasure Chest" -Compare "7542" -Param "0802" -X -312 -Z -223 -YRot 32767       
         }
         else 
 	{ SaveLoadedMap }
@@ -2333,6 +2333,7 @@ function ByteTextOptions() {
     if (IsChecked $Redux.Gameplay.AlternateIceArrow -Lang 1) {
             SetMessage -ID "0071"                                                              -Replace "<NS><Icon:0C><DI>You got the <B>Ice Arrow<W>!<DC><N>Set it to <Y><C Button> <W>and your arrows will<N>be powered up! If you hit your <N>target, it will freeze."
             SetMessage -ID "0419"                                                              -Replace "They say that a treasure deep in <N>the hidden tower of the Fire Temple,<N>would be able to freeze enemies<N>and even traps!"
+	    SetMessage -ID "0419"                                                              -Replace "<NS>I'll tell you a secret for<N>saving me!<New Box><NS>I've heard that there's a<N>strange treasure that can<N>freeze alot of things<N>somewhere around here.<New Box><NS>But... It is really true?<N>It's maybe just a rumor."
     }
     
     if (IsChecked $Redux.Graphics.GCScheme) {
