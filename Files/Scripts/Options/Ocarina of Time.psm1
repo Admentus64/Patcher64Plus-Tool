@@ -1828,19 +1828,36 @@ function ByteSceneOptions() {
     }
 
     if (IsChecked $Redux.Gameplay.AlternateIceArrow) {
-        PrepareMap       -Scene "Fire Temple"    -Map 8 -Header 0
+        PrepareMap       -Scene "Fire Temple"    -Map 4 -Header 0
         if ($DungeonList["Fire Temple"] -eq "Master Quest" -or $DungeonList["Fire Temple"] -eq "Ura Quest") {
-            InsertObject -Name  "Treasure Chest"
-            InsertActor  -Name  "Treasure Chest"                 -Param "0B2D" -X 1944 -Y 4681 -Z -393 -YRot 24394
-            RemoveActor  -Name  "Stone Hookshot Target"
-            RemoveActor  -Name  "Pushable Block"
+           ReplaceActor -Name  "Treasure Chest" -Compare "080B" -Param "27EB" -X 2474 -Y 2080 -Z -50 -YRot 32768        
         }
+        else 
+	{ SaveLoadedMap }
+        SaveAndPatchLoadedScene
+
+        PrepareMap       -Scene "Fire Temple"    -Map 8 -Header 0
+        if ($DungeonList["Fire Temple"] -eq "Master Quest" -or $DungeonList["Fire Temple"] -eq "Ura Quest") 
+	{ SaveLoadedMap }
         else {
-            ReplaceActor -Name  "Treasure Chest" -Compare "5ACD" -Param "0B2D" -X 1944 -Y 4681 -Z -393 -YRot 24394
+           ReplaceActor -Name  "Treasure Chest" -Compare "5ACD" -Param "0B2D" -X 1944 -Y 4681 -Z -393 -YRot 24394
         }
-        ReplaceActor     -Name  "Skullwalltula"                                -X 1728 -Y 4473 -Z -231 -YRot 57344
-        ReplaceActor     -Name  "Switch"                         -Param "3800" -X 1148 -Y 4400 -Z -294
-        ReplaceActor     -Name  "Flame Circle"                   -Param "1378" -X 1938 -Y 4680 -Z -393
+        SaveAndPatchLoadedScene
+
+       PrepareMap       -Scene "Fire Temple"    -Map 17 -Header 0
+        if ($DungeonList["Fire Temple"] -eq "Master Quest" -or $DungeonList["Fire Temple"] -eq "Ura Quest") {
+           ReplaceActor -Name  "Treasure Chest" -Compare "7542" -Param "0802" -X -220 -Z -220 -YRot 16384       
+        }
+        else 
+	{ SaveLoadedMap }
+        SaveAndPatchLoadedScene
+
+       PrepareMap       -Scene "Fire Temple"    -Map 19 -Header 0
+        if ($DungeonList["Fire Temple"] -eq "Master Quest" -or $DungeonList["Fire Temple"] -eq "Ura Quest") {
+           ReplaceActor -Name  "Treasure Chest" -Compare "27E4" -Param "0B24" -X 856 -Y 260 -Z -1832 -YRot 49152
+        }
+        else 
+	{ SaveLoadedMap }
         SaveAndPatchLoadedScene
 
         PrepareMap       -Scene "Zora's Fountain" -Map 0 -Header 2 
@@ -1848,12 +1865,19 @@ function ByteSceneOptions() {
         SaveAndPatchLoadedScene
 
         PrepareMap       -Scene "Gerudo Training Ground" -Map 8 -Header 0 
-        ReplaceActor     -Name  "Treasure Chest" -Compare "0B2C" -Param "07CC"
-        ReplaceActor     -Name  "Treasure Chest" -Compare "BB24" -Param "B7C4" 
+        if ($DungeonList["Gerudo Training Ground"]  -eq "Master Quest" {
+	   ReplaceActor     -Name  "Treasure Chest" -Compare "BB24" -Param "B7C4"
+        }
+	else { 
+           ReplaceActor     -Name  "Treasure Chest" -Compare "0B2C" -Param "07CC" 
+        }
         SaveLoadedMap
 
         PrepareMap       -Scene "Gerudo Training Ground" -Map 10 -Header 0
-        ReplaceActor     -Name  "Treasure Chest" -Compare "0B22" -Param "07C2"
+        if ($DungeonList["Gerudo Training Ground"]  -eq "Ura Quest" {
+	ReplaceActor     -Name  "Treasure Chest" -Compare "0B22" -Param "07C2"
+        }
+	else { SaveLoadedMap }
         SaveAndPatchLoadedScene
     }
 
@@ -3150,7 +3174,7 @@ function CreateTabGraphics() {
     CreateReduxComboBox -Name "Magic"            -Text "Magic Bar"           -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Magic")         -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the magic meter"                                                                 -Credits "GhostlyDark (ported), Pizza, Nerrel (HD), Zeth Alkar"
     CreateReduxComboBox -Name "CurrentFloor"     -Text "Current Floor Icon"  -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Current Floor") -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the current floor icon"                                                          -Credits "Admentus (ported), GhostlyDark (ported) & GoldenMariaNova (Alternative & Triforce)"
     CreateReduxComboBox -Name "BossFloor"        -Text "Boss Floor Icon"     -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Boss Floor")    -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the boss floor icon"                                                             -Credits "Admentus (ported), GhostlyDark (ported) & GoldenMariaNova (Alternative)"
-    CreateReduxComboBox -Name "HookReticle"      -Text "Hookshot Reticle"    -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Hook Reticle")  -Ext "bin" -Default $val              -Info "Set the style for the Hookshot reticle"                                                            -Credits "GoldenMariaNova"
+    CreateReduxComboBox -Name "HookReticle"      -Text "Hookshot Reticle"    -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Hook Reticle")  -Ext "bin" -Default $val              -Info "Set the style for the Hookshot reticle"   -Warning 'May not work with custom player models that change the Hylian Shield'       -Credits "GoldenMariaNova"
     CreateReduxCheckBox -Name "DungeonKeys"      -Text "MM Key Icon"         -Info "Replace the key icon with that from Majora's Mask"          -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "Chests"           -Text "MM Chests Map Icon"  -Info "Replace the chests map icons with those from Majora's Mask" -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "CenterNaviPrompt" -Text "Center Navi Prompt"  -Info 'Centers the "Navi" prompt shown in the C-Up button'         -Credits "GhostlyDark (ported)"
