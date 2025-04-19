@@ -1840,7 +1840,8 @@ function ByteSceneOptions() {
 	if ($DungeonList["Fire Temple"] -eq "Master Quest" -or $DungeonList["Fire Temple"] -eq "Ura Quest")
         { SaveLoadedMap }
 	else { 
-           ReplaceActor     -Name  "Pierre the Scarecrow Spawn" -Compare "017F" -Param "FF00"
+           ReplaceActor     -Name  "Pierre the Scarecrow Spawn" -Compare "017F" -Param "FF40"
+	   RemoveObject     -Name  "Pierre & Bonooru"
 	}
         SaveAndPatchLoadedScene
        
