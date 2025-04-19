@@ -1830,7 +1830,7 @@ function ByteSceneOptions() {
     if (IsChecked $Redux.Gameplay.AlternateIceArrow) {
         PrepareMap       -Scene "Fire Temple"    -Map 4 -Header 0
         if ($DungeonList["Fire Temple"] -eq "Master Quest" -or $DungeonList["Fire Temple"] -eq "Ura Quest") {
-           ReplaceActor -Name  "Treasure Chest" -Compare "080B" -Param "27EB" -X 2474 -Y 2080 -Z -43 -YRot 32768        
+           ReplaceActor     -Name  "Treasure Chest" -Compare "080B" -Param "27EB" -X 2474 -Y 2080 -Z -36 -YRot 16372        
         }
         else 
 	{ SaveLoadedMap }
@@ -1840,13 +1840,13 @@ function ByteSceneOptions() {
         if ($DungeonList["Fire Temple"] -eq "Master Quest" -or $DungeonList["Fire Temple"] -eq "Ura Quest") 
 	{ SaveLoadedMap }
         else {
-           ReplaceActor -Name  "Treasure Chest" -Compare "5ACD" -Param "0B2D" -X 1944 -Y 4681 -Z -393 -YRot 24394
+           ReplaceActor     -Name  "Treasure Chest" -Compare "5ACD" -Param "0B2D" -X 1944 -Y 4681 -Z -393 -YRot 24394
         }
         SaveAndPatchLoadedScene
 
        PrepareMap       -Scene "Fire Temple"    -Map 17 -Header 0
         if ($DungeonList["Fire Temple"] -eq "Master Quest" -or $DungeonList["Fire Temple"] -eq "Ura Quest") {
-           ReplaceActor -Name  "Treasure Chest" -Compare "7542" -Param "0802" -X -242 -Z -232 -YRot 16380    
+           ReplaceActor     -Name  "Treasure Chest" -Compare "7542" -Param "0802" -X -246 -Z -221 -YRot -32768   
         }
         else 
 	{ SaveLoadedMap }
@@ -1854,14 +1854,14 @@ function ByteSceneOptions() {
 
        PrepareMap       -Scene "Fire Temple"    -Map 19 -Header 0
         if ($DungeonList["Fire Temple"] -eq "Master Quest" -or $DungeonList["Fire Temple"] -eq "Ura Quest") {
-           ReplaceActor -Name  "Treasure Chest" -Compare "27E4" -Param "0B24" -X 856 -Y 260 -Z -1832 -YRot 49152
+           ReplaceActor     -Name  "Treasure Chest" -Compare "27E4" -Param "0B24" -X 856 -Y 260 -Z -1832 -YRot 49152
         }
         else 
 	{ SaveLoadedMap }
         SaveAndPatchLoadedScene
 
-        PrepareMap       -Scene "Zora's Fountain" -Map 0 -Header 2 
-        ReplaceActor     -Name  "Collectable"    -Compare "1406" -Param "1402" 
+        PrepareMap          -Scene "Zora's Fountain" -Map 0 -Header 2 
+        ReplaceActor        -Name  "Collectable"    -Compare "1406" -Param "1402" 
         SaveAndPatchLoadedScene
 
         PrepareMap       -Scene "Gerudo Training Ground" -Map 8 -Header 0 
@@ -1873,9 +1873,9 @@ function ByteSceneOptions() {
         }
         SaveLoadedMap
 
-        PrepareMap       -Scene "Gerudo Training Ground" -Map 10 -Header 0
+        PrepareMap          -Scene "Gerudo Training Ground" -Map 10 -Header 0
         if ($DungeonList["Gerudo Training Ground"]  -eq "Ura Quest") {
-	ReplaceActor     -Name  "Treasure Chest" -Compare "0B22" -Param "07C2"
+	ReplaceActor        -Name  "Treasure Chest" -Compare "0B22" -Param "07C2"
         }
 	else { SaveLoadedMap }
         SaveAndPatchLoadedScene
