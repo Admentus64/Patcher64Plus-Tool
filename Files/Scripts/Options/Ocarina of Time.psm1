@@ -2343,7 +2343,7 @@ function ByteTextOptions() {
     if (IsChecked $Redux.Gameplay.AlternateIceArrow -Lang 1) {
             SetMessage -ID "0071"                                                              -Replace "<NS><Icon:0C><DI>You got the <B>Ice Arrow<W>!<DC><N>Set it to <Y><C Button> <W>and your arrows will<N>be powered up! If you hit your <N>target, it will freeze."
             SetMessage -ID "0419"                                                              -Replace "They say that a treasure deep in <N>the hidden tower of the Fire Temple,<N>would be able to freeze enemies<N>and even traps!"
-	    SetMessage -ID "0419"                                                              -Replace "<NS>I'll tell you a secret for<N>saving me!<New Box><NS>I've heard that there's a<N>strange treasure that can<N>freeze alot of things<N>somewhere around here.<New Box><NS>But... It is really true?<N>It's maybe just a rumor."
+	    SetMessage -ID "306D"                                                              -Replace "<NS>I'll tell you a secret for<N>saving me!<New Box><NS>I've heard that there's a<N>strange treasure that can<N>freeze alot of things<N>somewhere around here.<New Box><NS>But... It is really true?<N>It's maybe just a rumor."
     }
     
     if (IsChecked $Redux.Graphics.GCScheme) {
