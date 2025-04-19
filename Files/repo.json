@@ -14,7 +14,12 @@
 		"uri"			: "https://github.com/Teutonicknight2/Amara-Public/archive/refs/heads/main.zip",
 		"version"		: "https://github.com/Teutonicknight2/Amara-Public/blob/main/version.txt",
 		"versionFallback"	: "https://raw.githubusercontent.com/Teutonicknight2/Amara-Public/main/version.txt"
-
+	}, {
+		"title"			: "MoT Models",
+		"type"			: "Models",
+		"uri"			: "https://github.com/LoadingErr/MoT-IssueLink-Public/archive/refs/heads/main.zip",
+		"version"		: "https://github.com/LoadingErr/MoT-IssueLink-Public/blob/main/version.txt",
+		"versionFallback"	: "https://raw.githubusercontent.com/LoadingErr/MoT-IssueLink-Public/main/version.txt"
 	}, {
 		"title"			: "Caverns4 OoT-Models",
 		"type"			: "Models",
