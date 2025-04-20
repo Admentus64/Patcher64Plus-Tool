@@ -694,8 +694,8 @@ function ByteOptions() {
     # SWORD TRAIL COLORS #
 
     if ($Redux.Colors.SetSwordTrail -ne $null) {
-        if (IsColor   $Redux.Colors.SetSwordTrail[0]   -Not)   { ChangeBytes -Offset "BEFF7C" -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
-        if (IsColor   $Redux.Colors.SetSwordTrail[1]   -Not)   { ChangeBytes -Offset "BEFF84" -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
+        if (IsColor   $Redux.Colors.SetSwordTrail[0]   -Not)   { ChangeBytes -Offset @("BEFF7C", "BEFF80") -Values @($Redux.Colors.SetSwordTrail[0].Color.R, $Redux.Colors.SetSwordTrail[0].Color.G, $Redux.Colors.SetSwordTrail[0].Color.B) }
+        if (IsColor   $Redux.Colors.SetSwordTrail[1]   -Not)   { ChangeBytes -Offset @("BEFF84", "BEFF88") -Values @($Redux.Colors.SetSwordTrail[1].Color.R, $Redux.Colors.SetSwordTrail[1].Color.G, $Redux.Colors.SetSwordTrail[1].Color.B) }
         if (IsDefault $Redux.Colors.SwordTrailDuration -Not)   { ChangeBytes -Offset "BEFF8C" -Values ( $Redux.Colors.SwordTrailDuration.SelectedIndex * 5) }
     }
     

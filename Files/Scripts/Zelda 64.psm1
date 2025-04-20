@@ -1290,11 +1290,11 @@ function CreateSwordTrailColorOptions() {
     $buttons   = $Redux.Colors.SetSwordTrail = $Redux.Colors.SwordTrailLabels = @()
     if ($GameType.mode -eq "Ocarina of Time" ){ $credits = "Ported from $Rando" } else { $credits = "Admentus" }
 
-    CreateReduxGroup -Tag  "Colors" -Text "Sword Trail Colors"
-                     CreateReduxComboBox -Name "SwordTrail"         -Text "Sword Trail Color"    -Items @("White", "Red", "Green", "Blue", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom") -Default 1 -Info ("Select a preset for the sword trail color" + $randomize) -Credits "Ported from Rando"
-    $buttons +=      CreateReduxButton   -Tag $Buttons.Count        -Text "Trail (Inner)"                                                                                                                                            -Info "Select the inner color you want for the sword trail"      -Credits "Ported from Rando"
-    $buttons +=      CreateReduxButton   -Tag $Buttons.Count        -Text "Trail (Outer)"                                                                                                                                            -Info "Select the outer color you want for the sword trail"      -Credits "Ported from Rando"
-                     CreateReduxComboBox -Name "SwordTrailDuration" -Text "Sword Trail Duration" -Items @("Disabled", "Short", "Long", "Very Long", "Lightsaber")                                                         -Default 2 -Info "Select the duration for sword trail"                      -Credits $credits
+    CreateReduxGroup -Tag  "Colors" -Text "Attack Trail Colors"
+                     CreateReduxComboBox -Name "SwordTrail"         -Text "Attack Trail Color"    -Items @("White", "Red", "Green", "Blue", "Cyan", "Magenta", "Orange", "Gold", "Purple", "Pink", "Randomized", "Custom") -Default 1 -Info ("Select a preset for the attack trail color" + $randomize) -Credits "Ported from Rando"
+    $buttons +=      CreateReduxButton   -Tag $Buttons.Count        -Text "Trail (Start)"                                                                                                                                             -Info "Select the starting color you want for the attack trail"   -Credits "Ported from Rando"
+    $buttons +=      CreateReduxButton   -Tag $Buttons.Count        -Text "Trail (End)"                                                                                                                                               -Info "Select the ending color you want for the attack trail"     -Credits "Ported from Rando"
+                     CreateReduxComboBox -Name "SwordTrailDuration" -Text "Sword Trail Duration" -Items @("Disabled", "Short", "Long", "Very Long", "Lightsaber")                                                         -Default 2 -Info "Select the duration for the attack trail"                   -Credits $credits
 
     $Redux.Colors.SetSwordTrail += CreateColorDialog -Color "FFFFFF" -Name "SetInnerSwordTrail" -IsGame -Button $Buttons[0]
     $Redux.Colors.SetSwordTrail += CreateColorDialog -Color "FFFFFF" -Name "SetOuterSwordTrail" -IsGame -Button $Buttons[1]
@@ -1309,11 +1309,13 @@ function CreateSwordTrailColorOptions() {
 
     if (IsSet $Redux.Colors.SwordTrail) {
         $Redux.Colors.SwordTrail.Add_SelectedIndexChanged({
-            if ($Redux.Colors.SwordTrail.text -ne "Custom") { SetColor -Color "FFFFFF" -Dialog $Redux.Colors.SetSwordTrail[1] -Label $Redux.Colors.SwordTrailLabels[1] }
+            if ($Redux.Colors.SwordTrail.text -ne "Custom") { SetColor -Color "FFFFFF" -Dialog $Redux.Colors.SetSwordTrail[0] -Label $Redux.Colors.SwordTrailLabels[0] }
             SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[0] -Label $Redux.Colors.SwordTrailLabels[0]
         })
-        if ($Redux.Colors.SwordTrail.text -ne "Custom") { SetColor -Color "FFFFFF" -Dialog $Redux.Colors.SetSwordTrail[1] -Label $Redux.Colors.SwordTrailLabels[1] }
-        SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[0] -Label $Redux.Colors.SwordTrailLabels[0]
+        $Redux.Colors.SwordTrail.Add_SelectedIndexChanged({
+            if ($Redux.Colors.SwordTrail.text -ne "Custom") { SetColor -Color "FFFFFF" -Dialog $Redux.Colors.SetSwordTrail[1] -Label $Redux.Colors.SwordTrailLabels[1] }
+            SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[1] -Label $Redux.Colors.SwordTrailLabels[1]
+        })
     }
 
 }
