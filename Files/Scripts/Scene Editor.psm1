@@ -1589,6 +1589,35 @@ function LoadSceneSettings() {
     $y = (DPISize 10)
 
 
+    # MISC #
+
+    if ($SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].WorldMap -ne $null) {
+        $group = CreateGroupBox -Text "Music" -X (DPISize 10) -Y $y -Width ($SceneEditor.BottomPanelSceneSettings.Width - (DPISize 20)) -Height (DPISize 50) -AddTo $SceneEditor.BottomPanelSceneSettings
+        $y     = $group.bottom + (DPISize 10)
+
+        $default = 0
+        foreach ($i in 0..($Files.json.sceneEditor.skyboxes.Count-1)) {
+            if ($SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].WorldMap] -eq (GetDecimal $Files.json.sceneEditor.world_map[$i].id)) {
+                $default = $i + 1
+                break
+            }
+        }
+                CreateLabel    -X (DPISize 10) -Y (DPISize 18) -Width (DPISize 80)  -Height (DPISize 20) -Text "World Map:" -AddTo $group
+        $elem = CreateComboBox -X (DPISize 90) -Y (DPISize 17) -Width (DPISize 150) -Height (DPISize 20) -Default $default -Items $Files.json.sceneEditor.world_map.title -AddTo $group
+        $elem.Add_SelectedIndexChanged({
+            foreach ($map in $Files.json.sceneEditor.world_map) {
+                if ($map.title -eq $this.text) {
+                    $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].WorldMap] = GetDecimal $map.id
+                    break
+                }
+            }
+        })
+
+        CreateLabel   -X (DPISize 270) -Y (DPISize 18) -Width (DPISize 60) -Height (DPISize 20) -Text "Camera:" -AddTo $group
+        CreateTextBox -X (DPISize 330) -Y (DPISize 17) -Width (DPISize 40) -Height (DPISize 20) -Text $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].Camera] -AddTo $group -ReadOnly $True
+    }
+
+
 
     # MUSIC #
 
@@ -1910,10 +1939,10 @@ function LoadMapSettings() {
 
 
 #==============================================================================================================================================================================================
-function PrepareAndSetSceneSettings([string]$Scene, [byte]$Map, [byte]$Header, $Music, $NightMusic, $SoundSetting, $Skybox, $Cast, $LightningControl) {
+function PrepareAndSetSceneSettings([string]$Scene, [byte]$Map, [byte]$Header, $Music, $NightMusic, $SoundSetting, $Skybox, $Cast, $LightningControl, $WorldMap, $Camera) {
     
     PrepareMap       -Scene $Scene -Map $Map -Header $Header
-    SetSceneSettings -Music $Music -NightMusic $NightMusic -SoundSetting $SoundSetting -Skybox $Skybox -Cast $Cast -LightningControl $LightningControl
+    SetSceneSettings -Music $Music -NightMusic $NightMusic -SoundSetting $SoundSetting -Skybox $Skybox -Cast $Cast -LightningControl $LightningControl -WorldMap $WorldMap -Camera $Camera
 
 }
 
@@ -1930,7 +1959,7 @@ function PrepareAndSetMapSettings([string]$Scene, [byte]$Map, [byte]$Header, $Ti
 
 
 #==============================================================================================================================================================================================
-function SetSceneSettings($Music, $NightMusic, $SoundSetting, $Skybox, $Cast, $LightningControl, [switch]$Silent) {
+function SetSceneSettings($Music, $NightMusic, $SoundSetting, $Skybox, $Cast, $LightningControl, $WorldMap, $Camera, [switch]$Silent) {
     
     if ($Music            -is [int] -and ( $Music            -ge 0 -and $Music            -le 0x7F))                             { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].MusicSequence]    = $Music            }
     if ($NightMusic       -is [int] -and (($NightMusic       -ge 0 -and $NightMusic       -le 0x1F) -or $NightMusic -le 0xFF))   { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].NightSequence]    = $NightMusic       }
@@ -1938,6 +1967,8 @@ function SetSceneSettings($Music, $NightMusic, $SoundSetting, $Skybox, $Cast, $L
     if ($Skybox           -is [int] -and ( $Skybox           -ge 0 -and $Skybox           -le 0x22))                             { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].Skybox]           = $Skybox           }
     if ($Cast             -is [int] -and ( $Cast             -eq 0 -or  $Cast             -eq 1))                                { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].Cloudy]           = $Cast             }
     if ($LightningControl -is [int] -and ( $LightningControl -eq 0 -or  $LightningControl -eq 1))                                { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].LightningControl] = $LightningControl }
+    if ($WorldMap         -is [int] -and ( $WorldMap         -ge 0 -and $WorldMap         -le 0x16))                             { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].WorldMap]         = $WorldMap         }
+    if ($Camera           -is [int] -and ( $Camera           -ge 0 -and $Camera           -le 0x50))                             { $SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].Camera]           = $Camera           }
 
     if (!$Silent) { WriteToConsole "Scene properties have been updated" }
 
@@ -2032,6 +2063,10 @@ function ChangeSpawnPoint([byte]$Index=0, $X, $Y, $Z, $XRot, $YRot, $ZRot, $Para
     }
 
     $offset = (GetPositionStart) + $Index * 16
+
+    if ($X -is [string] -and $X -match '^-?\d+$')   { $X = [int]$X }
+    if ($Y -is [string] -and $Y -match '^-?\d+$')   { $Y = [int]$Y }
+    if ($Z -is [string] -and $Z -match '^-?\d+$')   { $Z = [int]$Z }
 
     if ($X -is [int] -and $X -ge -32768 -and $X -le 32767) {
         if ($X -lt 0) { $X += 0x10000 }
@@ -2366,6 +2401,10 @@ function RunLoadScene([string]$File) {
             $SceneEditor.SceneOffsets[0].AlternateStart      = $SceneEditor.SceneArray[$i + 5] * 65536 + $SceneEditor.SceneArray[$i + 6] * 256 + $SceneEditor.SceneArray[$i + 7]
             $SceneEditor.SceneOffsets[0].AlternateIndex      = $i + 5
         }
+        elseif ($SceneEditor.SceneArray[$i] -eq 0x19) { # Camera Settings & World Map
+            $SceneEditor.SceneOffsets[0].Camera              = $i + 1
+            $SceneEditor.SceneOffsets[0].WorldMap            = $i + 7
+        }
 
         $SceneEditor.SceneOffsets[0].NextAlternate = $SceneEditor.SceneOffsets[0].PositionStart
     }
@@ -2493,6 +2532,10 @@ function RunLoadScene([string]$File) {
                     $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].CutsceneStart       = $SceneEditor.SceneArray[$j + 5] * 65536 + $SceneEditor.SceneArray[$j + 6] * 256 + $SceneEditor.SceneArray[$j + 7]
                     $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].CutsceneIndex       = $j + 5
                     $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].FoundCutscenes      = $True
+                }
+                elseif ($SceneEditor.SceneArray[$j] -eq 0x19) { # Camera Settings & World Map
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].Camera              = $j + 1
+                    $SceneEditor.SceneOffsets[$SceneEditor.SceneOffsets.Count-1].WorldMap            = $j + 7
                 }
             }
         }

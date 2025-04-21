@@ -14,45 +14,24 @@
 
 }, {
 
-	"title"				: "Child Quest Classic",
-	"version"			: "1.0.3",
+	"title"				: "Child Quest",
+	"version"			: "3.0.0",
 	"vc_title"			: "Zelda: Child Quest",
-	"function" 			: "ChildQuestClassic",
+	"function" 			: "ChildQuest",
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
 		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons"
 	},
-	"script"			: [ "Ocarina of Time", "Child Quest Classic" ],
-	"settings"			: "Child Quest Classic",
-	"base"				: 2,
-	"age"				: "Child",
-	"models"			: 0,
-	"presets"			: 0,
-	"output"			: "child_quest_classic",
-	"tooltip"			: "Collect every Heart Piece and Gold Skulltula, finish any dungeon and beat Ganon{0}Experience the entire story as Young Link",
-	"credits"			: "Admentus & GhostlyDark"
-
-}, {
-
-	"title"				: "Child Quest Pro",
-	"version"			: "1.0.2",
-	"vc_title"			: "Zelda: Child Quest",
-	"function" 			: "ChildQuestPro",
-	"redux" : {
-		"remap_controls"	: 1,
-		"expand_memory"		: 1,
-		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons"
-	},
-	"script"			: [ "Ocarina of Time", "Child Quest Pro" ],
-	"settings"			: "Child Quest Pro",
+	"script"			: [ "Ocarina of Time", "Child Quest" ],
+	"settings"			: "Child Quest",
 	"base"				: 2,
 	"mq"				: 1,
 	"age"				: "Child",
 	"models"			: 0,
 	"presets"			: 0,
-	"output"			: "child_quest_pro",
-	"tooltip"			: "Child Quest Classic with a more powerful Young Link, being able to use Hookshot and Bow",
+	"output"			: "child_quest",
+	"tooltip"			: "Experience the story of Ocarina of Time without ever reaching adulthood.{0}All items are usuable and every collectable can be acquired.{0}Riding Epona, doing both trading quests, pulling the Master Sword...{0}Hidden surprises included!",
 	"credits"			: "Admentus & GhostlyDark"
 
 }, {

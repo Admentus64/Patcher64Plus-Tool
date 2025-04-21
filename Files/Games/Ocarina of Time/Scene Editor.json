@@ -5009,16 +5009,16 @@
 			"name"	: "Deku Seeds (5) / Arrows (5)",
 			"value"	: "10"
 		}, {
-			"name"	: "Arrow",
+			"name"	: "Arrows (1)",
 			"value"	: "5"
 		}, {
-			"name"	: "Arrows (x1)",
+			"name"	: "Arrows (5)",
 			"value"	: "8"
 		}, {
-			"name"	: "Arrows (x2)",
+			"name"	: "Arrows (10)",
 			"value"	: "9"
 		}, {
-			"name"	: "Arrows (x3)",
+			"name"	: "Arrows (30)",
 			"value"	: "A"
 		}, {
 			"name"	: "Bombs (5 - A)",
@@ -5896,21 +5896,21 @@
 		"id"		: "013F",
 		"type"		: "NPC"
 	}, {
-		"name"		: "Ingo's Gates",
+		"name"		: "Ingo's Gate",
 		"id"		: "0140",
 		"type"		: "Area",
 		"band"		: [ "0001", "0002" ],
 		"params" : [ [ {
-			"name"	: "Do Nothing",
+			"name"	: "Stays",
 			"value"	: "0"
 		}, {
-			"name"	: "Activated",
+			"name"	: "Can Close",
 			"value"	: "1"
 		} ], [ {
-			"name"	: "Do Nothing",
+			"name"	: "Regular Direction",
 			"value"	: "0"
 		}, {
-			"name"	: "Activated",
+			"name"	: "Reverse Direction",
 			"value"	: "2"
 		} ] ]
 	}, {

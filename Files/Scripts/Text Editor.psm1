@@ -598,9 +598,37 @@ function SaveScript([string]$Script, [string]$Table) {
     }
     while ($tempList.count % 16 -ne 0) { $tempList.Insert($tempList.count, 0) }
 
+    foreach ($id in $StoredReplaceIDs) { ChangeMessageID -ID $id.id -NewID $id.newId -Silent $id.silent }
+
     [System.IO.File]::WriteAllBytes($Script, $tempList)
     [System.IO.File]::WriteAllBytes($Table,  $ByteTableArray)
     $increase = $tempList = $global:StoredReplaceIDs = $null
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function ChangeMessageID([string]$ID, [string]$NewID, [boolean]$Silent) {
+    
+    if ($DialogueList -eq $null) {
+        WriteToConsole ("Could not change message ID: " + $ID + " as the message data does not exist. Did it ran outside ByteTextOptions?") -Error
+        return
+    }
+
+    if ($DialogueList[$ID] -eq $null) {
+        if (!$Silent) { WriteToConsole ("Could not find message ID: " + $ID) -Error }
+        return
+    }
+
+    $index                    = $DialogueList[$ID].index
+    $replaceId                = GetDecimal $NewID
+    $ByteTableArray[$index]   = $replaceId -shr 8
+    $ByteTableArray[$index+1] = $replaceId -band 0xFF
+
+    if (!$Silent) {
+        WriteToConsole ("Changed message ID from: " + $ID + " to: " + $NewID) 
+    }
 
 }
 
@@ -939,7 +967,7 @@ function LoadTextEditor() {
 
 
 #==============================================================================================================================================================================================
-function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File="", [switch]$Full, [switch]$Insert, [byte]$Offset=0, [switch]$Append, [switch]$All, [switch]$ASCII, [switch]$Silent, [switch]$Safety, [switch]$Force) {
+function SetMessage([string]$ID, [string]$NewID="", [object]$Text, [object]$Replace, [string]$File="", [switch]$Full, [switch]$Insert, [byte]$Offset=0, [switch]$Append, [switch]$All, [switch]$ASCII, [switch]$Silent, [switch]$Safety, [switch]$Force) {
     
     if ($Files.json.textEditor -eq $null) { LoadTextEditor }
 
@@ -956,6 +984,24 @@ function SetMessage([string]$ID, [object]$Text, [object]$Replace, [string]$File=
     }
 
     [void]$global:StoredMessages.Add(@{ index = $StoredMessages.Count; dec = (GetDecimal $ID); id = $ID; text = $Text; replace = $Replace; file = $File; full = $Full; insert = $Insert; offset = $Offset; append = $Append; all = $All; ascii = $ASCII; silent = $Silent; safety = $Safety; force = $Force })
+    
+    if ($NewID.Length -gt 0) {
+        if ($Silent) { SetMessageID -ID $ID -NewID $NewID -Silent } else { SetMessageID -ID $ID -NewID $NewID }
+    }
+
+}
+
+
+
+#==============================================================================================================================================================================================
+function SetMessageID([string]$ID, [string]$NewID="", [switch]$Silent) {
+    
+    if ($Files.json.textEditor -eq $null)   { LoadTextEditor }
+    if ($NewID.Length          -eq 0)       { return }
+    if ($NewID.Length          -ne 4)       { WriteToConsole ("Could not change message ID to: " + $ID + " as the ID  is not valid.") -Error; return }
+
+    if ($StoredReplaceIDs -eq $null) { [System.Collections.ArrayList]$global:StoredReplaceIDs = @() }
+    [void]$global:StoredReplaceIDs.Add(@{ id = $ID; newId = $NewID; silent = $Silent })
 
 }
 
@@ -1502,6 +1548,7 @@ Export-ModuleMember -Function GetMessagelength
 Export-ModuleMember -Function LoadTextEditor
 Export-ModuleMember -Function RunAllStoredMessages
 Export-ModuleMember -Function SetMessage
+Export-ModuleMember -Function SetMessageID
 Export-ModuleMember -Function SetMessageBox
 Export-ModuleMember -Function SetMessagePosition
 Export-ModuleMember -Function SetMessageIcon

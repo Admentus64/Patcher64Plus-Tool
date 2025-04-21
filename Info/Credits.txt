@@ -6,8 +6,8 @@
 
 - Tier 3:	Thanatos-Zero, patrick
 
-- Tier 2:	Amara, FrenchAddGamer, CasaDeLavo, Rick Mathot, Thanna-Shinu, Peter Morgan,
-		Biggoron SwordFigher, TwilitSheikah
+- Tier 2:	Amara, FrenchAddGamer, CasaDeLavo, Rick Mathot, Peter Morgan,
+		Biggoron SwordFigher, StarFox
 
 - Tier 1:	redmaro, mad_scrub, GoldenMariaNova
 
@@ -91,8 +91,7 @@
 					GNU General Public License v3.0 (GPL-3.0 License)
 
 --- Custom Models ---
-- Child Quest:				GhostlyDark & LuigiBlood
-- Child Quest Enhanced:			Admentus
+- Child Quest:				Admentus
 - Dawn & Dusk:				LuigiBlood
 - Fierce Deity:				CrookedPoe
 - Hatsune Miku Link:			JanexLane
@@ -122,13 +121,12 @@
 - Chinese Simplified:			madcell (2009) & GhostlyDark (improvements)
 - Debug Map Select:			Zelda Edit
 
---- Child Quest Classic ---
-- Code Development:			Admentus
-- Level Design:				GhostlyDark
-
---- Child Quest Pro ---
-- Code Development:			Admentus
-- Level Design:				GhostlyDark
+--- Child Quest ---
+- Lead Development & Design:		Admentus
+- Idea & Dungeon Design:		GhostlyDark
+- Quality Assurance & Testing:		GhostlyDark
+- Testing & Gold Dust Texture:		ThanatosZero
+- Testing:				Mod God
 
 --- Dawn and Dusk ---
 - Lead Development & Music:		Captain Seedy-Eye
