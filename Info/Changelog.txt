@@ -1,5 +1,6 @@
 v25.2.13
 - Connected Custom Models repo from LoadingError
+- Improved "Change Ice Arrow Location" option for OoT
 
 v25.2.12
 - Added "Change Ice Arrow Location" option for OoT

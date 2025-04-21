@@ -1828,33 +1828,45 @@ function ByteSceneOptions() {
     }
 
     if (IsChecked $Redux.Gameplay.AlternateIceArrow) {
-        PrepareMap       -Scene "Fire Temple"    -Map 8 -Header 0
         if ($DungeonList["Fire Temple"] -eq "Master Quest" -or $DungeonList["Fire Temple"] -eq "Ura Quest") {
-            InsertObject -Name  "Treasure Chest"
-            InsertActor  -Name  "Treasure Chest"                 -Param "0B2D" -X 1944 -Y 4681 -Z -393 -YRot 24394
-            RemoveActor  -Name  "Stone Hookshot Target"
-            RemoveActor  -Name  "Pushable Block"
+            PrepareMap       -Scene "Fire Temple"    -Map 4 -Header 0
+            ReplaceActor     -Name  "Treasure Chest" -Compare "080B" -Param "27EB" -X 2474 -Y 2080 -Z -36 -YRot 16372
+            SaveLoadedMap
+
+            PrepareMap       -Scene "Fire Temple"    -Map 17 -Header 0
+            ReplaceActor     -Name  "Treasure Chest" -Compare "7542" -Param "0802" -X -246 -Z -221 -YRot -32768
+            SaveLoadedMap
+
+            PrepareMap       -Scene "Fire Temple"    -Map 19 -Header 0
+            ReplaceActor     -Name  "Treasure Chest" -Compare "27E4" -Param "0B24" -X 856 -Y 260 -Z -1832 -YRot 49152
+            SaveAndPatchLoadedScene
+
         }
         else {
-            ReplaceActor -Name  "Treasure Chest" -Compare "5ACD" -Param "0B2D" -X 1944 -Y 4681 -Z -393 -YRot 24394
+            PrepareMap       -Scene "Fire Temple"    -Map 5 -Header 0
+            RemoveActor      -Name  "Pierre the Scarecrow Spawn"
+            RemoveObject     -Name  "Pierre & Bonooru"
+            InsertActor      -Name  "Stone Hookshot Target" -Compare -Param "FF00" -X 1551 -Y 3200 -Z -443
+            SaveLoadedMap
+
+            PrepareMap       -Scene "Fire Temple"    -Map 8 -Header 0
+            ReplaceActor     -Name  "Treasure Chest" -Compare "5ACD" -Param "0B2D" -X 1944 -Y 4681 -Z -393 -YRot 24394
+            SaveAndPatchLoadedScene
         }
-        ReplaceActor     -Name  "Skullwalltula"                                -X 1728 -Y 4473 -Z -231 -YRot 57344
-        ReplaceActor     -Name  "Switch"                         -Param "3800" -X 1148 -Y 4400 -Z -294
-        ReplaceActor     -Name  "Flame Circle"                   -Param "1378" -X 1938 -Y 4680 -Z -393
+       
+        PrepareMap           -Scene "Zora's Fountain" -Map 0 -Header 2 
+        ReplaceActor         -Name  "Collectable"    -Compare "1406" -Param "1402" 
         SaveAndPatchLoadedScene
 
-        PrepareMap       -Scene "Zora's Fountain" -Map 0 -Header 2 
-        ReplaceActor     -Name  "Collectable"    -Compare "1406" -Param "1402" 
-        SaveAndPatchLoadedScene
+        if ($DungeonList["Gerudo Training Ground"]  -eq "Ura Quest") {
+            PrepareMap       -Scene "Gerudo Training Ground" -Map 10 -Header 0
+            ReplaceActor     -Name  "Treasure Chest" -Compare "0B22" -Param "07C2"
+            SaveLoadedMap
+        }
 
         PrepareMap       -Scene "Gerudo Training Ground" -Map 8 -Header 0 
-        ReplaceActor     -Name  "Treasure Chest" -Compare "0B2C" -Param "07CC"
-        ReplaceActor     -Name  "Treasure Chest" -Compare "BB24" -Param "B7C4" 
+        if ($DungeonList["Gerudo Training Ground"]  -eq "Master Quest") { ReplaceActor -Name  "Treasure Chest" -Compare "BB24" -Param "B7C4" } else { ReplaceActor -Name  "Treasure Chest" -Compare "0B2C" -Param "07CC"  }
         SaveLoadedMap
-
-        PrepareMap       -Scene "Gerudo Training Ground" -Map 10 -Header 0
-        ReplaceActor     -Name  "Treasure Chest" -Compare "0B22" -Param "07C2"
-        SaveAndPatchLoadedScene
     }
 
     # RESTORE #
@@ -2309,6 +2321,7 @@ function ByteTextOptions() {
     if (IsChecked $Redux.Gameplay.AlternateIceArrow -Lang 1) {
             SetMessage -ID "0071"                                                              -Replace "<NS><Icon:0C><DI>You got the <B>Ice Arrow<W>!<DC><N>Set it to <Y><C Button> <W>and your arrows will<N>be powered up! If you hit your <N>target, it will freeze."
             SetMessage -ID "0419"                                                              -Replace "They say that a treasure deep in <N>the hidden tower of the Fire Temple,<N>would be able to freeze enemies<N>and even traps!"
+	    SetMessage -ID "306D"                                                              -Replace "<NS>I'll tell you a secret for<N>saving me!<New Box><NS>I've heard that there's a<N>strange treasure that can<N>freeze alot of things<N>somewhere around here.<New Box><NS>But... It is really true?<N>It's maybe just a rumor."
     }
     
     if (IsChecked $Redux.Graphics.GCScheme) {
@@ -3150,7 +3163,7 @@ function CreateTabGraphics() {
     CreateReduxComboBox -Name "Magic"            -Text "Magic Bar"           -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Magic")         -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the magic meter"                                                                 -Credits "GhostlyDark (ported), Pizza, Nerrel (HD), Zeth Alkar"
     CreateReduxComboBox -Name "CurrentFloor"     -Text "Current Floor Icon"  -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Current Floor") -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the current floor icon"                                                          -Credits "Admentus (ported), GhostlyDark (ported) & GoldenMariaNova (Alternative & Triforce)"
     CreateReduxComboBox -Name "BossFloor"        -Text "Boss Floor Icon"     -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Boss Floor")    -Ext "bin" -Default "Ocarina of Time" -Info "Set the style for the boss floor icon"                                                             -Credits "Admentus (ported), GhostlyDark (ported) & GoldenMariaNova (Alternative)"
-    CreateReduxComboBox -Name "HookReticle"      -Text "Hookshot Reticle"    -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Hook Reticle")  -Ext "bin" -Default $val              -Info "Set the style for the Hookshot reticle"                                                            -Credits "GoldenMariaNova"
+    CreateReduxComboBox -Name "HookReticle"      -Text "Hookshot Reticle"    -Items "Ocarina of Time" -FilePath ($Paths.shared + "\HUD\Hook Reticle")  -Ext "bin" -Default $val              -Info "Set the style for the Hookshot reticle"   -Warning 'May not work with custom player models that changes the Hylian Shield'       -Credits "GoldenMariaNova"
     CreateReduxCheckBox -Name "DungeonKeys"      -Text "MM Key Icon"         -Info "Replace the key icon with that from Majora's Mask"          -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "Chests"           -Text "MM Chests Map Icon"  -Info "Replace the chests map icons with those from Majora's Mask" -Credits "GhostlyDark (ported)"
     CreateReduxCheckBox -Name "CenterNaviPrompt" -Text "Center Navi Prompt"  -Info 'Centers the "Navi" prompt shown in the C-Up button'         -Credits "GhostlyDark (ported)"
