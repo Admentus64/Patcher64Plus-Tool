@@ -76,8 +76,10 @@ function SetFileParameters() {
     $Files.oot.widescreen_2                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Widescreen\widescreen_hide_geometry")
     $Files.oot.widescreen_3                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Widescreen\widescreen_minimum")
     $Files.oot.widescreen_4                 = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Widescreen\widescreen_redux_hotfix")
-    $Files.oot.child_quest_1                = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Child Quest\child_quest_classic_model")
-    $Files.oot.child_quest_2                = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Child Quest\child_quest_classic_enhanced_model")
+    $Files.oot.child_quest_oot              = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Child Quest\model_oot")
+    $Files.oot.child_quest_mm               = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Child Quest\model_mm")
+    $Files.oot.child_quest_base             = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Child Quest\baserom")
+    $Files.oot.child_quest_header           = CheckPatchExtension ($Paths.Games + "\Ocarina of Time\Decompressed\Optional\Child Quest\headers")
 
     $Files.oot.lens_of_truth                = $Paths.Games + "\Ocarina of Time\Textures\widescreen\lens_of_truth.bin"
     $Files.oot.title_mq_copyright           = $Paths.Games + "\Ocarina of Time\Textures\Logo\mq_copyright.bin"

@@ -1,3 +1,41 @@
+v25.3.0
+- Merged previous versions of Child Quest for OoT into one ultimate version
+- Updated Child Quest with fixes and additions
+	* Restored all missing cutscenes and events
+	* Restored Epona
+	* Restored every item and upgrade
+	* Added new headers for scenes after the timeskip
+	* Added new headers for Restored Zora's Domain and Restored Goron City
+	* All songs are now learned in their intended locations instead of in chests
+	* Biggoron Trading Sequence fully restored
+	* Medigoron now allows to sell the Silver Sword after the Fire Temple
+	* New Yellow Tektite enemy that stuns Link
+	* Added new grottos to act as shortcuts to get through Hyrule faster
+	* Added two new areas, ported over from Majora's Mask
+	* Moved Ghost Shop to the new Road to Lake Hylia area
+	* Improved Ocarina of Time Child Link Model
+	* Optional Majora's Mask Child Link Model
+	* Kakariko Well Crossbeam is destroyed after the Bongo Bongo Attack
+	* Optional Restore Text option
+	* Shifted injected Get Item models
+	* Power Bracelet icons/textures instead of Gauntlets
+	* Optional Censored Fire Temple music theme fixed
+	* Logo and subtitle on title screen
+	* Equipped strength level (as bracelets) and boots (as earrings) are shown
+	* Dialogue fixes and improvements
+	* Keep currently equipped item on B for cutscenes
+	* Improvements to cutscenes
+	* Silver Sword (one-handed Giant's Knife) changed to 4 -> 2 damage, won't break and has the Gilded Sword range
+	* Gilded Sword (one-handed Biggoron Sword) changed to 4 -> 3 damage
+	* Respective sword sheaths are now shown or hidden
+	* Either the Bullet Bag or Quiver upgrade can be shown in equipment, Quiver takes priority
+	* Adjusted title screen logo and intro
+- Added "Big Poe Hunting" option for OoT
+- Added "Pirates' Fortress Interior" option for MM
+- Added new tunic colors from Rando for OoT
+- Updated API support to set attack collision detection for OoT
+- Updated Scene Editor with additional API features support and fixes
+
 v25.2.13
 - Connected Custom Models repo from LoadingError
 - Improved "Change Ice Arrow Location" option for OoT

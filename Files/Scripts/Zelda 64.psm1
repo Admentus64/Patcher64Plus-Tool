@@ -60,46 +60,112 @@ function GetOoTShopItem([string]$Item) {
 
 
 #==============================================================================================================================================================================================
-function GetOoTCollision([switch]$DekuNut, [switch]$DekuStick, [switch]$Slingshot, [switch]$Bomb, [switch]$Boomerang, [switch]$Arrow, [switch]$HammerSwing, [switch]$Hookshot, [switch]$KokiriSlash, [switch]$MasterSlash, [switch]$GiantSlash, [switch]$ArrowFire, [switch]$ArrowIce, [switch]$ArrowLight,
-[switch]$ArrowUnknown1, [switch]$ArrowUnknown2, [switch]$ArrowUnknown3, [switch]$MagicFire, [switch]$MagicIce, [switch]$MagicLight, [switch]$Shield, [switch]$MirrorRay, [switch]$KokiriSpin, [switch]$MasterSpin, [switch]$GiantSpin, [switch]$KokiriJump, [switch]$MasterJump, [switch]$GiantJump,
-[switch]$Unknown1, [switch]$HammerJump, [switch]$Unknown2) {
+function ChangeOoTCollision([object]$Offset,
+                            [switch]$DekuNut,    [switch]$DekuStick,     [switch]$Slingshot,     [switch]$Bomb,          [switch]$Boomerang, [switch]$ArrowNormal, [switch]$HammerSwing, [switch]$Hookshot,  [switch]$KokiriSlash, [switch]$MasterSlash, [switch]$GiantSlash, [switch]$ArrowFire, [switch]$ArrowIce,
+                            [switch]$ArrowLight, [switch]$ArrowUnknown1, [switch]$ArrowUnknown2, [switch]$ArrowUnknown3, [switch]$MagicFire, [switch]$MagicIce,    [switch]$MagicLight,  [switch]$Shield,    [switch]$MirrorRay,   [switch]$KokiriSpin,  [switch]$MasterSpin, [switch]$GiantSpin, [switch]$KokiriJump,
+                            [switch]$MasterJump, [switch]$GiantJump,     [switch]$Unknown1,      [switch]$HammerJump,    [switch]$Unknown2,  [switch]$Slash,       [switch]$SpinAttack,  [switch]$JumpSlash, [switch]$Hammer,      [switch]$Fire,        [switch]$Arrow,      [switch]$Ranged) {
     
-    $value = 0
+    if ($Offset -is [String]) { $Offset = $Offset -split ' ' }
 
-    if ($DekuNut)         { $value +=        0x1 }
-    if ($DekuStick)       { $value +=        0x2 }
-    if ($Slingshot)       { $value +=        0x4 }
-    if ($Bomb)            { $value +=        0x8 }
-    if ($Boomerang)       { $value +=       0x10 }
-    if ($Arrow)           { $value +=       0x20 }
-    if ($HammerSwing)     { $value +=       0x40 }
-    if ($Hookshot)        { $value +=       0x80 }
-    if ($KokiriSlash)     { $value +=      0x100 }
-    if ($MasterSlash)     { $value +=      0x200 }
-    if ($GiantSlash)      { $value +=      0x400 }
-    if ($ArrowFire)       { $value +=      0x800 }
-    if ($ArrowIce)        { $value +=     0x1000 }
-    if ($ArrowLight)      { $value +=     0x2000 }
-    if ($ArrowUnknown1)   { $value +=     0x4000 }
-    if ($ArrowUnknown2)   { $value +=     0x8000 }
-    if ($ArrowUnknown3)   { $value +=    0x10000 }
-    if ($MagicFire)       { $value +=    0x20000 }
-    if ($MagicIce)        { $value +=    0x40000 }
-    if ($MagicLight)      { $value +=    0x80000 }
-    if ($Shield)          { $value +=   0x100000 }
-    if ($MirrorRay)       { $value +=   0x200000 }
-    if ($KokiriSpin)      { $value +=   0x400000 }
-    if ($GiantSpin)       { $value +=   0x800000 }
-    if ($MasterSpin)      { $value +=  0x1000000 }
-    if ($KokiriJump)      { $value +=  0x2000000 }
-    if ($GiantJump)       { $value +=  0x4000000 }
-    if ($MasterJump)      { $value +=  0x8000000 }
-    if ($Unknown1)        { $value += 0x10000000 }
-    if ($HammerJump)      { $value += 0x20000000 }
-    if ($Unknown2)        { $value += 0x40000000 }
+    foreach ($o in $Offset) {
+        if ($o -is [string]) { $dec = GetDecimal $o } else { $dec = $o }
+        if ($dec -lt 0) {
+            WriteToConsole "Offset is negative, too large or not an integer!" -Error
+            $global:WarningError = $True
+            return $False
+        }
+        if ($dec -gt $ByteArrayGame.Length) {
+            WriteToConsole "Offset is too large for file!" -Error
+            $global:WarningError = $True
+            return $False
+        }
 
-    return (Get32Bit $value)
+        $value = ($ByteArrayGame[$dec] * 0x1000000) + ($ByteArrayGame[$dec+1] * 0x10000) + ($ByteArrayGame[$dec+2] * 0x100) + $ByteArrayGame[$dec+3]
 
+        if ($DekuNut            -and -not ($value -band        0x1) )   { $value +=        0x1 }
+        if ($DekuStick          -and -not ($value -band        0x2) )   { $value +=        0x2 }
+        if ($Slingshot          -and -not ($value -band        0x4) )   { $value +=        0x4 }
+        if ($Bomb               -and -not ($value -band        0x8) )   { $value +=        0x8 }
+        if ($Boomerang          -and -not ($value -band       0x10) )   { $value +=       0x10 }
+        if ($ArrowNormal        -and -not ($value -band       0x20) )   { $value +=       0x20 }
+        if ($HammerSwing        -and -not ($value -band       0x40) )   { $value +=       0x40 }
+        if ($Hookshot           -and -not ($value -band       0x80) )   { $value +=       0x80 }
+        if ($KokiriSlash        -and -not ($value -band      0x100) )   { $value +=      0x100 }
+        if ($MasterSlash        -and -not ($value -band      0x200) )   { $value +=      0x200 }
+        if ($GiantSlash         -and -not ($value -band      0x400) )   { $value +=      0x400 }
+        if ($ArrowFire          -and -not ($value -band      0x800) )   { $value +=      0x800 }
+        if ($ArrowIce           -and -not ($value -band     0x1000) )   { $value +=     0x1000 }
+        if ($ArrowLight         -and -not ($value -band     0x2000) )   { $value +=     0x2000 }
+        if ($ArrowUnknown1      -and -not ($value -band     0x4000) )   { $value +=     0x4000 }
+        if ($ArrowUnknown2      -and -not ($value -band     0x8000) )   { $value +=     0x8000 }
+        if ($ArrowUnknown3      -and -not ($value -band    0x10000) )   { $value +=    0x10000 }
+        if ($MagicFire          -and -not ($value -band    0x20000) )   { $value +=    0x20000 }
+        if ($MagicIce           -and -not ($value -band    0x40000) )   { $value +=    0x40000 }
+        if ($MagicLight         -and -not ($value -band    0x80000) )   { $value +=    0x80000 }
+        if ($Shield             -and -not ($value -band   0x100000) )   { $value +=   0x100000 }
+        if ($MirrorRay          -and -not ($value -band   0x200000) )   { $value +=   0x200000 }
+        if ($KokiriSpin         -and -not ($value -band   0x400000) )   { $value +=   0x400000 }
+        if ($GiantSpin          -and -not ($value -band   0x800000) )   { $value +=   0x800000 }
+        if ($MasterSpin         -and -not ($value -band  0x1000000) )   { $value +=  0x1000000 }
+        if ($KokiriJump         -and -not ($value -band  0x2000000) )   { $value +=  0x2000000 }
+        if ($GiantJump          -and -not ($value -band  0x4000000) )   { $value +=  0x4000000 }
+        if ($MasterJump         -and -not ($value -band  0x8000000) )   { $value +=  0x8000000 }
+        if ($Unknown1           -and -not ($value -band 0x10000000) )   { $value += 0x10000000 }
+        if ($HammerJump         -and -not ($value -band 0x20000000) )   { $value += 0x20000000 }
+        if ($Unknown2           -and -not ($value -band 0x40000000) )   { $value += 0x40000000 }
+
+        if ($Slash) {
+            if (!$KokiriSlash   -and -not ($value -band      0x100) )   { $value +=      0x100 }
+            if (!$MasterSlash   -and -not ($value -band      0x200) )   { $value +=      0x200 }
+            if (!$GiantSlash    -and -not ($value -band      0x400) )   { $value +=      0x400 }
+        }
+
+        if ($SpinAttack) {
+            if (!$KokiriSpin    -and -not ($value -band   0x400000) )   { $value +=   0x400000 }
+            if (!$MasterSpin    -and -not ($value -band  0x1000000) )   { $value +=  0x1000000 }
+            if (!$GiantSpin     -and -not ($value -band   0x800000) )   { $value +=   0x800000 }
+        }
+
+        if ($JumpSlash) {
+            if (!$KokiriJump    -and -not ($value -band  0x2000000) )   { $value +=  0x2000000 }
+            if (!$MasterJump    -and -not ($value -band  0x8000000) )   { $value +=  0x8000000 }
+            if (!$GiantJump     -and -not ($value -band  0x4000000) )   { $value +=  0x4000000 }
+        }
+
+        if ($Hammer) {
+            if (!$HammerSwing   -and -not ($value -band       0x40) )   { $value +=       0x40 }
+            if (!$HammerJump    -and -not ($value -band 0x20000000) )   { $value += 0x20000000 }
+        }
+
+        if ($Fire) {
+            if (!$ArrowFire     -and -not ($value -band      0x800) )   { $value +=      0x800 }
+            if (!$MagicFire     -and -not ($value -band    0x20000) )   { $value +=    0x20000 }
+        }
+
+        if ($Arrow) {
+            if (!$ArrowNormal   -and -not ($value -band       0x20) )   { $value +=       0x20 }
+            if (!$ArrowFire     -and -not ($value -band      0x800) )   { $value +=      0x800 }
+            if (!$ArrowIce      -and -not ($value -band     0x1000) )   { $value +=     0x1000 }
+            if (!$ArrowLight    -and -not ($value -band     0x2000) )   { $value +=     0x2000 }
+            if (!$ArrowUnknown1 -and -not ($value -band     0x4000) )   { $value +=     0x4000 }
+            if (!$ArrowUnknown2 -and -not ($value -band     0x8000) )   { $value +=     0x8000 }
+            if (!$ArrowUnknown3 -and -not ($value -band    0x10000) )   { $value +=    0x10000 }
+        }
+
+        if ($Ranged) {
+            if (!$Slingshot     -and -not ($value -band        0x4) )   { $value +=        0x4 }
+            if (!$Hookshot      -and -not ($value -band       0x80) )   { $value +=       0x80 }
+            if (!$ArrowNormal   -and -not ($value -band       0x20) )   { $value +=       0x20 }
+            if (!$ArrowFire     -and -not ($value -band      0x800) )   { $value +=      0x800 }
+            if (!$ArrowIce      -and -not ($value -band     0x1000) )   { $value +=     0x1000 }
+            if (!$ArrowLight    -and -not ($value -band     0x2000) )   { $value +=     0x2000 }
+            if (!$ArrowUnknown1 -and -not ($value -band     0x4000) )   { $value +=     0x4000 }
+            if (!$ArrowUnknown2 -and -not ($value -band     0x8000) )   { $value +=     0x8000 }
+            if (!$ArrowUnknown3 -and -not ($value -band    0x10000) )   { $value +=    0x10000 }
+        }
+
+        ChangeBytes -Offset $dec -Values $value
+    }
 }
 
 
@@ -1896,7 +1962,7 @@ function SetFormColorLabel([object]$ComboBox, [object]$Label) {
 Export-ModuleMember -Function PatchModel
 
 Export-ModuleMember -Function GetOoTShopItem
-Export-ModuleMember -Function GetOoTCollision
+Export-ModuleMember -Function ChangeOoTCollision
 Export-ModuleMember -Function GetButtonScale
 Export-ModuleMember -Function SetMMCUpTextCoords
 Export-ModuleMember -Function GetOoTEntranceIndex
