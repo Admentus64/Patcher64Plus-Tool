@@ -2322,6 +2322,16 @@ function ByteTextOptions() {
         SetMessage -ID "0417"                                                                  -Replace "They say that a strange owl<N>around here, may look big and<N>heavy, but its character is rather <N>lighthearted."
     }
 
+    if (IsChecked $Redux.Text.NoMoreTrollingOwl -Lang 1) {
+	SetMessage -ID "10C2"                                                                  -Replace "Do you want to hear what I said<N>again?<N><Two Choices><G>No<N>Yes<W>"
+        SetMessage -ID "10C6"                                                                  -Replace "Do you want to hear what I<N>said again?<N><Two Choices><G>No<N>Yes<W>"
+	SetMessage -ID "2066"                                                                  -Replace "Did you get all that?<N><N><Two Choices><G>Yes<N>No<W>"
+        SetMessage -ID "2064" -Text "It appears that the time has <N>finally come for you to start your <N>adventure!" -Replace "It appears that the time has <N>finally come for you to start your <N>adventure!<N><New Box><N><NS>I will be your guide along<N> this long arduous journey.<N><New Box><N>"
+	SetMessage -ID "206A"                                                                  -Replace "Do you want to hear what I said<N>again?<N><Two Choices><G>No<N>Yes<W>"
+        SetMessage -ID "5011"                                                                  -Replace "Do you want to hear what I<N>said again?<N><Two Choices><G>No<N>Yes<W>"
+        SetMessage -ID "607B"                                                                  -Replace "Do you want to hear what I said<N>again?<N><Two Choices><G>No<N>Yes<W>"
+    }
+
     if (IsChecked $Redux.Gameplay.InstantClaimCheck -Lang 1) {
         SetMessage -ID "305A" -Text "My worrrrrk is not <N>verrrry consistent, so "            -Replace "Now, I know you're <N>verrrry busy, so "
         SetMessage -ID "305C"                                                                  -Replace "Please returrrrrrn soon...<N>When you're readyyyy<N>for it, show the claim<N>agaaaain..."
@@ -3045,6 +3055,7 @@ function CreateTabLanguage() {
     CreateReduxCheckBox -Base 1 -Name "FemalePronouns" -Text "Female Pronouns" -Info "Refer to Link as a female character"                                                                                                                       -Credits "Admentus"
     CreateReduxCheckBox         -Name "GoldSkulltula"  -Text "Gold Skulltula"  -Info "The textbox for obtaining a Gold Skulltula will no longer interrupt the gameplay`nThe English & German scripts also shows the total amount you got so far" -Credits "ShadowOne333"
     CreateReduxCheckBox -Base 4 -Name "EasterEggs"     -Text "Easter Eggs"     -Info "Adds custom Patreon Tier 3 messages into the game`nCan you find them all?" -Checked                                                                        -Credits "Admentus & Patreons"
+    CreateReduxCheckbox -Base 1 -Name "NoMoreTrollingOwl" -Text "Less Annoying Owl" -Info "Makes the Owl be less of an annoyance by removing the useless choices trolling`nAlso add a needed welcoming sentence at his introductory text"        -Credits "GoldenMariaNova"
     CreateReduxCheckBox -Base 1 -Name "Custom"         -Text "Custom"          -Info ('Insert custom dialogue found from "..\Patcher64+ Tool\Files\Games\Majora' + "'" + 's Mask\Custom Text"') -Warning "Make sure your custom script is proper and correct, or your ROM will crash`n[!] No edit will be made if the custom script is missing"
 
 
