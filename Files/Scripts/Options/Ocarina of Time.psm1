@@ -2326,7 +2326,7 @@ function ByteTextOptions() {
 	SetMessage -ID "10C2"                                                                  -Replace "Do you want to hear what I said<N>again?<N><Two Choices><G>No<N>Yes<W>"
         SetMessage -ID "10C6"                                                                  -Replace "Do you want to hear what I<N>said again?<N><Two Choices><G>No<N>Yes<W>"
 	SetMessage -ID "2066"                                                                  -Replace "Did you get all that?<N><N><Two Choices><G>Yes<N>No<W>"
-        SetMessage -ID "2064" -Text "It appears that the time has <N>finally come for you to start your <N>adventure!" -Replace "It appears that the time has <N>finally come for you to start your <N>adventure!<N><New Box><N><NS>I will be your guide along<N> this long arduous journey.<N><New Box><N>"
+        SetMessage -ID "2064" -Text "It appears that the time has <N>finally come for you to start your <N>adventure!" -Replace "It appears that the time has <N>finally come for you to start your <N>adventure!<N><New Box><N><NS>I will be your guide along <N>this long arduous journey.<N><New Box><N>"
 	SetMessage -ID "206A"                                                                  -Replace "Do you want to hear what I said<N>again?<N><Two Choices><G>No<N>Yes<W>"
         SetMessage -ID "5011"                                                                  -Replace "Do you want to hear what I<N>said again?<N><Two Choices><G>No<N>Yes<W>"
         SetMessage -ID "607B"                                                                  -Replace "Do you want to hear what I said<N>again?<N><Two Choices><G>No<N>Yes<W>"
