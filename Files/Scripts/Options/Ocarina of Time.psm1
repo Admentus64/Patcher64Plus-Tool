@@ -3581,7 +3581,7 @@ function CreateTabEquipment() {
     
     # UNLOCK CHILD RESTRICTIONS #
 
-    CreateReduxGroup    -Tag  "Unlock"        -Text "Unlock Child Restrictions" -Child -Base 4
+    CreateReduxGroup    -Tag  "Unlock"        -Text "Remove Child Restrictions" -Child -Base 4
     CreateReduxCheckBox -Name "Tunics"        -Text "Unlock Tunics"        -Info "Child Link is able to use the Goron Tunic and Zora Tunic`nSince you might want to walk around in style as well when you are young.`nThe dialogue script will be adjusted to reflect this (only for English)`nChild Link will be also able to purchase them aswell" -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "MasterSword"   -Text "Unlock Master Sword"  -Info "Child Link is able to use the Master Sword`nThe Master Sword does twice as much damage as the Kokiri Sword"                                          -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "GiantsKnife"   -Text "Unlock Giant's Knife" -Info "Child Link is able to use the Giant's Knife / Biggoron Sword`nThe Giant's Knife / Biggoron Sword does four times as much damage as the Kokiri Sword" -Credits "GhostlyDark" -Warning "The Giant's Knife / Biggoron Sword appears as if Link if thrusting the sword through the ground"
@@ -3594,7 +3594,7 @@ function CreateTabEquipment() {
 
     # UNLOCK ADULT RESTRICTIONS #
 
-    CreateReduxGroup    -Tag  "Unlock"         -Text "Unlock Adult Restrictions" -Adult -Base 4
+    CreateReduxGroup    -Tag  "Unlock"         -Text "Remove Adult Restrictions" -Adult -Base 4
     CreateReduxCheckBox -Name "KokiriSword"    -Text "Unlock Kokiri Sword" -Info "Adult Link is able to use the Kokiri Sword`nThe Kokiri Sword does half as much damage as the Master Sword" -Credits "GhostlyDark"
     CreateReduxCheckBox -Name "DekuShield"     -Text "Unlock Deku Shield"  -Info "Adult Link is able to use the Deku Shield"                                                                 -Credits "GhostlyDark" -Warning "The Deku Shield appears as invisible but can still be burned up by fire"
     CreateReduxCheckBox -Name "FairySlingshot" -Text "Unlock Slingshot"    -Info "Adult Link is able to use the Fairy Slingshot"                                                             -Credits "GhostlyDark" -Warning "The Fairy Slingshot appears as the Fairy Bow"

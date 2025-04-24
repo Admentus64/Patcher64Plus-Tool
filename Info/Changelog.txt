@@ -1,6 +1,7 @@
 v25.3.2
 - Fixed issues with Advanced WS for OoT Redux
 - Changed Sword Trail color option to allow setting both colors separately from each other
+- Hotfix Child Quest crashes on Gohma and Gerudo Guards
 
 v25.3.1
 - Updated Advanced WS for OoT and MM to fix debug loading messages, song effects and screen transitions

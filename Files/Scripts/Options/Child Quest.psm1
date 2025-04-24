@@ -2,7 +2,7 @@
 function ChildQuestExposeOptions() {
     
     # Exclude Group
-    ExcludeGroup  -Group "Unlock"       -Name "Unlock Child Restrictions"
+    ExcludeGroup  -Group "Unlock"       -Name "Remove Child Restrictions"
     ExcludeGroup  -Group "Equipment"    -Name "Swords & Shields"
     ExcludeGroup  -Group "Previews"     -Name "Equipment Previews"
 
@@ -149,8 +149,8 @@ function ChildQuestByteOptions() {
     PatchBytes  -Offset "15BB000" -Patch "Object GI Models\Termina Hookshot.bin"                                                                                                                          # Model: Hookshot -> Termina Hookshot
     ChangeBytes -Offset @("A006", "B6F646") -Values "C880";                             ChangeBytes -Offset   "B663C6"            -Values "0A10";             ChangeBytes -Offset "B663EA" -Values "0E48"
 
-    PatchBytes  -Offset "80E000"  -Texture -Patch "Equipment\Bracelet\Power Bracelet.icon"                                                                                                                # Icon:  Silver Gauntlets -> Gerudo Bracelet
-    PatchBytes  -Offset "8B3000"  -Texture -Patch "Equipment\Bracelet\Power Bracelet.en.label"                                                                                                            # Icon:  Silver Gauntlets -> Gerudo Bracelet
+    PatchBytes  -Offset "80E000"  -Texture -Patch "Equipment\Bracelet\Power Bracelet.icon"                                                                                                                # Icon:  Silver Gauntlets -> Power Bracelet
+    PatchBytes  -Offset "8B3000"  -Texture -Patch "Equipment\Bracelet\Power Bracelet.en.label"                                                                                                            # Icon:  Silver Gauntlets -> Power Bracelet
     PatchBytes  -Offset "80F000"  -Texture -Patch "Equipment\Bracelet\Power Bracelets.icon"                                                                                                               # Icon:  Golden Gauntlets -> Power Bracelets
     PatchBytes  -Offset "8B3400"  -Texture -Patch "Equipment\Bracelet\Power Bracelets.en.label"                                                                                                           # Icon:  Golden Gauntlets -> Power Bracelets
     PatchBytes  -Offset "173A000"          -Patch "Object GI Models\Power Bracelet.bin" -Length "1960"                                                                                                    # Model: Gauntlets        -> Power Bracelet
@@ -183,14 +183,14 @@ function ChildQuestByteOptions() {
     ChangeBytes -Offset   "DF46D4"            -Values "3F0CCCCD"; ChangeBytes -Offset "DF31B6" -Values "3E80" # Resize Horseback Archery Pots (0.55f, 0.3125f)
 
 
-    
+
     # Collision
-    ChangeOoTCollision -Offset @("CF4CDC", "CF4D00", "CF4D24", "CF4D48", "CF4D6C", "CF4D90", "CF4DB4", "CF4DD8", "CF4DFC", "CF4E07", "CF4E20", "CF4E44", "CF4E68") -Boomerang             # Flare Dancer
-    ChangeOoTCollision -Offset "D8D4A0"                                                                                                                            -SpinAttack -JumpSlash # Ganondorf Lightball
-    ChangeOoTCollision -Offset "EA0814"                                                                                                                            -SpinAttack -JumpSlash # Gerudo Guard
-    ChangeOoTCollision -Offset "C91A08"                                                                                                                            -Arrow                 # Falling Ladder (Inside the Deku Tree)
-    ChangeOoTCollision -Offset "C4930C"                                                                                                                            -Arrow                 # Gohma (stun)
-    ChangeOoTCollision -Offset "DE9734"                                                                                                                            -Arrow                 # Invisible Collectible for Slingshot switch interaction
+  # ChangeOoTCollision -Offset @("CF4CDC", "CF4D00", "CF4D24", "CF4D48", "CF4D6C", "CF4D90", "CF4DB4", "CF4DD8", "CF4DFC", "CF4E07", "CF4E20", "CF4E44", "CF4E68") -Boomerang             # Flare Dancer
+  # ChangeOoTCollision -Offset "D8D4A0"                                                                                                                            -SpinAttack -JumpSlash # Ganondorf Lightball
+  # ChangeOoTCollision -Offset "EA0814"                                                                                                                            -SpinAttack -JumpSlash # Gerudo Guard
+  # ChangeOoTCollision -Offset "C91A08"                                                                                                                            -Arrow                 # Falling Ladder (Inside the Deku Tree)
+  # ChangeOoTCollision -Offset "C4930C"                                                                                                                            -Arrow                 # Gohma (stun)
+  # ChangeOoTCollision -Offset "DE9734"                                                                                                                            -Arrow                 # Invisible Collectible for Slingshot switch interaction
 
 
 
@@ -256,7 +256,7 @@ function ChildQuestByteOptions() {
     ChangeBytes -Offset "C3D0"    -Values ($sceneOffset + (Get32Bit $sceneStart)); ChangeBytes -Offset "B71684" -Values $sceneOffset
     ChangeBytes -Offset "C3E0"    -Values ($mapOffset   + (Get32Bit $mapStart))
     ChangeBytes -Offset "B6FC40"  -Values "1D0081021D0081021D0081021D0081021D01C1021D01C1021D01C1021D01C1021D0241021D0241021D0241021D024102" # Relink entrances (ENTR_UNUSED_6E, ENTR_SASATEST_0, ENTR_SYOTES_0) (14, 18, 1C)
-    ChangeBytes -Offset "B6D35A"  -Values "0010"                                                                                             # Remove scene strictions
+    ChangeBytes -Offset "B6D35A"  -Values "0010"                                                                                             # Remove scene restrictions
     ChangeBytes -Offset "B7168C"  -Values "019CE000019CFB00"                                                                                 # Reuse Gerudo Valley title card
 
     $sceneStart  = 0x3139000
@@ -271,7 +271,7 @@ function ChildQuestByteOptions() {
     ChangeBytes -Offset "CCB0"   -Values ($mapOffset   + (Get32Bit $mapStart))
     ChangeBytes -Offset "B6FC70" -Values "250081022500810225008102250081022501C1022501C1022501C1022501C102" # Relink entrances (ENTR_SYOTES2_0, ENTR_TESTROOM_0) (20, 24)
     ChangeBytes -Offset "B6FD0C" -Values "25024102250241022502410225024102"                                 # Relink entrances (ENTR_SUTARU_0)                   (47)
-    ChangeBytes -Offset "B6D37A" -Values "0010"                                                             # Remove scene strictions
+    ChangeBytes -Offset "B6D37A" -Values "0010"                                                             # Remove scene restrictions
     ChangeBytes -Offset "B7172C" -Values "019BE000019BFB00"                                                 # Reuse Hyrule Field title card
 
     $sceneStart  = (($ByteArrayGame[0xCCB4] * 0x1000000) + ($ByteArrayGame[0xCCB5] * 0x10000) + ($ByteArrayGame[0xCCB6] * 0x100) + $ByteArrayGame[0xCCB7] + 0xFFF) -band 0xFFFFF000
@@ -290,7 +290,7 @@ function ChildQuestByteOptions() {
     ChangeBytes -Offset "B71070" -Values "55084102550841025508410255084102"                            # Add entrance for Kokiri Forest             (ENTR_BESITU_0)                  (520)
     ChangeBytes -Offset "B70798" -Values "25034102250341022503410225034102"                            # Add entrance for Road to Lake Hylia        (ENTR_TEST_SHOOTING_GALLERY_0)   (2EA)
     ChangeBytes -Offset "B707B0" -Values "1D0341021D0341021D0341021D034102"                            # Add entrance for Road to Gerudo's Fortress (ENTR_TEST_SHOOTING_GALLERY_0_6) (2F0)
-    ChangeBytes -Offset "B6D366" -Values "00D0"                                                        # Remove scene strictions
+    ChangeBytes -Offset "B6D366" -Values "00D0"                                                        # Remove scene restrictions
     ChangeBytes -Offset "B6FCF4" -Values "2200010222000102"                                            # Relink entrance (ENTR_GROTTOS_0_2) (41)
     ChangeBytes -Offset "B71258" -Values "2201010222010102"                                            # Relink entrance (ENTR_GROTTOS_1_2) (59A)
     ChangeBytes -Offset "B71268" -Values "2202010222020102"                                            # Relink entrance (ENTR_GROTTOS_2_2) (59E)
