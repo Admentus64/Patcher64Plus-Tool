@@ -1375,11 +1375,9 @@ function CreateSwordTrailColorOptions() {
 
     if (IsSet $Redux.Colors.SwordTrail) {
         $Redux.Colors.SwordTrail.Add_SelectedIndexChanged({
-            if ($Redux.Colors.SwordTrail.text -ne "Custom") { SetColor -Color "FFFFFF" -Dialog $Redux.Colors.SetSwordTrail[1] -Label $Redux.Colors.SwordTrailLabels[1] }
-            SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[0] -Label $Redux.Colors.SwordTrailLabels[0]
+            SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[0] -Label $Redux.Colors.SwordTrailLabels[0] -DialogOuter $Redux.Colors.SetSwordTrail[1] -LabelOuter $Redux.Colors.SwordTrailLabels[1]
         })
-        if ($Redux.Colors.SwordTrail.text -ne "Custom") { SetColor -Color "FFFFFF" -Dialog $Redux.Colors.SetSwordTrail[1] -Label $Redux.Colors.SwordTrailLabels[1] }
-        SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[0] -Label $Redux.Colors.SwordTrailLabels[0]
+        SetSwordColorsPreset -ComboBox $Redux.Colors.SwordTrail -Dialog $Redux.Colors.SetSwordTrail[0] -Label $Redux.Colors.SwordTrailLabels[0] -DialogOuter $Redux.Colors.SetSwordTrail[1] -LabelOuter $Redux.Colors.SwordTrailLabels[1]
     }
 
 }
@@ -1888,9 +1886,10 @@ function SetMinimapColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Lab
 
 
 #==============================================================================================================================================================================================
-function SetSwordColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label) {
+function SetSwordColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label, [object]$DialogOuter=$null, [object]$LabelOuter=$null) {
     
     $text = $ComboBox.Text.replace(' (default)', "")
+
     if     ($text -eq "Black")        { SetColor -Color "000000" -Dialog $Dialog -Label $Label }
     elseif ($text -eq "White")        { SetColor -Color "FFFFFF" -Dialog $Dialog -Label $Label }
     elseif ($text -eq "Red")          { SetColor -Color "FF0000" -Dialog $Dialog -Label $Label }
@@ -1902,7 +1901,22 @@ function SetSwordColorsPreset([object]$ComboBox, [object]$Dialog, [object]$Label
     elseif ($text -eq "Gold")         { SetColor -Color "FFD700" -Dialog $Dialog -Label $Label }
     elseif ($text -eq "Purple")       { SetColor -Color "800080" -Dialog $Dialog -Label $Label }
     elseif ($text -eq "Pink")         { SetColor -Color "FF69B4" -Dialog $Dialog -Label $Label }
-    elseif ($text -eq "Randomized")   { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Spin Attack Color" }
+    elseif ($text -eq "Randomized")   { SetRandomColor -Dialog $Dialog -Label $Label -Message "Randomize Sword Color" }
+
+    if ($DialogOuter -ne $null -and $LabelOuter -ne $null) {
+        if     ($text -eq "Black")        { SetColor -Color "FFFFFF" -Dialog $DialogOuter -Label $LabelOuter }
+        elseif ($text -eq "White")        { SetColor -Color "FFFFFF" -Dialog $DialogOuter -Label $LabelOuter }
+        elseif ($text -eq "Red")          { SetColor -Color "FFFFFF" -Dialog $DialogOuter -Label $LabelOuter }
+        elseif ($text -eq "Green")        { SetColor -Color "FFFFFF" -Dialog $DialogOuter -Label $LabelOuter }
+        elseif ($text -eq "Blue")         { SetColor -Color "FFFFFF" -Dialog $DialogOuter -Label $LabelOuter }
+        elseif ($text -eq "Cyan")         { SetColor -Color "FFFFFF" -Dialog $DialogOuter -Label $LabelOuter }
+        elseif ($text -eq "Magenta")      { SetColor -Color "FFFFFF" -Dialog $DialogOuter -Label $LabelOuter }
+        elseif ($text -eq "Orange")       { SetColor -Color "FFFFFF" -Dialog $DialogOuter -Label $LabelOuter }
+        elseif ($text -eq "Gold")         { SetColor -Color "FFFFFF" -Dialog $DialogOuter -Label $LabelOuter }
+        elseif ($text -eq "Purple")       { SetColor -Color "FFFFFF" -Dialog $DialogOuter -Label $LabelOuter }
+        elseif ($text -eq "Pink")         { SetColor -Color "FFFFFF" -Dialog $DialogOuter -Label $LabelOuter }
+        elseif ($text -eq "Randomized")   { SetRandomColor -Dialog $DialogOuter -Label $LabelOuter -Message "Randomize Outer Sword Color" }
+    } 
 
 }
 
