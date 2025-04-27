@@ -164,7 +164,7 @@ function ChangeOoTCollision([object]$Offset,
             if (!$ArrowUnknown3 -and -not ($value -band    0x10000) )   { $value +=    0x10000 }
         }
 
-        ChangeBytes -Offset $dec -Values $value
+        ChangeBytes -Offset $dec -Values (Get32Bit $value)
     }
 }
 

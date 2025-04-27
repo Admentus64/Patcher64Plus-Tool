@@ -43,6 +43,7 @@ function ChildQuestExposeOptions() {
     ExcludeOption -Group "Fixes"        -Option "Dungeons"
     ExcludeOption -Group "Graphics"     -Option "ForceHiresModel"
     ExcludeOption -Group "Styles"       -Option "HairColor"
+    ExcludeOption -Group "Hero"         -Option "LostWoodsOctorok"
     ExcludeOption -Group "Minigames"    -Option "LessDemandingFishing"
     ExcludeOption -Group "Minigames"    -Option "GuaranteedFishing"
     ExcludeOption -Group "Equipment"    -Option "HideSword"
@@ -185,12 +186,12 @@ function ChildQuestByteOptions() {
 
 
     # Collision
-  # ChangeOoTCollision -Offset @("CF4CDC", "CF4D00", "CF4D24", "CF4D48", "CF4D6C", "CF4D90", "CF4DB4", "CF4DD8", "CF4DFC", "CF4E07", "CF4E20", "CF4E44", "CF4E68") -Boomerang             # Flare Dancer
-  # ChangeOoTCollision -Offset "D8D4A0"                                                                                                                            -SpinAttack -JumpSlash # Ganondorf Lightball
-  # ChangeOoTCollision -Offset "EA0814"                                                                                                                            -SpinAttack -JumpSlash # Gerudo Guard
-  # ChangeOoTCollision -Offset "C91A08"                                                                                                                            -Arrow                 # Falling Ladder (Inside the Deku Tree)
-  # ChangeOoTCollision -Offset "C4930C"                                                                                                                            -Arrow                 # Gohma (stun)
-  # ChangeOoTCollision -Offset "DE9734"                                                                                                                            -Arrow                 # Invisible Collectible for Slingshot switch interaction
+    ChangeOoTCollision -Offset @("CF4CDC", "CF4D00", "CF4D24", "CF4D48", "CF4D6C", "CF4D90", "CF4DB4", "CF4DD8", "CF4DFC", "CF4E07", "CF4E20", "CF4E44", "CF4E68") -Boomerang             # Flare Dancer
+    ChangeOoTCollision -Offset   "D8D4A0"                                                                                                                          -SpinAttack -JumpSlash # Ganondorf Lightball
+    ChangeOoTCollision -Offset   "EA0814"                                                                                                                          -SpinAttack -JumpSlash # Gerudo Guard
+    ChangeOoTCollision -Offset   "C91A08"                                                                                                                          -Arrow                 # Falling Ladder (Inside the Deku Tree)
+    ChangeOoTCollision -Offset   "C4930C"                                                                                                                          -Arrow                 # Gohma (stun)
+    ChangeOoTCollision -Offset   "DE9734"                                                                                                                          -Arrow                 # Invisible Collectible for Slingshot switch interaction
 
 
 
@@ -347,6 +348,8 @@ function ChildQuestByteOptions() {
     PatchBytes  -Offset "E51A60" -Patch "Child Quest\Whole\kokiri.bin"                                                           # Kokiri now change after the Master Sword cutscene
     PatchBytes  -Offset "E61B50" -Patch "Child Quest\Whole\mido.bin"                                                             # Mido is no longer found in his house after the Master Sword cutscene
     PatchBytes  -Offset "DFC3B0" -Patch "Child Quest\Whole\zoras_domain_ice.bin"                                                 # Zora's Domain is now frozen inbetween the Master Sword cutscene and the Water Temple
+    PatchBytes  -Offset "C823F0" -Patch "Child Quest\Whole\drawbridge.bin"                                                       # Drawbridge won't close at night with Epona last used in Hyrule Field
+
 
 
     # Partial Actors / Other Options
@@ -906,7 +909,7 @@ function ChildQuestByteSceneOptions() {
 
     # ZORA'S FOUNTAIN #
 
-    PrepareMap   -Scene "Zora's Fountain" -Map 0 -Header 0 # Child - Day 
+    PrepareMap   -Scene "Zora's Fountain" -Map 0 -Header 0 # Child - Day
     RemoveActor  -Name  "Ice Platform" -Compare "0214" # Ice Ramp
     SaveLoadedMap
     
@@ -921,9 +924,10 @@ function ChildQuestByteSceneOptions() {
     ReplaceActor -Name  "Ice Platform"   -X  550  -Y 30  -Z -600                                        -CompareX  599 -Compare "0023" # Twin Ice Platforms
     ReplaceActor -Name  "Collectable"    -X  950  -Y 40  -Z -600                                                       -Compare "0106" # Piece of Heart
     ReplaceActor -Name  "Ice Platform"   -X  950  -Y 30  -Z -600                                        -CompareX  974 -Compare "0011" # Heart Piece Ice Platform
-    ReplaceActor -Name  "Ice Platform"   -X  320  -Y 30  -Z  95                           -Param "0011" -CompareX -185 -Compare "0001" # Big Ice Platform -> Medium Second Ice Platform
-    ReplaceActor -Name  "Ice Platform"   -X  240  -Y 5   -Z  475                          -Param "0010" -CompareX -649 -Compare "0020" # Small Ice Platform -> Medium Starting Ice Platform
-    ReplaceActor -Name  "Ice Platform"   -X  280  -Y 30                                                 -CompareX  255 -Compare "0010" # Fork Ice Platform
+  # ReplaceActor -Name  "Ice Platform"   -X  320  -Y 30  -Z  95                           -Param "0011" -CompareX -185 -Compare "0001" # Big Ice Platform -> Medium Second Ice Platform
+  # ReplaceActor -Name  "Ice Platform"   -X  240  -Y 5   -Z  475                          -Param "0010" -CompareX -649 -Compare "0020" # Small Ice Platform -> Medium Starting Ice Platform
+    ReplaceActor -Name  "Ice Platform"   -X  140  -Y 5   -Z -275                          -Param "0010" -CompareX -649 -Compare "0020" # Small Ice Platform -> Medium Starting Ice Platform
+  # ReplaceActor -Name  "Ice Platform"   -X  280  -Y 30                                                 -CompareX  255 -Compare "0010" # Fork Ice Platform
     ReplaceActor -Name  "Ice Platform"            -Y 30                                                 -CompareY  20                  # Raise remaining Ice Platforms
     ReplaceActor -Name  "Ice Platform"            -Y 30                                                 -CompareY  20
     ReplaceActor -Name  "Ice Platform"            -Y 30                                                 -CompareY  20
@@ -940,6 +944,8 @@ function ChildQuestByteSceneOptions() {
     InsertActor  -Name  "Greenery"       -X  394  -Y 55  -Z  2510                         -Param "FF0B"
     InsertActor  -Name  "Greenery"       -X  167  -Y 56  -Z  2514                         -Param "FF0B"
     InsertActor  -Name  "Greenery"       -X  186  -Y 44  -Z  2222 -YRot 0x2000 -ZRot 0x72 -Param "8001"                                # Tree with Skulltula
+    RemoveActor  -Name  "Ice Platform"                                                                  -CompareX -185
+    RemoveActor  -Name  "Ice Platform"                                                                  -CompareX  255
     SaveAndPatchLoadedScene
 
 

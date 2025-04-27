@@ -15,7 +15,7 @@
 }, {
 
 	"title"				: "Child Quest",
-	"version"			: "3.0.0",
+	"version"			: "3.0.1",
 	"vc_title"			: "Zelda: Child Quest",
 	"function" 			: "ChildQuest",
 	"redux" : {
