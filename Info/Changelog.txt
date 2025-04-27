@@ -2,6 +2,7 @@ v25.3.3
 - Fixed API for setting weapon collisions
 - Fixed issue with Jabu-Jabu crashing after the time skip for Child Quest
 - Fixed issue getting stuck on the Hyrule Field drawbridge while on Epona
+- Updated Advanced Widescreen for OoT & MM for Inventory Editor alignment
 - Updated Blonde Alt hair colors for OoT & MM Link
 - Removed "Lost Woods Octorok" option for Child Quest
 
