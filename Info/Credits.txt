@@ -239,8 +239,10 @@
 
 --- Sands of Time ---
 - Main Programming:			Debug log, Woon
-- Other:				Jinnosuke, Shoopey, StoneeBadLuck, Nokaubure, Pugsly, X dude awesome, Owl,
-					Richie, Syeo, Goblinlord, Grandlovania, Sklitte, Cursed Crafts
+- Contributors:				Jinnosuke, Shoopey, StoneeBadLuck, Nokaubure, Pugsly, X dude awesome, Owl,
+					Richie, Syeo, Goblinlord, Grandlovania, Sklitte, The Lady Zelda
+- Special Thanks:			Cursed Crafts
+
 -- Time Lost ---
 - Main Programming:			Stonee Bad Luck
 - Other:				Don Camilo, Jinnosuke, LemonTea, Shoopey, X-DudeAwesome, z64tools, Bobbahawk,
