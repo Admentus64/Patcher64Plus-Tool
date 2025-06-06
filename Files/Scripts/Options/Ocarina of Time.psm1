@@ -603,7 +603,7 @@ function ByteOptions() {
     if (IsDefault $Redux.Magic.LightArrow  -Not)   { ChangeBytes -Offset "BEFC12" -Values (Get8Bit $Redux.Magic.LightArrow.Text)  }
     if (IsDefault $Redux.Magic.DinsFire    -Not)   { ChangeBytes -Offset "BEFC05" -Values (Get8Bit $Redux.Magic.DinsFire.Text)    }
     if (IsDefault $Redux.Magic.FaroresWind -Not)   { ChangeBytes -Offset "BEFC03" -Values (Get8Bit $Redux.Magic.FaroresWind.Text) }
-    if (IsDefault $Redux.Magic.NayrusLove  -Not)   { ChangeBytes -Offset "BEFC05" -Values (Get8Bit $Redux.Magic.NayrusLove.Text)  }
+    if (IsDefault $Redux.Magic.NayrusLove  -Not)   { ChangeBytes -Offset "BEFC04" -Values (Get8Bit $Redux.Magic.NayrusLove.Text)  }
     
 
 

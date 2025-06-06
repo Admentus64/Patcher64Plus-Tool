@@ -2,12 +2,10 @@
 <<< PATCHER64+ TOOL >>>
 
 --- Thanks to my Patreons ---
-- Tier 4:	SoulsMidnight
-
-- Tier 3:	Thanatos-Zero, patrick
+- Tier 3:	Thanatos-Zero
 
 - Tier 2:	Amara, FrenchAddGamer, CasaDeLavo, Rick Mathot, Peter Morgan,
-		Biggoron SwordFigher, StarFox
+		StarFox
 
 - Tier 1:	redmaro, mad_scrub, GoldenMariaNova
 
