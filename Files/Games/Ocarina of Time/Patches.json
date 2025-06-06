@@ -4,7 +4,8 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons"
+		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons",
+		"version"		: "2025-06-06"
 	},
 	"finalize"			: "rev0_finalize",
 	"script"			: "Ocarina of Time",
@@ -21,7 +22,8 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons"
+		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons",
+		"version"		: "2025-06-06"
 	},
 	"script"			: [ "Ocarina of Time", "Child Quest" ],
 	"settings"			: "Child Quest",
@@ -43,7 +45,8 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons"
+		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons",
+		"version"		: "2025-06-06"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Dawn & Dusk",
@@ -64,7 +67,8 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons"
+		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons",
+		"version"		: "2025-06-06"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Master of Time",
@@ -95,7 +99,8 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons"
+		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons",
+		"version"		: "2025-06-06"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Nimpize Adventure",
@@ -113,7 +118,8 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons"
+		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons",
+		"version"		: "2025-06-06"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Gold Quest",
@@ -131,7 +137,8 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons"
+		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons",
+		"version"		: "2025-06-06"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "New Master Quest",
@@ -148,7 +155,8 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons"
+		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons",
+		"version"		: "2025-06-06"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Bombiwa",
@@ -167,7 +175,8 @@
 	"redux" : {
 		"remap_controls"	: 1,
 		"expand_memory"		: 1,
-		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons"
+		"tooltip"		: "Includes among other changes the inclusion of the D-Pad for dedicated item buttons",
+		"version"		: "2025-06-06"
 	},
 	"script"			: "Ocarina of Time",
 	"settings"			: "Puzzling",

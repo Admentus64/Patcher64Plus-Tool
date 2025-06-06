@@ -1,3 +1,9 @@
+v25.3.4
+- Fixed issues with OoT Redux
+	* Flare Dancer no longer randomizes increased health
+	* Megaton Hammer damage type stays intact with "Weaker Swords" within Fire Temple
+- Fixed issue with Din's Fire and Nayru's Love not properly adjusting MP costs
+
 v25.3.3
 - Fixed API for setting weapon collisions
 - Fixed issue with Jabu-Jabu crashing after the time skip for Child Quest
