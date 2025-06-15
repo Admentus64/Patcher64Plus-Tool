@@ -481,6 +481,7 @@ function CreateErrorDialog([string]$Error, [boolean]$Fatal=$True, [boolean]$Once
     elseif ($Error -eq "Missing Modules")   { $String += ".PSM1 module files are missing for import.{0}{0}Please download the Patcher64+ Tool again." }
     elseif ($Error -eq "Restricted")        { $String += "Patcher64+ Tool is being run from a restricted folder:{0}" + $Paths.FullBase + "{0}{0}Please move the Patcher64+ Tool to another folder and run it again.{0}Locations such as Desktop, Downloads or My Documents are restricted.{0}{0}No assistance is given when this warning is shown." }
     elseif ($Error -eq "Forbidden Path")    { $String += "The filepath to the Patcher64+ Tool is illegal.{0}{0}Remove any special symbol characters from the filepath leading to the Patcher64+ Tool and try again.{0}{0}Only letters and numbers are allowed." }
+    elseif ($Error -eq "Mismatch")          { $String += "Patcher64+ Tool version is mismatching.{0}Can not continue.{0}Please reinstall." }
     $String = [string]::Format($String, [Environment]::NewLine)
 
     #Create Label
