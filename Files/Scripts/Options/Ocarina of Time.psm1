@@ -470,13 +470,13 @@ function ByteOptions() {
     if (IsIndex -Elem $Redux.Hero.MonsterHP -Index 3 -Not) { # Monsters
         if (IsIndex -Elem $Redux.Hero.MonsterHP) { $multi = 0 } else { [float]$multi = [float]$Redux.Hero.MonsterHP.text.split('x')[0] }
 
-        MultiplyBytes -Offset @("D74393", "C2F97F", "C0DEF8") -Factor $multi -Max 127 # Like-Like, Peehat, Octorok
+        MultiplyBytes -Offset @("D74393", "C2F97F", "C0DEF8") -Factor $multi -Max 127 # Like-Like, Peahat, Octorok
         MultiplyBytes -Offset @("D463BF", "CA85DC", "DADBAF") -Factor $multi -Max 127 # Shell Blade, Mad Scrub, Spike
         MultiplyBytes -Offset @("C83647", "C83817", "C836AB") -Factor $multi -Max 127 # Moblin, Spear Moblin, Club Moblin
         MultiplyBytes -Offset @("C5F69C", "CAAF9C", "C55A78") -Factor $multi -Max 127 # Biri, Bari, Shabom
         MultiplyBytes -Offset @("CD724F", "EDC597", "C0B804") -Factor $multi -Max 127 # ReDead / Gibdo, Stalchild, Poe
         MultiplyBytes -Offset @("C6471B", "C51A9F")           -Factor $multi -Max 127 # Torch Slug, Gohma Larva
-        MultiplyBytes -Offset @("CB1903", "CB2DD7")           -Factor $multi -Max 127 # Blue Bubble, Red Blue
+        MultiplyBytes -Offset @("CB1903", "CB2DD7")           -Factor $multi -Max 127 # Blue Bubble, Red Bubble
         MultiplyBytes -Offset @("D76A07", "C5FC3F")           -Factor $multi -Max 127 # Tentacle, Tailpasaran
         MultiplyBytes -Offset @("C693CC", "EB797C")           -Factor $multi -Max 127 # Stinger (Land), Stinger (Water)
         MultiplyBytes -Offset @("C1097C", "CD582C")           -Factor $multi -Max 127 # Wallmaster, Floormaster
@@ -770,13 +770,9 @@ function ByteOptions() {
     
     # EQUIPMENT #
 
-    if   ( (IsChecked $Redux.Equipment.HideSword) -and (IsChecked $Redux.Equipment.HideShield) )   { ChangeBytes -Offset "B6D758" -Values "00" -Repeat 0xBF    }
-    elseif (IsChecked $Redux.Equipment.HideSword)                                                  { CopyBytes   -Offset "B6D7B8" -Length "60" -Start "B6D758" }
-    elseif (IsChecked $Redux.Equipment.HideShield) {
-        CopyBytes -Offset "B6D758" -Length "10" -Start "B6D768"; CopyBytes -Offset "B6D758" -Length "10" -Start "B6D778"; CopyBytes -Offset "B6D758" -Length "10" -Start "B6D788"; ChangeBytes -Offset "B6D798" -Values "00" -Repeat 0x1F
-        CopyBytes -Offset "B6D7B8" -Length "10" -Start "B6D7C8"; CopyBytes -Offset "B6D7B8" -Length "10" -Start "B6D7D8"; CopyBytes -Offset "B6D7B8" -Length "10" -Start "B6D7E8"; ChangeBytes -Offset "B6D7F8" -Values "00" -Repeat 0x1F
-    }
-
+    if     (IsIndex $Redux.Equipment.HideEquipment -Index 2)   { CopyBytes   -Offset "B6D768" -Length "10" -Start "B6D758"; CopyBytes -Offset "B6D778" -Length "10" -Start "B6D758"; CopyBytes -Offset "B6D788" -Length "10" -Start "B6D758"; ChangeBytes -Offset @("B6D7AC", "B6D7B4") -Values "00000000" }
+    elseif (IsIndex $Redux.Equipment.HideEquipment -Index 3)   { ChangeBytes -Offset "B6D758" -Values "00" -Repeat 0xBF }
+    
     if (IsChecked $Redux.Equipment.HerosBow) {
         PatchBytes -Offset "7C0000" -Texture -Patch "Equipment\Bow\Hero's Bow.icon"
         PatchBytes -Offset "7F5000" -Texture -Patch "Equipment\Bow\Hero's Bow Fire.icon"
@@ -3609,8 +3605,7 @@ function CreateTabEquipment() {
     if (StrLike -Str $GamePatch.settings -Val "Master of Time") { $hp = 20 } else { $hp = 8 } 
 
     CreateReduxGroup    -Tag  "Equipment"                  -Text "Equipment Adjustments"
-    CreateReduxCheckBox -Name "HideSword"                  -Text "Hide Sword"                  -Info "The sword is hidden when sheathed"                                                             -Credits "Admentus"
-    CreateReduxCheckBox -Name "HideShield"                 -Text "Hide Shield"                 -Info "The shield is hidden when sheathed"                                                            -Credits "Admentus"
+    CreateReduxComboBox -Name "HideEquipment"              -Text "Hide Equipment"              -Info "Equipment is hidden when sheathed" -Items @("None", "Shield Only", "Sword and Shield")         -Credits "Admentus"
     CreateReduxCheckBox -Name "NoSlipperyBoots"     -Adult -Text "No Slippery Boots"           -Info "The Hover Boots are no longer slippery"                                                        -Credits "Admentus" 
     CreateReduxCheckBox -Name "UnsheathSword"              -Text "Unsheath Sword"              -Info "The sword is unsheathed first before immediately swinging it"                                  -Credits "Admentus"
     CreateReduxCheckBox -Name "FireproofDekuShield" -Child -Text "Fireproof Deku Shield"       -Info "The Deku Shield turns into an fireproof shield, which will not burn up anymore"                -Credits "Admentus (ported) & Three Pendants (ROM patch)"
