@@ -1,3 +1,6 @@
+v25.3.6
+- Add MK64DX v0.0.1
+
 v25.3.5
 - Fix issues with Hide Sword & Hide Shield
 

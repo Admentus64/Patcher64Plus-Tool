@@ -6,7 +6,15 @@
 
 }, {
 
-	"title"		: "Amped Up)",
+	"title"		: "MK64DX",
+	"version"	: "0.0.1",
+	"patch"		: "Compressed\\mk64dx.bps",
+	"output"	: "mk64dx",
+	"tooltip"	: "Enhanced version of Mario Kart 64{0}Fixes various issues related to texture rendering"
+
+}, {
+
+	"title"		: "Amped Up",
 	"version"	: "2.0",
 	"patch"		: "Compressed\\amped_up.bps",
 	"console"	: "Native",

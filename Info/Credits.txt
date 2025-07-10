@@ -634,6 +634,10 @@ Other:			Admentus & gamemasterplc
 - No Camera Shake:			Triclon
 - Always Advance:			Litronom
 
+--- MK64DX ---
+- Dario
+- GhostlyDark
+
 --- Amped Up ---
 - Production:				Litronom
 - Tarmac64 Modding Tools:		DeadHamster
