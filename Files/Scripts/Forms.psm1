@@ -763,6 +763,7 @@ function CreateReduxSlider([single]$Column=$Last.Column, [single]$Row=$Last.Row,
     if ($Large.GetType().Name   -eq "String")   { $Large   = GetDecimal $Large }
 
     $Info = "Right click to reset to default value`n`n" + $Info
+    if ($Info -ne "" -and $Warning -ne "") { $Info += ("`n[!]  "         + $Warning) }
     if ($Info -ne "" -and $Credits -ne "") { $Info += ("`n`n- Credits: " + $Credits) }
     if ($Text -ne "") { $Text += ":" }
 

@@ -339,10 +339,6 @@ function ChangeGameMode() {
                 $Files.json.patches     += SetJSONFile ($Paths.Patches + "\" + $_.title + "\" + $GameType.mode + "\Patches.json")
             }
         }
-
-        $Files.json.patches = $Files.json.patches | Where-Object {
-            !( ($_.title -eq "The Sealed Palace" -or $_.title -eq "Sands of Time" -or $_.title -eq "Demon's Quest") -and $_.script -ne $null -and $_.code -eq $null)
-        }
     }
     else { $Files.json.patches = $null }
 
