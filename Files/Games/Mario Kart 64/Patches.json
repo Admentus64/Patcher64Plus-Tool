@@ -15,11 +15,11 @@
 }, {
 
 	"title"		: "Amped Up",
-	"version"	: "2.0",
+	"version"	: "3.00",
 	"patch"		: "Compressed\\amped_up.bps",
 	"console"	: "Native",
 	"output"	: "amped_up",
-	"tooltip"	: "ROM hack of Mario Kart 64 with custom tracks{0}Features 12 custom tracks with custom music and a new game mode"
+	"tooltip"	: "ROM hack of Mario Kart 64 with a lot of new content, features and improvements{0}Features new custom tracks with custom music and new game modes"
 
 }, {
 

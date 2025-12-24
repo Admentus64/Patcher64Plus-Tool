@@ -66,7 +66,7 @@ function ReadWebRequest([string]$Uri) {
     $script = { Param([string]$Uri)
         $ProgressPreference                         = 'SilentlyContinue'
         [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-        Write-Output (Invoke-WebRequest -Uri $Uri)
+        Write-Output (Invoke-WebRequest -UseBasicParsing -Uri $Uri)
         $ProgressPreference                         = 'Continue'
     }
               Start-Job    -Name "Script" -ScriptBlock $script -ArgumentList @($Uri)

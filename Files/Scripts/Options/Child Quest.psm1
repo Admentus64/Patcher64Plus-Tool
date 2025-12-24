@@ -863,8 +863,8 @@ function ChildQuestByteSceneOptions() {
 
     PrepareMap   -Scene "Goron City" -Map 3 -Header 1 # Adult - City
     InsertActor  -Name  "Big Goron Pot" -X  3   -Y -3   -Z  20  -Param "1C1F"
-    InsertActor  -Name  "Time Block"                            -Param "B819" -Compare "3819"
-    InsertActor  -Name  "Time Block"            -Y  410 -Z -930 -Param "B81A" -Compare "381A"
+    ReplaceActor -Name  "Time Block"                            -Param "B819" -Compare "3819"
+    ReplaceActor -Name  "Time Block"            -Y  410 -Z -930 -Param "B81A" -Compare "381A"
     SaveLoadedMap
 
     PrepareMap   -Scene "Goron City" -Map 3 -Header 2 # Adult Cleansed - City
@@ -872,8 +872,8 @@ function ChildQuestByteSceneOptions() {
     RemoveActor  -Name  "Sliding Doors Goron City"              -Compare "0100"
     RemoveActor  -Name  "Goron"                                 -Compare "1C01"
     InsertActor  -Name  "Big Goron Pot" -X  3   -Y -3   -Z  20                  -Param "1C1F"
-    InsertActor  -Name  "Time Block"                            -Compare "3819" -Param "B819" 
-    InsertActor  -Name  "Time Block"            -Y  410 -Z -930 -Compare "381A" -Param "B81A" 
+    ReplaceActor -Name  "Time Block"                            -Compare "3819" -Param "B819" 
+    ReplaceActor -Name  "Time Block"            -Y  410 -Z -930 -Compare "381A" -Param "B81A" 
     InsertActor  -Name  "Goron"         -X  520 -Y  399 -Z  565 -YRot 0xCD83    -Param "FC00"
     SaveAndPatchLoadedScene
 

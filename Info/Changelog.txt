@@ -1,3 +1,8 @@
+v25.3.7
+- Updated Mario Kart Amped to v3.0.0
+- Corrected InsertActor with ReplaceActor for Child Quest
+- Added -UseBasicParsing to Invoke-WebRequest
+
 v25.3.6
 - Add MK64DX v0.0.1
 
