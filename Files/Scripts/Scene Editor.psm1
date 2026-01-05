@@ -1591,12 +1591,12 @@ function LoadSceneSettings() {
 
     # MISC #
 
-    if ($SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].WorldMap -ne $null) {
-        $group = CreateGroupBox -Text "Music" -X (DPISize 10) -Y $y -Width ($SceneEditor.BottomPanelSceneSettings.Width - (DPISize 20)) -Height (DPISize 50) -AddTo $SceneEditor.BottomPanelSceneSettings
+    if ($SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].WorldMap -ne $null -and $Files.json.sceneEditor.world_map.Count -gt 0) {
+        $group = CreateGroupBox -Text "World Map & Camera" -X (DPISize 10) -Y $y -Width ($SceneEditor.BottomPanelSceneSettings.Width - (DPISize 20)) -Height (DPISize 50) -AddTo $SceneEditor.BottomPanelSceneSettings
         $y     = $group.bottom + (DPISize 10)
 
         $default = 0
-        foreach ($i in 0..($Files.json.sceneEditor.skyboxes.Count-1)) {
+        foreach ($i in 0..($Files.json.sceneEditor.world_map.Count-1)) {
             if ($SceneEditor.SceneArray[$SceneEditor.SceneOffsets[$SceneEditor.LoadedHeader].WorldMap] -eq (GetDecimal $Files.json.sceneEditor.world_map[$i].id)) {
                 $default = $i + 1
                 break

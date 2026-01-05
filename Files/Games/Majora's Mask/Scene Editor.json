@@ -4,6 +4,8 @@
 	"max_objects"	: 255,
 	"hash"			: "2A0A8ACB61538235BC1094D297FB6556",
 
+	"world_map" : [ ],
+
 	"skyboxes" : [ {
 		"title"		: "No Skybox",
 		"id"		: "00"
