@@ -2288,20 +2288,20 @@ function ByteTextOptions() {
         if (TestFile ($GameFiles.textures + "\Text Labels\keaton_mask." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "8A7C00" -Texture -Patch ("Text Labels\keaton_mask." + $LanguagePatch.code + ".label") }
 
         SetMessage -ID "0004"                                                                  -Replace "You received an Odd Potion!<N>You don't know what's going on<N>between this lady and that guy,<N>but take it to the Lost Woods!"
-        SetMessage -ID "0057" -Text "<Icon:4B>"                                                -Replace "<Icon:4C>"
-        SetMessage -ID "00F3" -Text "treasure <N>chest and "                                   -Replace "chest and<N>"
+		SetMessage -ID "0057" -Text "<Icon:4B>"                                                -Replace "<Icon:4C>"
+        SetMessage -ID "00F3" -Text "Select a treasure <N>chest and see how lucky you are!"    -Replace "Select a chest and<N>see how lucky you are!"
         SetMessage -ID "0616" -Text "try to cut it, it will bounce<N>off your blade!"          -Replace "cut it, it will burst open and<N>knock you back!"
-        SetMessage -ID "109B" -Text "<DI><C>Twenty-three is number one!<W><DC><N><NS><Sound:3880>Do you think I'm a traitor?"                                                  -Replace "<DI><C>Twenty-three is number one!<W><DC><New Box><NS><Sound:3880>Do you think I'm a traitor?"
+        SetMessage -ID "109B" -Text "<DI><C>Twenty-three is number one!<W><DC><N><NS><Sound:3880>Do you think I'm a traitor?"                                                 -Replace "<DI><C>Twenty-three is number one!<W><DC><New Box><NS><Sound:3880>Do you think I'm a traitor?"
 	    SetMessage -ID "10B8"                                                                  -Replace "That guy isn't here anymore.<New Box>Anybody who comes into the<N>forest will be lost.<New Box>Everybody will become a Stalfos.<N>Everybody, Stalfos.<N>So, he's not here anymore.<N>Only his saw is left. Hee hee.<New Box>That medicine is made of<N>forest mushrooms. Give it back!<N><Two Choices><G>Yes<N>No<W>"
         if (IsChecked $Redux.Text.FemalePronouns -Not) { SetMessage -ID "3006" -Text "brother" -Replace "Brother" }
         SetMessage -ID "2047" -Text "I heard that you found my dad!"                           -Replace "<NS>I heard that you found my dad!"
 	    SetMessage -ID "4013" -Text "the <N>temple of Lake Hylia and has not<N>come back... "  -Replace "Lake<N>Hylia and has not come back...<N>"
         SetMessage -ID "507B" -Text @(1, 1)                                                    -Replace @(1)
         SetMessage -ID "6035" -Text "<NS>Kid, let me thank you.<N><NS>Heheheh..."              -Replace "<NS>Kid, let me thank you.<New Box><NS>Heheheh..."
-	    SetMessage -ID "6041" -Text "again "                                                   -Replace ""
+	    SetMessage -ID "6041" -Text "Do you want to try again for<N><R>20 Rupees<W>?"          -Replace "Do you want to try for <R>20 Rupees<W>?"
         SetMessage -ID "6044" -Text "a true"                                                   -Replace "the ultimate"
 	    SetMessage -ID "6044" -Text "a master"                                                 -Replace "the master"
-        SetMessage -ID "6046"                                                                  -Replace "Fantastic!<N>You are a true master!<N>I will give this to you.<N>Keep improving yourself!"
+        SetMessage -ID "6046"                                                                  -Replace "Fantastic!<N>You are a true master!<New Box>I will give this to you.<N>Keep improving yourself!"
         SetMessage -ID "6067"                                                                  -Replace "Building a bridge over the valley<N>is a simple task for four<N>carpenters."
         SetMessage -ID "6077" -Text "Well Come!"                                               -Replace "Welcome!"
 	    SetMessage -ID "7027" -Text "<NS>But with the long peace, no one<N>has seen a Sheikah around here <N>for a long time.<N><NS>However..."                               -Replace "<NS>But with the long peace, no one<N>has seen a Sheikah around here <N>for a long time.<New Box><NS>However..."
