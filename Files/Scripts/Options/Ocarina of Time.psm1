@@ -2287,7 +2287,7 @@ function ByteTextOptions() {
     if (IsChecked $Redux.Text.Restore -Lang 1) {
         if (TestFile ($GameFiles.textures + "\Text Labels\keaton_mask." + $LanguagePatch.code + ".label")) { PatchBytes -Offset "8A7C00" -Texture -Patch ("Text Labels\keaton_mask." + $LanguagePatch.code + ".label") }
 
-        SetMessage -ID "0004"                                                                  -Replace "You received an <R>Odd Potion<W>!<N>You don't know what's going on<N>between this lady and that guy,<N>but take it to the Lost Woods!"
+        SetMessage -ID "0004"                                                                  -Replace "<NS><Icon:31><DI>You received an <R>Odd Potion<W>!<DC><N>You don't know what's going on<N>between this lady and that guy,<N>but take it to the Lost Woods!"
 		SetMessage -ID "0057" -Text "<Icon:4B>"                                                -Replace "<Icon:4C>"
         SetMessage -ID "00F3" -Text "Select a treasure <N>chest and see how lucky you are!"    -Replace "Select a chest and<N>see how lucky you are!"
         SetMessage -ID "0616" -Text "try to cut it, it will bounce<N>off your blade!"          -Replace "cut it, it will burst open<N>and knock you back!"
