@@ -2290,7 +2290,7 @@ function ByteTextOptions() {
         SetMessage -ID "0004"                                                                  -Replace "You received an Odd Potion!<N>You don't know what's going on<N>between this lady and that guy,<N>but take it to the Lost Woods!"
 		SetMessage -ID "0057" -Text "<Icon:4B>"                                                -Replace "<Icon:4C>"
         SetMessage -ID "00F3" -Text "Select a treasure <N>chest and see how lucky you are!"    -Replace "Select a chest and<N>see how lucky you are!"
-        SetMessage -ID "0616" -Text "try to cut it, it will bounce<N>off your blade!"          -Replace "cut it, it will burst open and<N>knock you back!"
+        SetMessage -ID "0616" -Text "try to cut it, it will bounce<N>off your blade!"          -Replace "cut it, it will burst open<N>and knock you back!"
         SetMessage -ID "109B" -Text "<DI><C>Twenty-three is number one!<W><DC><N><NS><Sound:3880>Do you think I'm a traitor?"                                                 -Replace "<DI><C>Twenty-three is number one!<W><DC><New Box><NS><Sound:3880>Do you think I'm a traitor?"
 	    SetMessage -ID "10B8"                                                                  -Replace "That guy isn't here anymore.<New Box>Anybody who comes into the<N>forest will be lost.<New Box>Everybody will become a Stalfos.<N>Everybody, Stalfos.<N>So, he's not here anymore.<N>Only his saw is left. Hee hee.<New Box>That medicine is made of<N>forest mushrooms. Give it back!<N><Two Choices><G>Yes<N>No<W>"
         if (IsChecked $Redux.Text.FemalePronouns -Not) { SetMessage -ID "3006" -Text "brother" -Replace "Brother" }
