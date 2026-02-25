@@ -1,3 +1,6 @@
+v25.3.10
+- Improved "Restore Text" for OoT
+
 v25.3.9
 - New GE007 crosshairs
 
