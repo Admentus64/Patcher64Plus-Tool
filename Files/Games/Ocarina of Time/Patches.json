@@ -131,7 +131,7 @@
 }, {
 
 	"title"				: "New Master Quest",
-	"version"			: "2.8",
+	"version"			: "3.0",
 	"vc_title"			: "Zelda: New MQ",
 	"patch"				: "Decompressed\\new_master_quest.bps",
 	"redux" : {

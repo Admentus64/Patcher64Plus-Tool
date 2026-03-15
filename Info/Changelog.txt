@@ -1,3 +1,6 @@
+v25.3.11
+- Updated New Master Quest to v3.0
+
 v25.3.10
 - Improved "Restore Text" for OoT
 
